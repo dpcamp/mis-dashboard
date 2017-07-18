@@ -1,0 +1,29 @@
+  <h2 class="sub-header">Phones</h2>
+
+  <div class="table-respsonsive" *ngIf="phones">
+  <table class="table table-striped table-hover">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Number</th>
+            <th>Location</th>
+            <th>Model</th>
+        </tr>
+    </thead>
+
+  <tbody >
+    <tr *ngFor="let phone of phones">
+      <td>{{ phone.id }} </td>
+      <td><a [routerLink]="['/phones', phone.id]" >{{ phone.full_number }}</a></td>
+      <td>{{ phone.location }} </td>
+      <td>{{ phone.model }} </td>
+    </tr>
+    
+  </tbody>
+  </table>
+    Page <strong>{{pageValue}}</strong>
+    <button (click)="decrement()">-</button>
+    <span>{{counter}}</span>
+    <button (click)="increment()">+</button>
+    <a routerLink="/phones/create" class="btn btn-sm btn-info">Create Phone</a><br />
+</div>
