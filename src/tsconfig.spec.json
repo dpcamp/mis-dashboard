@@ -1,4 +1,5 @@
 {
+<<<<<<< HEAD
   "compilerOptions": {
     "sourceMap": true,
     "declaration": false,
@@ -11,6 +12,13 @@
     "outDir": "../out-tsc/spec",
     "module": "commonjs",
     "target": "es6",
+=======
+  "extends": "../tsconfig.json",
+  "compilerOptions": {
+    "outDir": "../out-tsc/spec",
+    "module": "commonjs",
+    "target": "es5",
+>>>>>>> 840960a6b6c0072ff6fe83602ec7e5478bb957c8
     "baseUrl": "",
     "types": [
       "jasmine",
@@ -21,6 +29,11 @@
     "test.ts"
   ],
   "include": [
+<<<<<<< HEAD
     "**/*.spec.ts"
+=======
+    "**/*.spec.ts",
+    "**/*.d.ts"
+>>>>>>> 840960a6b6c0072ff6fe83602ec7e5478bb957c8
   ]
 }
