@@ -1,5 +1,4 @@
 {
-<<<<<<< HEAD
   "compilerOptions": {
     "sourceMap": true,
     "declaration": false,
@@ -14,16 +13,6 @@
     "target": "es6",
     "types":[
       "jasmine",
-=======
-  "extends": "../tsconfig.json",
-  "compilerOptions": {
-    "outDir": "../out-tsc/e2e",
-    "module": "commonjs",
-    "target": "es5",
-    "types": [
-      "jasmine",
-      "jasminewd2",
->>>>>>> 840960a6b6c0072ff6fe83602ec7e5478bb957c8
       "node"
     ]
   }

@@ -1,5 +1,4 @@
 {
-<<<<<<< HEAD
   "compilerOptions": {
     "sourceMap": true,
     "declaration": false,
@@ -12,11 +11,6 @@
     ],
     "outDir": "../out-tsc/app",
     "target": "es5",
-=======
-  "extends": "../tsconfig.json",
-  "compilerOptions": {
-    "outDir": "../out-tsc/app",
->>>>>>> 840960a6b6c0072ff6fe83602ec7e5478bb957c8
     "module": "es2015",
     "baseUrl": "",
     "types": []

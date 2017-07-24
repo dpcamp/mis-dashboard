@@ -3,6 +3,10 @@
 # compiled output
 /dist
 /tmp
+<<<<<<< HEAD
+=======
+/out-tsc
+>>>>>>> 840960a6b6c0072ff6fe83602ec7e5478bb957c8
 
 # dependencies
 /node_modules
@@ -26,7 +30,11 @@
 # misc
 /.sass-cache
 /connect.lock
+<<<<<<< HEAD
 /coverage/*
+=======
+/coverage
+>>>>>>> 840960a6b6c0072ff6fe83602ec7e5478bb957c8
 /libpeerconnection.log
 npm-debug.log
 testem.log
@@ -36,6 +44,10 @@ testem.log
 /e2e/*.js
 /e2e/*.map
 
+<<<<<<< HEAD
 #System Files
+=======
+# System Files
+>>>>>>> 840960a6b6c0072ff6fe83602ec7e5478bb957c8
 .DS_Store
 Thumbs.db

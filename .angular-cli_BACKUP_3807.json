@@ -1,7 +1,16 @@
 {
   "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
   "project": {
+<<<<<<< HEAD
     "name": "pq"
+=======
+    "name": "mis-dash-cli"
+  },
+  "defaults": {
+    "serve": {
+      "host": "192.168.235.97"
+    }
+>>>>>>> 840960a6b6c0072ff6fe83602ec7e5478bb957c8
   },
   "apps": [
     {
@@ -19,6 +28,7 @@
       "testTsconfig": "tsconfig.spec.json",
       "prefix": "app",
       "styles": [
+<<<<<<< HEAD
 	"../node_modules/clarity-ui/clarity-ui.min.css",
 	"../node_modules/clarity-icons/clarity-icons.min.css",
         "../node_modules/primeng/resources/primeng.min.css",
@@ -30,7 +40,12 @@
 	"../node_modules/mutationobserver-shim/dist/mutationobserver.min.js",
  	"../node_modules/@webcomponents/custom-elements/custom-elements.min.js",
 	"../node_modules/clarity-icons/clarity-icons.min.js"
-		],
+	],
+=======
+        "styles.css"
+      ],
+      "scripts": [],
+>>>>>>> 840960a6b6c0072ff6fe83602ec7e5478bb957c8
       "environmentSource": "environments/environment.ts",
       "environments": {
         "dev": "environments/environment.ts",
@@ -61,9 +76,13 @@
   },
   "defaults": {
     "styleExt": "css",
+<<<<<<< HEAD
     "component": {},
 	"serve": {
 	"host": "192.168.235.97"
 		}
+=======
+    "component": {}
+>>>>>>> 840960a6b6c0072ff6fe83602ec7e5478bb957c8
   }
 }
