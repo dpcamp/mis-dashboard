@@ -1,0 +1,40 @@
+<div *ngIf="phone">
+
+  <a [routerLink]="['/phones', phone.id, 'edit']" class="btn btn-primary btn-sm">Edit</a>
+  <a (click)="deletePhone()" class="btn btn-danger btn-sm">Delete</a>
+
+  <h2>id :{{ phone.id }}</h2>
+  <h2>full_number :{{ phone.full_number }}</h2>
+  <h2>telephone :{{ phone.telephone }}</h2>
+  <h2>division_id :{{ phone.division_id }}</h2>
+  <h2>department :{{ phone.department }}</h2>
+  <h2>position :{{ phone.position }}</h2>
+  <h2>username :{{ phone.username }}</h2>
+  <h2>location :{{ phone.location }}</h2>
+  <h2>function_info :{{ phone.function_info }}</h2>
+  <h2>notes :{{ phone.notes }}</h2>
+  <h2>account_number :{{ phone.account_number }}</h2>
+  <h2>date_installed :{{ phone.date_installed }}</h2>
+  <h2>monthly_cost :{{ phone.monthly_cost }}</h2>
+  <h2>investigate :{{ phone.investigate }}</h2>
+  <h2>model :{{ phone.model }}</h2>
+  <h2>line_type :{{ phone.line_type }}</h2>
+  <h2>long_distance :{{ phone.long_distance }}</h2>
+  <h2>need_voicemail :{{ phone.need_voicemail }}</h2>
+  <h2>disconnect_now :{{ phone.disconnect_now }}</h2>
+  <h2>disconnect_later :{{ phone.disconnect_later }}</h2>
+  <h2>phone_number :{{ phone.phone_number }}</h2>
+  <h2>ld_changed :{{ phone.ld_changed }}</h2>
+  <h2>new_phone :{{ phone.new_phone }}</h2>
+  <h2>switch_comments :{{ phone.switch_comment }}</h2>
+  <h2>new_location :{{ phone.new_location }}</h2>
+  <h2>drop_num :{{ phone.drop_num }}</h2>
+  <h2>port_num :{{ phone.port_num }}</h2>
+  <h2>extension :{{ phone.extension }}</h2>
+  <h2>vm_id :{{ phone.vm_id }}</h2>
+  <h2>binding_post :{{ phone.binding_post }}</h2>
+  <h2>provider :{{ phone.provider }}</h2>
+  <h2>pin :{{ phone.pin }}</h2>
+  <h2>date_created :{{ phone.date_created }}</h2>
+
+</div>

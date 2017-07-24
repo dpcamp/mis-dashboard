@@ -1,0 +1,328 @@
+<section class="wrapper">
+<p-growl [(value)]="msgs"></p-growl>
+<h1>Phones</h1> 
+<button (click)="createPhoneWizard()" class="btn btn-sm">Add Phone</button> 
+<button type="button" (click)="show('success', 'Test', 'Testing 123...')">Show</button>
+    <div class="card">
+        <div class="card-header">
+            <clr-icon shape="search"></clr-icon>
+            <input #gb type="text" pInputText size="25" placeholder="Search Phones">
+        </div>
+    </div>
+    <div class="card" *ngIf="selectedPhone">
+        <div class="card-header">
+            {{selectedPhone.full_number}}
+        </div>
+        <div class="card-block" *ngIf="selectedPhone">
+            <div class="card-text">
+                <div class="row">
+                    <div class="col-lg-6 col-md-12 col-sm-12 col-xs-12">
+                        <div class="form-group">
+                            <label for="ext">Owner:</label>
+                            <input type="text" id="ext" size="20" readonly [(ngModel)]="selectedPhone.username">
+                            <label for="ext" *ngIf="selectedPhone.extension">Extension:</label>
+                            <input type="text" id="ext" size="7" readonly [(ngModel)]="selectedPhone.extension" *ngIf="selectedPhone.extension">
+                            <label for="ext" *ngIf="selectedPhone.vm_id">Voicemail:</label>
+                            <input type="text" id="ext" size="7" readonly [(ngModel)]="selectedPhone.vm_id" *ngIf="selectedPhone.vm_id">
+                        </div>
+                        <div class="form-group">
+                            <label for="dn" *ngIf="selectedPhone.drop_num">Drop Number:</label>
+                            <input type="text" id="dn" size="10" readonly [(ngModel)]="selectedPhone.drop_num" *ngIf="selectedPhone.drop_num">
+                            <label for="pn" *ngIf="selectedPhone.port_num">Port Number:</label>
+                            <input type="text" id="pn" size="10" readonly [(ngModel)]="selectedPhone.port_num" *ngIf="selectedPhone.port_num">
+                            <label for="pn" *ngIf="selectedPhone.binding_post">Binding Post:</label>
+                            <input type="text" id="bp" size="10" readonly [(ngModel)]="selectedPhone.binding_post" *ngIf="selectedPhone.binding_post">
+                        </div>
+                        <div class="form-group">
+                            <label for="ext" *ngIf="selectedPhone.provider">LD Provider:</label>
+                            <input type="text" id="ext" size="10" readonly [(ngModel)]="selectedPhone.provider" *ngIf="selectedPhone.provider">
+                            <label for="vm" *ngIf="selectedPhone.long_distance">Need LD?</label>
+                            <input type="text" id="vm" size="10" readonly [(ngModel)]="selectedPhone.long_distance" *ngIf="selectedPhone.long_distance">
+                        </div>
+                        <div class="form-group">
+                            <label for="ext" *ngIf="selectedPhone.monthly_cost">Monthly Cost:</label>
+                            <input type="text" id="cost" size="10" readonly [(ngModel)]="selectedPhone.monthly_cost" *ngIf="selectedPhone.monthly_cost">
+                            <label for="vm" *ngIf="selectedPhone.date_installed">Date Installed:</label>
+                            <input type="text" id="vm" size="10" readonly [(ngModel)]="selectedPhone.date_installed" *ngIf="selectedPhone.date_installed">
+                        </div>
+                        <div class="form-group">
+                            <div class="checkbox-inline">
+                                <clr-checkbox id="disconnect_now" readonly [(ngModel)]="selectedPhone.disconnect_now" *ngIf="selectedPhone.disconnect_now">Disconnect</clr-checkbox>
+                            </div>
+                            <div class="checkbox-inline">
+                                <clr-checkbox id="disconnect_later" readonly [(ngModel)]="selectedPhone.disconnect_later" *ngIf="selectedPhone.disconnect_later">Disconnect Later</clr-checkbox>
+                            </div>
+                            <div class="checkbox-inline">
+                                <clr-checkbox id="need_voicemail" readonly [(ngModel)]="selectedPhone.need_voicemail" *ngIf="selectedPhone.need_voicemail">Voicemail</clr-checkbox>
+                            </div>
+                            <div class="checkbox-inline">
+                                <clr-checkbox id="investigate" readonly [(ngModel)]="selectedPhone.investigate" *ngIf="selectedPhone.investigate">Investigate</clr-checkbox>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 col-md-12 col-sm-12 col-xs-12">
+                        <div class="form-group">
+                            <label for="notes" *ngIf="selectedPhone.notes">Notes:</label>
+                            <textarea id="notes" rows="2" readonly [(ngModel)]="selectedPhone.notes" *ngIf="selectedPhone.notes"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="switch" *ngIf="selectedPhone.switch_comments">Switch Comments:</label>
+                            <textarea id="switch" rows="1" readonly [(ngModel)]="selectedPhone.switch_comments" *ngIf="selectedPhone.switch_comments"></textarea>
+                        </div>
+                    </div>
+
+
+
+
+                </div>
+            </div>
+        </div>
+        <div class="card-footer">
+            <div class="btn-group btn-outline-primary btn-sm">
+            <button (click)="updatePhoneWizard()" class="btn"><clr-icon shape="edit" class="is-inverse"></clr-icon>Edit</button>
+            <button (click)="deleteModal()" class="btn">Delete</button>     
+            </div>     
+        </div>
+
+
+    </div>
+    <p-dataTable [value]="phones" selectionMode="single" [(selection)]="selectedPhone" datakey="id" [rows]="10" [paginator]="true"
+        [pageLinks]="5" [rowsPerPageOptions]="[5,10,20]" [globalFilter]="gb">
+        <p-column field="full_number" header="Telephone" [sortable]="true"></p-column>
+        <p-column field="location" header="Location" [sortable]="true"></p-column>
+        <p-column field="department" header="Department" [sortable]="true"></p-column>
+        <p-column field="function_info" header="Function" [sortable]="true"></p-column>
+        <p-column field="model" header="Phone Model" [sortable]="true"></p-column>
+        <p-column field="line_type" header="Line Type" [sortable]="true"></p-column>
+    </p-dataTable>
+</section>
+
+<!-- Create A Phone Wizard -->
+
+<clr-wizard #createlg [(clrWizardOpen)]="createOpen" clrWizardSize="lg" (clrWizardOnFinish)="createPhone()">
+    <clr-wizard-title>Create A New Phone</clr-wizard-title>
+    <clr-wizard-button [type]="'cancel'">Cancel</clr-wizard-button>
+    <clr-wizard-button [type]="'previous'">Back</clr-wizard-button>
+    <clr-wizard-button [type]="'next'">Next</clr-wizard-button>
+    <clr-wizard-button [type]="'finish'">Finish</clr-wizard-button>
+
+    <clr-wizard-page>
+        <ng-template clrPageTitle>Phone Info</ng-template>
+<form class="compact" *ngIf="newPhone">
+        <div class="form-group" >
+            <label>Full Number:</label>
+            <input type="text" placeholder="Enter value here" size="35" name="full_number" [(ngModel)]="newPhone.full_number">
+        </div>
+        <div class="form-group" >
+            <label>Extension:</label>
+            <input type="text" placeholder="Enter value here" size="35" name="extension" [(ngModel)]="newPhone.extension">
+        </div>
+                <div class="form-group" >
+            <label>Voice Mail:</label>
+            <input type="text" placeholder="Enter value here" size="35" name="vm_id" [(ngModel)]="newPhone.vm_id">
+        </div>
+        <div class="form-group">
+            <label>Function:</label>
+            <div class="select">
+                <select name="function_info" [(ngModel)]="newPhone.function_info">
+                    <option>Voice</option>
+                    <option>Modem</option>
+                    <option>Fax</option>
+                    <option>RAS</option>
+                    <option>Alarm</option>
+                    <option>RightFax</option>
+                    <option>Emergency</option>
+                    <option>Mechanical</option>
+                </select>
+            </div>
+        </div>
+        <div class="form-group">
+            <label>Phone Model</label>
+            <div class="select">
+                <select name="model" [(ngModel)]="newPhone.model">
+                    <option>InterTel Basic</option>
+                    <option>Intertel Standard</option>
+                    <option>InterTel Executive</option>
+                    <option>RightFax</option>
+                    <option>Analog Phone</option>
+                    <option>AT&amp;T 8503T</option>
+                    <option>AT&amp;T 8510T</option>
+                    <option>AT&amp;T 6504T</option>
+                    <option>AT&amp;T ISDN 10</option>
+                    <option>AT&amp;T 8520T</option>
+                    <option>AT&amp;T 8529</option>
+                </select>
+            </div>
+        </div>
+                <div class="form-group">
+            <label>Line Type:</label>
+            <div class="select">
+                <select name="line_type" [(ngModel)]="newPhone.line_type">
+                    <option>DID</option>
+                    <option>Centrex Analog</option>
+                    <option>Centrex ISDN</option>
+                    <option>Measured Business</option>
+                    <option>Paetec Digital Phone</option>
+                </select>
+            </div>
+        </div>
+        <div class="form-group" >
+            <label>Location:</label>
+            <input type="text" placeholder="Enter value here" size="35" name="location" [(ngModel)]="newPhone.location">
+        </div>
+                        <div class="form-group" >
+            <label>Long Distance:</label>
+            <input type="text" placeholder="Enter value here" size="35" name="long_distance" [(ngModel)]="newPhone.long_distance">
+        </div>
+                <div class="form-group" >
+            <label>Assigned to:</label>
+            <input type="text" placeholder="Enter value here" size="35" name="location" [(ngModel)]="newPhone.username">
+                </div>
+        <div class="form-group" >
+            <label>Monthly Cost:</label>
+            <input type="text" placeholder="Enter value here" size="35" name="monthly_cost" [(ngModel)]="newPhone.monthly_cost">
+
+        </div>
+                <div class="form-group" >
+            <label>Date Installed:</label>
+            <input type="date" placeholder="Enter value here" size="35" name="date_installed" [(ngModel)]="newPhone.date_installed">
+
+        </div>
+        
+        </form>
+    </clr-wizard-page>
+
+    <clr-wizard-page>
+        <ng-template clrPageTitle>Additional Info</ng-template>
+         <div class="form-group">
+                            <label for="switch" >Notes:</label>
+                            <textarea id="switch" rows="5" name="notes" [(ngModel)]="newPhone.notes" ></textarea>
+                        </div>
+                 <div class="form-group">
+                            <label for="switch" >Switch Comments:</label>
+                            <textarea id="switch" rows="2" name="switch_comments" [(ngModel)]="newPhone.switch_comments" ></textarea>
+                        </div>
+    </clr-wizard-page>
+
+</clr-wizard>
+
+<!-- Edit A Phone Wizard -->
+
+<clr-wizard #updatelg [(clrWizardOpen)]="updateOpen" clrWizardSize="lg" (clrWizardOnFinish)="updatePhone()" *ngIf="selectedPhone">
+    <clr-wizard-title>Edit Phone {{selectedPhone.full_number}}</clr-wizard-title>
+    <clr-wizard-button [type]="'cancel'">Cancel</clr-wizard-button>
+    <clr-wizard-button [type]="'previous'">Back</clr-wizard-button>
+    <clr-wizard-button [type]="'next'">Next</clr-wizard-button>
+    <clr-wizard-button [type]="'finish'">Finish</clr-wizard-button>
+
+    <clr-wizard-page>
+        <ng-template clrPageTitle>Phone Info</ng-template>
+<form class="compact" >
+        <div class="form-group" >
+            <label>Full Number:</label>
+            <input type="text" placeholder="Enter value here" size="35" name="full_number" [(ngModel)]="selectedPhone.full_number">
+        </div>
+        <div class="form-group" >
+            <label>Extension:</label>
+            <input type="text" placeholder="Enter value here" size="35" name="extension" [(ngModel)]="selectedPhone.extension">
+        </div>
+                <div class="form-group" >
+            <label>Voice Mail:</label>
+            <input type="text" placeholder="Enter value here" size="35" name="vm_id" [(ngModel)]="selectedPhone.vm_id">
+        </div>
+        <div class="form-group">
+            <label>Function:</label>
+            <div class="select">
+                <select name="function_info" [(ngModel)]="selectedPhone.function_info">
+                    <option>Voice</option>
+                    <option>Modem</option>
+                    <option>Fax</option>
+                    <option>RAS</option>
+                    <option>Alarm</option>
+                    <option>RightFax</option>
+                    <option>Emergency</option>
+                    <option>Mechanical</option>
+                </select>
+            </div>
+        </div>
+        <div class="form-group">
+            <label>Phone Model</label>
+            <div class="select">
+                <select name="model" [(ngModel)]="selectedPhone.model">
+                    <option>InterTel Basic</option>
+                    <option>Intertel Standard</option>
+                    <option>InterTel Executive</option>
+                    <option>RightFax</option>
+                    <option>Analog Phone</option>
+                    <option>AT&amp;T 8503T</option>
+                    <option>AT&amp;T 8510T</option>
+                    <option>AT&amp;T 6504T</option>
+                    <option>AT&amp;T ISDN 10</option>
+                    <option>AT&amp;T 8520T</option>
+                    <option>AT&amp;T 8529</option>
+                </select>
+            </div>
+        </div>
+                <div class="form-group">
+            <label>Line Type:</label>
+            <div class="select">
+                <select name="line_type" [(ngModel)]="selectedPhone.line_type">
+                    <option>DID</option>
+                    <option>Centrex Analog</option>
+                    <option>Centrex ISDN</option>
+                    <option>Measured Business</option>
+                    <option>Paetec Digital Phone</option>
+                </select>
+            </div>
+        </div>
+        <div class="form-group" >
+            <label>Location:</label>
+            <input type="text" placeholder="Enter value here" size="35" name="location" [(ngModel)]="selectedPhone.location">
+        </div>
+                        <div class="form-group" >
+            <label>Long Distance:</label>
+            <input type="text" placeholder="Enter value here" size="35" name="long_distance" [(ngModel)]="selectedPhone.long_distance">
+        </div>
+                <div class="form-group" >
+            <label>Assigned to:</label>
+            <input type="text" placeholder="Enter value here" size="35" name="location" [(ngModel)]="selectedPhone.username">
+                </div>
+        <div class="form-group" >
+            <label>Monthly Cost:</label>
+            <input type="text" placeholder="Enter value here" size="35" name="monthly_cost" [(ngModel)]="selectedPhone.monthly_cost">
+
+        </div>
+                <div class="form-group" >
+            <label>Date Installed:</label>
+            <input type="date" placeholder="Enter value here" size="35" name="date_installed" [(ngModel)]="selectedPhone.date_installed">
+
+        </div>
+        
+        </form>
+    </clr-wizard-page>
+
+    <clr-wizard-page>
+        <ng-template clrPageTitle>Additional Info</ng-template>
+         <div class="form-group">
+                            <label for="switch" >Notes:</label>
+                            <textarea id="switch" rows="5" name="notes" [(ngModel)]="selectedPhone.notes" ></textarea>
+                        </div>
+                 <div class="form-group">
+                            <label for="switch" >Switch Comments:</label>
+                            <textarea id="switch" rows="2" name="switch_comments" [(ngModel)]="selectedPhone.switch_comments" ></textarea>
+                        </div>
+    </clr-wizard-page>
+
+</clr-wizard>
+
+<!-- Delete Phone Modal -->
+<clr-modal [(clrModalOpen)]="delModalOpen">
+    <h3 class="modal-title">Delete Phone</h3>
+    <div class="modal-body" *ngIf="selectedPhone">
+        <p>Are you sure you want to delete phone {{selectedPhone.full_number}} ?</p>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-outline" (click)="deleteModal()">Cancel</button>
+        <button type="button" class="btn btn-danger" (click)="deletePhone() ">Delete</button>
+    </div>
+</clr-modal>
