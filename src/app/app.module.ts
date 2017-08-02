@@ -8,6 +8,7 @@ import { routing } from './app.routing';
 import { ClarityModule } from 'clarity-angular';
 
 import { InputTextModule, ButtonModule, DataTableModule, DialogModule, GrowlModule }  from 'primeng/primeng';
+import { TextMaskModule } from 'angular2-text-mask';
 
 import { AppComponent } from './app.component';
 
@@ -21,9 +22,6 @@ import { UserCreateComponent } from './users/user-create/user-create.component';
 import { PhoneService } from './shared/services/phone.service';
 import { PhonesComponent } from './phones/phones.component';
 import { PhoneListComponent } from './phones/phone-list/phone-list.component';
-import { PhoneSingleComponent } from './phones/phone-single/phone-single.component';
-import { PhoneCreateComponent } from './phones/phone-create/phone-create.component';
-import { PhoneEditComponent } from './phones/phone-edit/phone-edit.component';
 import { PhoneSidebarComponent } from './phones/phone-sidebar/phone-sidebar.component';
 
 import 'rxjs/add/operator/map';
@@ -44,9 +42,6 @@ import 'rxjs/add/observable/throw';
 
     PhonesComponent,
     PhoneListComponent,
-    PhoneSingleComponent,
-    PhoneCreateComponent,
-    PhoneEditComponent,
     PhoneSidebarComponent
   ],
   imports: [
@@ -54,6 +49,7 @@ import 'rxjs/add/observable/throw';
     BrowserAnimationsModule,
     ClarityModule.forRoot(),
     FormsModule,
+    TextMaskModule,
     DataTableModule,
     GrowlModule,
     HttpModule,

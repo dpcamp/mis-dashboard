@@ -1,37 +1,43 @@
-<div class="jumbotron text-center">
-  <h1>Users</h1>
+<section class="wrapper">
+    <h1>Users</h1>
+    <div class="card">
+        <div class="card-header">
+            <clr-icon shape="search"></clr-icon>
+            <input #gb type="text" pInputText size="25" placeholder="Search Users">
+        </div>
+    </div>
+    <div class="card" *ngIf="selectedUser">
+        <div class="card-header">
+            User{{selectedUser.sAMAccountName}}
+        </div>
+        <div class="card-block" *ngIf="selectedUser">
+            <div class="card-text">
+                <div class="row">
+                    <div class="col-lg-6 col-md-12 col-sm-12 col-xs-12">
+                        <div class="form-group">
+                            <label for="ext">Assets:</label>
+                            <input type="text" id="ext" size="20" readonly [(ngModel)]="selectedUser.Telephone.full_number">
+                        </div>
 
-  <a routerLink="/users/create" class="btn btn-sm btn-info">Create User</a>
-</div>
-
-<div class="user-list row" *ngIf="users">
-  <table class="table table-bordered table-hover table-striped">
-    <thead>
-        <tr>
-            <th>ID</th>
-            <th>Name</th>
-            <th>Username</th>
-            <th>email</th>
-            <th>phone</th>
-        </tr>
-    </thead>
-
-  <tbody *ngFor="let user of users">
-    <tr>
-      <td>{{ user.id }} </td>
-      <td><a [routerLink]="['/users', user.id]" >{{ user.name }} </a></td>
-      <td>{{ user.username }} </td>
-      <td>{{ user.email }} </td>
-      <td>{{ user.phone }} </td>
-    </tr>
-    
-  </tbody>
-  </table>
-
-    <!--><div class="user-card text-center" [routerLink]="['/users', user.id]">
-      <h2> {{ user.name }} <small>{{ user.email }}</small></h2>
-    </div><-->
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer">
+                <div class="btn-group btn-outline-primary btn-sm">
+                    <button  class="btn"><clr-icon shape="edit" class="is-inverse"></clr-icon>Edit</button>
+                    <button  class="btn">Delete</button>
+                </div>
+            </div>
 
 
-
-</div>
+        </div>
+    </div>
+        <p-dataTable [value]="users" selectionMode="single" [(selection)]="selectedUser" datakey="id" [rows]="10" [paginator]="true"
+            [pageLinks]="5" [rowsPerPageOptions]="[5,10,20]" [globalFilter]="gb">
+            <p-column field="displayName" header="Display Name" [sortable]="true"></p-column>
+            <p-column field="sAMAccountName" header="Username" [sortable]="true"></p-column>
+            <p-column field="mail" header="email" [sortable]="true"></p-column>
+            <p-column field="department" header="Department" [sortable]="true"></p-column>
+            <p-column field="title" header="Title" [sortable]="true"></p-column>
+        </p-dataTable>
+</section>

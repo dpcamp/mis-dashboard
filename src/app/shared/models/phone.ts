@@ -5,7 +5,7 @@ export class Phone {
   division_id?: number;
   department?: string;
   position?:string;
-  username?: string;
+  UserSAMAccountName?: string;
   location?: string;
   function_info?: string;
   notes?: string;
@@ -31,7 +31,12 @@ export class Phone {
   binding_post?: number;
   provider?: string;
   pin?: string;
-  date_created?:string
+  date_created?:string;
+  User?: {
+    sAMAccountName?: string;
+    displayName?: string;
+  }
+
 
   message?: string;
 

@@ -23,8 +23,8 @@ export class UserService {
    */
   getUsers(): Observable<User[]> {
     return this.http.get(this.usersUrl)
-      .map(res => res.json())
-      .map(users => users.map(this.toUser))
+      .map(res => res.json().data)
+      //.map(users => users.map(this.toUser))
       .catch(this.handleError);
   }
 
@@ -40,7 +40,7 @@ export class UserService {
 
     return this.http.get(`${this.usersUrl}/${id}`)
       .map(res => res.json())
-      .map(this.toUser)
+      //.map(this.toUser)
       .catch(this.handleError);
   }
 
@@ -74,7 +74,7 @@ export class UserService {
   /**
    * Convert user info from the API to our standard/format
    */
-  
+  /** 
   private toUser(user): User {
     return {
       id: user.user_id,
@@ -86,7 +86,7 @@ export class UserService {
       phone: user.number,
     };
   }
-
+*/
   /**
    * The user was created. add this info to our stream
    */

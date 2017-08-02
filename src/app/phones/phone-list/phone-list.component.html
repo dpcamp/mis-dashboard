@@ -17,8 +17,8 @@
                 <div class="row">
                     <div class="col-lg-6 col-md-12 col-sm-12 col-xs-12">
                         <div class="form-group">
-                            <label for="ext">Owner:</label>
-                            <input type="text" id="ext" size="20" readonly [(ngModel)]="selectedPhone.username">
+                            <label for="ext" *ngIf="selectedPhone.UserSAMAccountName">Username:</label>
+                            <input type="text" id="ext" size="20" readonly [(ngModel)]="selectedPhone.UserSAMAccountName" *ngIf="selectedPhone.UserSAMAccountName">
                             <label for="ext" *ngIf="selectedPhone.extension">Extension:</label>
                             <input type="text" id="ext" size="7" readonly [(ngModel)]="selectedPhone.extension" *ngIf="selectedPhone.extension">
                             <label for="ext" *ngIf="selectedPhone.vm_id">Voicemail:</label>
@@ -89,7 +89,7 @@
         [pageLinks]="5" [rowsPerPageOptions]="[5,10,20]" [globalFilter]="gb">
         <p-column field="full_number" header="Telephone" [sortable]="true"></p-column>
         <p-column field="location" header="Location" [sortable]="true"></p-column>
-        <p-column field="department" header="Department" [sortable]="true"></p-column>
+        <p-column field="User.displayName" header="Assigned To" [sortable]="true"></p-column>
         <p-column field="function_info" header="Function" [sortable]="true"></p-column>
         <p-column field="model" header="Phone Model" [sortable]="true"></p-column>
         <p-column field="line_type" header="Line Type" [sortable]="true"></p-column>
@@ -175,7 +175,7 @@
         </div>
                 <div class="form-group" >
             <label>Assigned to:</label>
-            <input type="text" placeholder="Enter value here" size="35" name="location" [(ngModel)]="newPhone.username">
+            <input type="text" placeholder="Enter value here" size="35" name="location" [(ngModel)]="newPhone.UserSAMAccountName">
                 </div>
         <div class="form-group" >
             <label>Monthly Cost:</label>
@@ -284,7 +284,13 @@
         </div>
                 <div class="form-group" >
             <label>Assigned to:</label>
-            <input type="text" placeholder="Enter value here" size="35" name="location" [(ngModel)]="selectedPhone.username">
+                        <div class="select">
+                <select name="UserSAMAccountName" [(ngModel)]="selectedPhone.UserSAMAccountName">
+                    <option *ngFor="let user of users" [value]="user.sAMAccountName">
+                        {{ user.displayName }}
+                    </option>
+                </select>
+            </div>
                 </div>
         <div class="form-group" >
             <label>Monthly Cost:</label>

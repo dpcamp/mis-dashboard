@@ -1,7 +1,9 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { PhoneService } from '../../shared/services/phone.service';
+import { UserService } from '../../shared/services/user.service';
 import { Phone } from '../../shared/models/phone';
+import { User } from '../../shared/models/user';
 import { Message } from 'primeng/primeng';
 
 import { Wizard } from 'clarity-angular';
@@ -12,6 +14,7 @@ import { Wizard } from 'clarity-angular';
 export class PhoneListComponent implements OnInit {
   loading: boolean;
   phones: Phone[];
+  users: User[];
  
   totalRecords: number;
   msgs: Message[] = [];
@@ -21,7 +24,9 @@ export class PhoneListComponent implements OnInit {
 
   successMessage: string = '';
   errorMessage: string = '';
-
+ 
+  mask = ['(', /[1-9]/, /\d/, /\d/, ')', ' ', /\d/, /\d/, /\d/, '-', /\d/, /\d/, /\d/, /\d/]
+ 
   @ViewChild('createlg') createLarge: Wizard;
   @ViewChild('updatelg') updateLarge: Wizard;
 
@@ -31,14 +36,19 @@ export class PhoneListComponent implements OnInit {
   delModalOpen: boolean = false;
 
   constructor(
-    private service: PhoneService,
+    private phoneService: PhoneService,
+    private userService: UserService,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+
+    
     ) { }
   
   ngOnInit() { 
-      this.service.getPhones()
+      this.phoneService.getPhones()
       .subscribe(phones => this.phones = phones);
+      this.userService.getUsers()
+      .subscribe(users => this.users = users);
   }
 
   createPhoneWizard() {
@@ -60,7 +70,7 @@ export class PhoneListComponent implements OnInit {
     //this.successMessage = '';
     //this.errorMessage   = '';
 
-    this.service.createPhone(this.newPhone)
+    this.phoneService.createPhone(this.newPhone)
       .subscribe(newPhone => {
         //this.successMessage = 'Phone was created!';
         console.log('phone was created');
@@ -79,7 +89,7 @@ export class PhoneListComponent implements OnInit {
     //this.successMessage = '';
     //this.errorMessage = '';
 
-    this.service.updatePhone(this.selectedPhone)
+    this.phoneService.updatePhone(this.selectedPhone)
       .subscribe(
       selectedPhone => {
         //this.successMessage = selectedPhone.message;
@@ -95,7 +105,7 @@ export class PhoneListComponent implements OnInit {
      * Delete a Phone
      */
         deletePhone() {
-        this.service.deletePhone(this.selectedPhone.id)
+        this.phoneService.deletePhone(this.selectedPhone.id)
         .subscribe(data => {
             this.deleteModal();
             this.refreshPhoneList();
@@ -108,7 +118,7 @@ export class PhoneListComponent implements OnInit {
      * Get Phones
      */
     refreshPhoneList(){
-        this.service.getPhones()
+        this.phoneService.getPhones()
       .subscribe(res => this.phones = res);
 
     }

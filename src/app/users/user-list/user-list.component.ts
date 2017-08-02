@@ -3,13 +3,11 @@ import { UserService } from '../../shared/services/user.service';
 import { User } from '../../shared/models/user';
 
 @Component({
-  styles: [`
-    .user-card { cursor: pointer; } 
-  `],
   templateUrl: 'user-list.component.html'
 })
 export class UserListComponent implements OnInit {
   users: User[];
+  selectedUser: User;
 
   constructor(private service: UserService) { }
 

@@ -50,20 +50,8 @@ export const routes: Routes = [
       {
         path: '',
         component: PhoneListComponent
-      },
-      {
-        path: 'create',
-        component: PhoneCreateComponent
-      },
-      {
-        path: ':id',
-        component: PhoneSingleComponent
-       },
-       {
-        path: ':id/edit',
-        component: PhoneEditComponent
-       }
-      ]
+      }
+  ]
   }
 ];
 

@@ -1,9 +1,15 @@
+
 export class User {
-  id?: string;
-  name?: string;
-  first_name: string;
-  last_name: string;
-  username: string;
-  email: string;
-  phone: string;
+  constructor(
+  public id: string,
+  public givenName: string,
+  public sn: string,
+  public mail: string,
+  public title: string,
+  public department: string,
+  public sAMAccountName: string,
+  public displayName: string
+
+  
+  ){}
 }
