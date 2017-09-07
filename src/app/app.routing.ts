@@ -9,9 +9,10 @@ import { UserCreateComponent } from './users/user-create/user-create.component';
 
 import { PhonesComponent } from './phones/phones.component';
 import { PhoneListComponent } from './phones/phone-list/phone-list.component';
-import { PhoneSingleComponent } from './phones/phone-single/phone-single.component';
-import { PhoneCreateComponent } from './phones/phone-create/phone-create.component';
-import { PhoneEditComponent } from './phones/phone-edit/phone-edit.component';
+
+import { ComputersComponent } from "./computers/computers.component";
+import { ComputerListComponent } from "./computers/computer-list/computer-list.component";
+
 
 //import { LoginComponent } from './login/login.component';
 
@@ -28,8 +29,8 @@ export const routes: Routes = [
       {
         path: '',
         component: UserListComponent
-      },
-      {
+      }
+/*       {
         path: 'create',
         component: UserCreateComponent
       },
@@ -40,7 +41,7 @@ export const routes: Routes = [
       {
         path: ':id/edit',
         component: UserEditComponent
-      }
+      } */
     ]
   },
   {
@@ -50,6 +51,16 @@ export const routes: Routes = [
       {
         path: '',
         component: PhoneListComponent
+      }
+  ]
+  },
+ {
+    path: 'computers',
+    component: ComputersComponent,
+      children: [
+      {
+        path: '',
+        component: ComputerListComponent
       }
   ]
   }

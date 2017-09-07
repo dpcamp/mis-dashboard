@@ -26,6 +26,8 @@ export class UserService {
       .map(res => res.json().data)
       //.map(users => users.map(this.toUser))
       .catch(this.handleError);
+            
+
   }
 
   /**

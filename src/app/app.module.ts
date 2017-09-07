@@ -24,6 +24,11 @@ import { PhonesComponent } from './phones/phones.component';
 import { PhoneListComponent } from './phones/phone-list/phone-list.component';
 import { PhoneSidebarComponent } from './phones/phone-sidebar/phone-sidebar.component';
 
+
+import { ComputerService } from './shared/services/computer.service';
+import { ComputersComponent } from './computers/computers.component';
+import { ComputerListComponent } from './computers/computer-list/computer-list.component';
+
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/toPromise';
 import 'rxjs/add/operator/catch';
@@ -42,7 +47,11 @@ import 'rxjs/add/observable/throw';
 
     PhonesComponent,
     PhoneListComponent,
-    PhoneSidebarComponent
+    PhoneSidebarComponent, 
+
+    ComputersComponent,
+    ComputerListComponent
+
   ],
   imports: [
     BrowserModule,
@@ -61,7 +70,8 @@ import 'rxjs/add/observable/throw';
   
   providers: [
     UserService,
-    PhoneService
+    PhoneService, 
+    ComputerService
   ],
   bootstrap: [AppComponent]
 })

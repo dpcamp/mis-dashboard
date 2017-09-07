@@ -8,15 +8,23 @@
     </div>
     <div class="card" *ngIf="selectedUser">
         <div class="card-header">
-            User{{selectedUser.sAMAccountName}}
+            User {{selectedUser.user_name}}
         </div>
         <div class="card-block" *ngIf="selectedUser">
             <div class="card-text">
                 <div class="row">
                     <div class="col-lg-6 col-md-12 col-sm-12 col-xs-12">
-                        <div class="form-group">
-                            <label for="ext">Assets:</label>
-                            <input type="text" id="ext" size="20" readonly [(ngModel)]="selectedUser.Telephone.full_number">
+                        <div class="form-group" >
+                            <label for="ext">Phone Number:</label>
+                            <div *ngFor="let p of selectedUser.phones; let i = index">  
+                            <input type="text" id="ext" size="20" readonly [(ngModel)]="p.full_number" *ngIf="p.full_number">
+                            </div>
+                        </div>
+                        <div class="form-group" >
+                            <label for="ext">Current Computer(s):</label>
+                        <div *ngFor="let c of selectedUser.computers; let i = index">      
+                            <input type="text" id="ext" size="10" readonly [(ngModel)]="c.computer_name" *ngIf="c.computer_name"> 
+                        </div>    
                         </div>
 
                     </div>
@@ -34,9 +42,9 @@
     </div>
         <p-dataTable [value]="users" selectionMode="single" [(selection)]="selectedUser" datakey="id" [rows]="10" [paginator]="true"
             [pageLinks]="5" [rowsPerPageOptions]="[5,10,20]" [globalFilter]="gb">
-            <p-column field="displayName" header="Display Name" [sortable]="true"></p-column>
-            <p-column field="sAMAccountName" header="Username" [sortable]="true"></p-column>
-            <p-column field="mail" header="email" [sortable]="true"></p-column>
+            <p-column field="display_name" header="Display Name" [sortable]="true"></p-column>
+            <p-column field="user_name" header="Username" [sortable]="true"></p-column>
+            <p-column field="email" header="email" [sortable]="true"></p-column>
             <p-column field="department" header="Department" [sortable]="true"></p-column>
             <p-column field="title" header="Title" [sortable]="true"></p-column>
         </p-dataTable>

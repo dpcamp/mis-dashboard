@@ -14,7 +14,7 @@ export class UsersComponent implements OnInit {
   ngOnInit() { 
     // user has been created
     this.service.userCreated$.subscribe(user => {
-      this.successMessage = `${user.first_name} has been created!`;
+      this.successMessage = `${user.display_name} has been created!`;
       this.clearMessages();
     });
 

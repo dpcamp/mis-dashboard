@@ -1,15 +1,13 @@
-
 export class User {
   constructor(
   public id: string,
-  public givenName: string,
-  public sn: string,
-  public mail: string,
+  public first_name: string,
+  public last_name: string,
+  public email: string,
   public title: string,
   public department: string,
-  public sAMAccountName: string,
-  public displayName: string
-
-  
+  public user_name: string,
+  public display_name: string
+   
   ){}
 }

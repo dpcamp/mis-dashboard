@@ -7,7 +7,7 @@ import { UserService } from '../../shared/services/user.service';
   templateUrl: 'user-create.component.html'
 })
 export class UserCreateComponent implements OnInit {
-  user: User = { first_name: '', last_name: '', username: '', email: '', phone:'' };
+  //user: User = { id: '', titlegivenName: '', sn: '', sAMAccountName: '', mail: '', };
   successMessage: string = '';
   errorMessage: string = '';
 
@@ -23,14 +23,14 @@ export class UserCreateComponent implements OnInit {
     this.successMessage = '';
     this.errorMessage   = '';
 
-    this.service.createUser(this.user)
+/*     this.service.createUser(this.user)
       .subscribe(user => {
         this.successMessage = 'User was created!';
         console.log('user was created');
 
         // navigate back to the users page
         this.router.navigate(['/users']);
-      })
+      }) */
   }
 
 }

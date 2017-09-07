@@ -4,20 +4,30 @@ import { Observable } from 'rxjs/Observable';
 import { Subject } from 'rxjs/Subject';
 import { Phone } from '../models/phone';
 
+
 @Injectable()
 export class PhoneService {
   private phonesUrl: string = 'http://192.168.235.96:3000/api/phones';
 
+
   // observable source
   private phoneCreatedSource = new Subject<Phone>();
+  private phoneUpdatedSource = new Subject<Phone>();
   private phoneDeletedSource = new Subject();
 
   // observable stream
+  phoneUpdated$ = this.phoneUpdatedSource.asObservable();
   phoneCreated$ = this.phoneCreatedSource.asObservable();
   phoneDeleted$ = this.phoneDeletedSource.asObservable();
   
   constructor(private http: Http) {}
 
+  getPhoneAssignment(): Observable<Phone[]> {
+    return this.http.get(`${this.phonesUrl}`)
+      .map(res => res.json().data[0].owners)
+      //.map(phones => phones.data.owners.toString())
+      .catch(this.handleError);
+  }
   /**
    * Get all phones
    */
@@ -60,8 +70,10 @@ export class PhoneService {
 
     return this.http.put(`${this.phonesUrl}/${phone.id}`, phone)
       .map(res => res.json())
-      .map(this.toPhone)
+      //.map(this.toPhone)
+      .do(phone => this.http.post(`${this.phonesUrl}/${phone.id}/users/`, phone))
       .catch(this.handleError);
+      
   } 
 
     /**
@@ -101,6 +113,11 @@ export class PhoneService {
   /**
    * Handle any errors from the API
    */
+
+   phoneUpdateUser(id, un) {
+     console.log(`SAMAccountName is: ${un}`)
+     return this.http.post(`${this.phonesUrl}/${id}/users/`, {UserSAMAccountName: `${un}`})
+   }
 
   private handleError(err) {
     let errMessage: string;

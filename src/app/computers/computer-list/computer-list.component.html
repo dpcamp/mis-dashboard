@@ -1,0 +1,42 @@
+<section class="wrapper">
+    <h1>Computers</h1>
+    <div class="card">
+        <div class="card-header">
+            <clr-icon shape="search"></clr-icon>
+            <input #gb type="text" pInputText size="25" placeholder="Search Computers">
+        </div>
+    </div>
+    <div class="card" *ngIf="selectedComputer">
+        <div class="card-header">
+            Asset Tag: {{selectedComputer.computer_name}}
+        </div>
+        <div class="card-block" *ngIf="selectedComputer">
+            <div class="card-text">
+                <div class="row">
+                    <div class="col-lg-6 col-md-12 col-sm-12 col-xs-12">
+                        <div class="form-group" >
+                            <label for="ext">IP Address:</label>
+                            <input type="text" id="ext" size="20" readonly [(ngModel)]="selectedComputer.ip_address" *ngIf="selectedComputer.ip_address">
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer">
+                <div class="btn-group btn-outline-primary btn-sm">
+                    <button  class="btn"><clr-icon shape="edit" class="is-inverse"></clr-icon>Edit</button>
+                    <button  class="btn">Delete</button>
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+        <p-dataTable [value]="computers" selectionMode="single" [(selection)]="selectedComputer" datakey="computer_id" [rows]="10" [paginator]="true"
+            [pageLinks]="5" [rowsPerPageOptions]="[5,10,20]" [globalFilter]="gb">
+            <p-column field="computer_name" header="Computer Name" [sortable]="true"></p-column>
+            <p-column field="computer_type" header="Computer_Type" [sortable]="true"></p-column>
+            <p-column field="ip_address" header="IP Address" [sortable]="true"></p-column>
+            <p-column field="mac_address" header="MAC Address" [sortable]="true"></p-column>
+        </p-dataTable>
+</section>

@@ -5,7 +5,7 @@ export class Phone {
   division_id?: number;
   department?: string;
   position?:string;
-  UserSAMAccountName?: string;
+//  UserSAMAccountName?: string;
   location?: string;
   function_info?: string;
   notes?: string;
@@ -32,12 +32,10 @@ export class Phone {
   provider?: string;
   pin?: string;
   date_created?:string;
-  User?: {
-    sAMAccountName?: string;
-    displayName?: string;
-  }
-
-
+  owners?: {
+    user_name?: string;
+    display_name?: string;
+  };
   message?: string;
 
   //owner: string;
