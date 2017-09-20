@@ -28,6 +28,10 @@ import { PhoneSidebarComponent } from './phones/phone-sidebar/phone-sidebar.comp
 import { ComputerService } from './shared/services/computer.service';
 import { ComputersComponent } from './computers/computers.component';
 import { ComputerListComponent } from './computers/computer-list/computer-list.component';
+import { ComputerSingleComponent } from './computers/computer-single/computer-single.component';
+
+import { FileSizePipe } from './shared/components/file-size.pipe'
+import { ClipboardModule } from 'ngx-clipboard'
 
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/toPromise';
@@ -38,6 +42,8 @@ import 'rxjs/add/observable/throw';
 @NgModule({
   declarations: [
     AppComponent,
+
+    FileSizePipe,
     
     UsersComponent,
     UserListComponent,
@@ -50,13 +56,15 @@ import 'rxjs/add/observable/throw';
     PhoneSidebarComponent, 
 
     ComputersComponent,
-    ComputerListComponent
+    ComputerListComponent,
+    ComputerSingleComponent
 
   ],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
     ClarityModule.forRoot(),
+    ClipboardModule,
     FormsModule,
     TextMaskModule,
     DataTableModule,

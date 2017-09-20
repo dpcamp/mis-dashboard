@@ -9,17 +9,17 @@ import { Message } from 'primeng/primeng';
 import { Wizard, StringFilter } from 'clarity-angular';
 
 class UserFilter implements StringFilter<Phone> {
-    accepts(phone: Phone, search: string):boolean {
-        return "" + phone.owners[0].display_name == search
-            || phone.owners[0].display_name.toLowerCase().indexOf(search) >= 0;
-    }
+  accepts(phone: Phone, search: string): boolean {
+    return "" + phone.owners[0].display_name == search
+      || phone.owners[0].display_name.toLowerCase().indexOf(search) >= 0;
+  }
 }
 
 class PhoneFilter implements StringFilter<Phone> {
-    accepts(phone: Phone, search: string):boolean {
-        return "" + phone.full_number == search
-            
-    }
+  accepts(phone: Phone, search: string): boolean {
+    return "" + phone.full_number == search
+
+  }
 }
 
 @Component({
@@ -33,23 +33,23 @@ export class PhoneListComponent implements OnInit {
 
   private userFilter = new UserFilter();
   phoneFilter = new PhoneFilter();
- 
+
   totalRecords: number;
   msgs: Message[] = [];
-  
+
   selectedPhone: Phone;
   newPhone: Phone = {};
 
   successMessage: string = '';
   errorMessage: string = '';
- 
+
   mask = ['(', /[1-9]/, /\d/, /\d/, ')', ' ', /\d/, /\d/, /\d/, '-', /\d/, /\d/, /\d/, /\d/]
- 
+
   @ViewChild('createlg') createLarge: Wizard;
   @ViewChild('updatelg') updateLarge: Wizard;
 
   createOpen: boolean = false;
-  updateOpen: boolean = false; 
+  updateOpen: boolean = false;
 
   delModalOpen: boolean = false;
 
@@ -59,26 +59,26 @@ export class PhoneListComponent implements OnInit {
     private userService: UserService,
     private route: ActivatedRoute,
     private router: Router,
-    
 
 
-    
-    ) { }
-  
-  
-  ngOnInit() { 
-      this.phoneService.getPhones()
+
+
+  ) { }
+
+
+  ngOnInit() {
+    this.phoneService.getPhones()
       .subscribe(phones => {
         this.phones = phones
         //console.log(phones)
-        });
-      this.userService.getUsers()
+      });
+    this.userService.getUsers()
       .subscribe(users => this.users = users);
-      this.phoneService.getPhoneAssignment()
+    this.phoneService.getPhoneAssignment()
       .subscribe(assignment => {
         //let assign = this.assignment.toString();
         this.assignment = assignment
-        console.log(assignment)
+        //console.log(assignment)
       });
 
   }
@@ -89,15 +89,15 @@ export class PhoneListComponent implements OnInit {
   }
 
   updatePhoneWizard() {
-  this.updateOpen = !this.updateOpen;
-  //console.log(`_ open is: ${this.updateOpen}`)
-}
+    this.updateOpen = !this.updateOpen;
+    //console.log(`_ open is: ${this.updateOpen}`)
+  }
   deleteModal() {
-  this.delModalOpen = !this.delModalOpen;
-}
- /**
-   * Create a phone
-   */
+    this.delModalOpen = !this.delModalOpen;
+  }
+  /**
+    * Create a phone
+    */
   createPhone() {
     //this.successMessage = '';
     //this.errorMessage   = '';
@@ -106,7 +106,7 @@ export class PhoneListComponent implements OnInit {
       .subscribe(newPhone => {
         //this.successMessage = 'Phone was created!';
         //console.log('phone was created');
-        this.show('success','Phone Created',`Phone: ${this.newPhone.full_number} was successfully created`)
+        this.show('success', 'Phone Created', `Phone: ${this.newPhone.full_number} was successfully created`)
         this.refreshPhoneList();
 
         // navigate back to the phones page
@@ -117,14 +117,14 @@ export class PhoneListComponent implements OnInit {
   /**
    * Edit a phone
    */
-    updatePhone() {
+  updatePhone() {
     //this.successMessage = '';
     //this.errorMessage = '';
-       this.phoneService.phoneUpdateUser(this.selectedPhone.id, this.selectedPhone.owners[0].user_name)
-          .subscribe(
+    this.phoneService.phoneUpdateUser(this.selectedPhone.id, this.selectedPhone.owners[0].user_name)
+      .subscribe(
       selectedPhone => {
         //this.successMessage = selectedPhone.message;
-        this.show('success','Phone Record Updated', `phone ID: ${this.selectedPhone.id} phone was assigned to ${this.selectedPhone.owners[0].user_name}`);
+        this.show('success', 'Phone Record Updated', `phone ID: ${this.selectedPhone.id} phone was assigned to ${this.selectedPhone.owners[0].user_name}`);
         this.refreshPhoneList();
       },
       err => {
@@ -144,44 +144,44 @@ export class PhoneListComponent implements OnInit {
       }
       );
   }
-    /**
-     * Delete a Phone
-     */
-        deletePhone() {
-        this.phoneService.deletePhone(this.selectedPhone.id)
-        .subscribe(data => {
-            this.deleteModal();
-            this.refreshPhoneList();
-            this.selectedPhone = null;
-        });
+  /**
+   * Delete a Phone
+   */
+  deletePhone() {
+    this.phoneService.deletePhone(this.selectedPhone.id)
+      .subscribe(data => {
+        this.deleteModal();
+        this.refreshPhoneList();
+        this.selectedPhone = null;
+      });
 
-    }
-    
-    /**
-     * Get Phones
-     */
-    refreshPhoneList(){
-        this.phoneService.getPhones()
+  }
+
+  /**
+   * Get Phones
+   */
+  refreshPhoneList() {
+    this.phoneService.getPhones()
       .subscribe(res => this.phones = res);
 
-    }
+  }
 
-    /**
-     * Shows the Growl message 
-     */
+  /**
+   * Shows the Growl message 
+   */
 
-     show(sev: string, sum: string, msg: string ){
-       
-       this.msgs =[];
-       this.msgs.push({severity:`${sev}`, summary:`${sum}`, detail:`${msg}`});
-     }
+  show(sev: string, sum: string, msg: string) {
 
-     /**
-      * Decodes User Array
-      */
-      decodedUser(){
+    this.msgs = [];
+    this.msgs.push({ severity: `${sev}`, summary: `${sum}`, detail: `${msg}` });
+  }
+
+  /**
+   * Decodes User Array
+   */
+  decodedUser() {
 
 
-      }
+  }
 
 }

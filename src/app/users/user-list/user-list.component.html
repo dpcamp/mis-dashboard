@@ -8,44 +8,62 @@
     </div>
     <div class="card" *ngIf="selectedUser">
         <div class="card-header">
-            User {{selectedUser.user_name}}
+            Assigned Assets for {{selectedUser.first_name}} {{selectedUser.last_name}}
         </div>
         <div class="card-block" *ngIf="selectedUser">
             <div class="card-text">
                 <div class="row">
-                    <div class="col-lg-6 col-md-12 col-sm-12 col-xs-12">
-                        <div class="form-group" >
-                            <label for="ext">Phone Number:</label>
-                            <div *ngFor="let p of selectedUser.phones; let i = index">  
-                            <input type="text" id="ext" size="20" readonly [(ngModel)]="p.full_number" *ngIf="p.full_number">
+                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                        <div class="form-group">
+                            <label for="ext">Phone Number(s):</label>
+                            <div *ngFor="let p of selectedUser.phones; let i = index">
+                                <input type="text" id="ext" size="20" readonly [(ngModel)]="p.full_number" *ngIf="p.full_number">
                             </div>
                         </div>
-                        <div class="form-group" >
-                            <label for="ext">Current Computer(s):</label>
-                        <div *ngFor="let c of selectedUser.computers; let i = index">      
-                            <input type="text" id="ext" size="10" readonly [(ngModel)]="c.computer_name" *ngIf="c.computer_name"> 
-                        </div>    
-                        </div>
 
+                    </div>
+                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                        <div class="form-group">
+                            <label for="ext">Current Computer(s):</label>
+                            <div *ngFor="let c of selectedUser.computers; let i = index">
+                                <a [routerLink]="['/computers', c.computer_id]">{{c.computer_name}}</a>
+                                <!-- BUG
+                                    <span class="btn-group btn-link btn-icon-link">
+                                    <button class="btn" [class.is-solid]= "cnCopied" ngxClipboard [cbContent]="c.computer_name" (cbOnSuccess)="cnCopied = true"><clr-icon shape="clipboard"></clr-icon></button>
+                                </span>
+                                -->
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                        <div class="form-group">
+                            <label for="ext">Current Trouble Tickets(s):</label>
+                            <div *ngFor="let sr of selectedUser.service_requests; let i = index">
+                                <a [href]="['http://helpdesk/SREdit.jsp?id='+ sr.id]" class="btn btn-primary btn-sm">SR{{sr.id}} - {{sr.title}}</a>
+
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
             <div class="card-footer">
                 <div class="btn-group btn-outline-primary btn-sm">
-                    <button  class="btn"><clr-icon shape="edit" class="is-inverse"></clr-icon>Edit</button>
-                    <button  class="btn">Delete</button>
+                    <button class="btn"><clr-icon shape="edit" class="is-inverse"></clr-icon>Edit</button>
+                    <button class="btn">Delete</button>
                 </div>
             </div>
 
 
         </div>
     </div>
-        <p-dataTable [value]="users" selectionMode="single" [(selection)]="selectedUser" datakey="id" [rows]="10" [paginator]="true"
-            [pageLinks]="5" [rowsPerPageOptions]="[5,10,20]" [globalFilter]="gb">
-            <p-column field="display_name" header="Display Name" [sortable]="true"></p-column>
-            <p-column field="user_name" header="Username" [sortable]="true"></p-column>
-            <p-column field="email" header="email" [sortable]="true"></p-column>
-            <p-column field="department" header="Department" [sortable]="true"></p-column>
-            <p-column field="title" header="Title" [sortable]="true"></p-column>
-        </p-dataTable>
+    <p-dataTable [value]="users" selectionMode="single" [(selection)]="selectedUser" datakey="id" [rows]="10" [paginator]="true"
+        [pageLinks]="5" [rowsPerPageOptions]="[5,10,20]" [globalFilter]="gb">
+        <p-column field="display_name" header="Display Name" [sortable]="true"></p-column>
+        <p-column field="user_name" header="Username" [sortable]="true"></p-column>
+        <p-column field="email" header="email" [sortable]="true"></p-column>
+        <p-column field="department" header="Department" [sortable]="true"></p-column>
+        <p-column field="title" header="Title" [sortable]="true"></p-column>
+    </p-dataTable>
 </section>

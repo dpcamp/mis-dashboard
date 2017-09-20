@@ -4,7 +4,6 @@ import { Observable } from 'rxjs/Observable';
 import { Subject } from 'rxjs/Subject';
 import { Computer } from '../models/computer';
 
-
 @Injectable()
 export class ComputerService {
     private computersUrl: string = 'http://192.168.235.96:3000/api/computers';
@@ -19,6 +18,19 @@ export class ComputerService {
             .catch(this.handleError);
     }
 
+    /**
+    * Get a single computer
+    */
+    getComputer(id: string): Observable<Computer> {
+        // attaching a token
+        //let headers = new Headers();
+        //headers.append('Content-Type', 'application/json');
+
+        return this.http.get(`${this.computersUrl}/${id}`)
+            .map(res => res.json())
+            //.map(this.toPhone)
+            .catch(this.handleError);
+    }
     private handleError(err) {
         let errMessage: string;
 
@@ -32,5 +44,4 @@ export class ComputerService {
 
         return Observable.throw(errMessage);
     }
-
 }

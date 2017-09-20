@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ComputerService } from '../../shared/services/computer.service';
 import { Computer } from '../../shared/models/computer';
 
+
 @Component({
     templateUrl: 'computer-list.component.html'
 })

@@ -39,6 +39,8 @@
                             <input type="text" id="vm" size="10" readonly [(ngModel)]="selectedPhone.long_distance" *ngIf="selectedPhone.long_distance">
                         </div>
                         <div class="form-group">
+                            <label for="ext" *ngIf="selectedPhone.line_type">Line Type:</label>
+                            <input type="text" id="cost" size="10" readonly [(ngModel)]="selectedPhone.line_type" *ngIf="selectedPhone.monthly_cost">
                             <label for="ext" *ngIf="selectedPhone.monthly_cost">Monthly Cost:</label>
                             <input type="text" id="cost" size="10" readonly [(ngModel)]="selectedPhone.monthly_cost" *ngIf="selectedPhone.monthly_cost">
                             <label for="vm" *ngIf="selectedPhone.date_installed">Date Installed:</label>
@@ -88,6 +90,7 @@
     <p-dataTable [value]="phones" selectionMode="single" [(selection)]="selectedPhone" datakey="id" [rows]="10" [paginator]="true"
         [pageLinks]="5" [rowsPerPageOptions]="[5,10,20]" [globalFilter]="gb">
         <p-column field="full_number" header="Telephone" [sortable]="true"></p-column>
+        <p-column field="department" header="Department" [sortable]="true"></p-column>
         <p-column field="position" header="Position" [sortable]="true"></p-column>
         <p-column field="location" header="Location" [sortable]="true"></p-column>
         <p-column field="owners" header="Assigned To" [sortable]="true">
@@ -98,7 +101,7 @@
         </p-column>
         <p-column field="function_info" header="Function" [sortable]="true"></p-column>
         <p-column field="model" header="Phone Model" [sortable]="true"></p-column>
-        <p-column field="line_type" header="Line Type" [sortable]="true"></p-column>
+        
     </p-dataTable>
 <!--
 <clr-datagrid [(clrDgSingleSelected)]="selectedPhone">
@@ -318,7 +321,8 @@
                 <div class="form-group" >
             <label>Assigned to:</label>
                         <div class="select">
-                <select name="UserSAMAccountName" [(ngModel)]="selectedPhone.owners[0].user_name">
+                <select name="UserSAMAccountName" [ngModel]="selectedPhone.owners && selectedPhone.owners[0]?.user_name" 
+                (ngModelChange)="selectedPhones.owners?.length && selectedPhone.owners[0].user_name=$event">
                     <option name="UserSAMAccountName" *ngFor="let user of users" [value]="user.user_name">
                         {{ user.display_name }}
                     </option>

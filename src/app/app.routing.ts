@@ -12,6 +12,7 @@ import { PhoneListComponent } from './phones/phone-list/phone-list.component';
 
 import { ComputersComponent } from "./computers/computers.component";
 import { ComputerListComponent } from "./computers/computer-list/computer-list.component";
+import { ComputerSingleComponent } from "./computers/computer-single/computer-single.component";
 
 
 //import { LoginComponent } from './login/login.component';
@@ -61,6 +62,10 @@ export const routes: Routes = [
       {
         path: '',
         component: ComputerListComponent
+      },
+      {
+        path: ':computer_id',
+        component: ComputerSingleComponent
       }
   ]
   }

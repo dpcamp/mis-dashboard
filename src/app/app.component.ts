@@ -10,6 +10,7 @@ import { UserService } from './shared/services/user.service';
 })
 export class AppComponent implements OnInit {
   users: User[];
+  cnCopied: boolean = false
 
   constructor(
     private userService: UserService, 

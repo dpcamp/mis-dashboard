@@ -4,6 +4,7 @@ import { Observable } from 'rxjs/Observable';
 import { Subject } from 'rxjs/Subject';
 import { User } from '../models/user';
 
+
 @Injectable()
 export class UserService {
   private usersUrl: string = 'http://192.168.235.96:3000/api/users';
