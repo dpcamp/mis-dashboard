@@ -120,6 +120,8 @@ export class PhoneListComponent implements OnInit {
   updatePhone() {
     //this.successMessage = '';
     //this.errorMessage = '';
+    if(this.selectedPhone.owners[0].user_name)
+      {
     this.phoneService.phoneUpdateUser(this.selectedPhone.id, this.selectedPhone.owners[0].user_name)
       .subscribe(
       selectedPhone => {
@@ -143,6 +145,7 @@ export class PhoneListComponent implements OnInit {
         console.error(err);
       }
       );
+    }
   }
   /**
    * Delete a Phone

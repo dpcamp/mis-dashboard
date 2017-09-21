@@ -3,11 +3,12 @@ import { Http, Response } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
 import { Subject } from 'rxjs/Subject';
 import { Phone } from '../models/phone';
+import { environment } from '../../../environments/environment';
 
 
 @Injectable()
 export class PhoneService {
-  private phonesUrl: string = 'http://192.168.235.96:3000/api/phones';
+  private phonesUrl: string = environment.phonesUrl;
 
 
   // observable source

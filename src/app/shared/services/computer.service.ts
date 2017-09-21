@@ -3,10 +3,11 @@ import { Http, Response } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
 import { Subject } from 'rxjs/Subject';
 import { Computer } from '../models/computer';
+import { environment } from '../../../environments/environment';
 
 @Injectable()
 export class ComputerService {
-    private computersUrl: string = 'http://192.168.235.96:3000/api/computers';
+    private computersUrl: string = environment.computersUrl;
 
     constructor(private http: Http) { }
     /**
