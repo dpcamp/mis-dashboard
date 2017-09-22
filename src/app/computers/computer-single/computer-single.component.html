@@ -1,5 +1,5 @@
 <section class="wrapper">
-    <h1>{{selectedComputer.computer_name}}</h1>
+    <h1 *ngIf="selectedComputer">{{selectedComputer.computer_name}}</h1>
     <div class="card" *ngIf="selectedComputer">
         <div class="card-block" *ngIf="selectedComputer">
             <div class="card-text">
