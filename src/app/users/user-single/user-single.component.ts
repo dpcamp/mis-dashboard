@@ -9,7 +9,7 @@ import { UserService } from '../../shared/services/user.service';
 })
 
 export class UserSingleComponent implements OnInit {
-    user: User;
+    selectedUser: User;
     constructor(
         private route: ActivatedRoute,
         private router: Router, 
@@ -18,12 +18,12 @@ export class UserSingleComponent implements OnInit {
 
     ngOnInit() {
         // grab the id from the url
-        let id = this.route.snapshot.params['id'];
+        let id = this.route.snapshot.params['user_name'];
 
         // use the userservice to getUser()
         this.service.getUser(id)
             .subscribe(user => {
-                this.user = user
+                this.selectedUser = user
                 console.log(user)
             });
      }
@@ -33,7 +33,7 @@ export class UserSingleComponent implements OnInit {
       */
 
       deleteUser() {
-          this.service.deleteUser(this.user.id)
+          this.service.deleteUser(this.selectedUser.id)
           .subscribe(data => {
               this.router.navigate(['users']);
           });

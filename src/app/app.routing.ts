@@ -30,15 +30,12 @@ export const routes: Routes = [
       {
         path: '',
         component: UserListComponent
-      }
-/*       {
-        path: 'create',
-        component: UserCreateComponent
       },
       {
-        path: ':id',
+        path: ':user_name',
         component: UserSingleComponent
-      },
+      }
+      /*
       {
         path: ':id/edit',
         component: UserEditComponent
@@ -48,17 +45,17 @@ export const routes: Routes = [
   {
     path: 'phones',
     component: PhonesComponent,
-      children: [
+    children: [
       {
         path: '',
         component: PhoneListComponent
       }
-  ]
+    ]
   },
- {
+  {
     path: 'computers',
     component: ComputersComponent,
-      children: [
+    children: [
       {
         path: '',
         component: ComputerListComponent
@@ -67,7 +64,7 @@ export const routes: Routes = [
         path: ':computer_id',
         component: ComputerSingleComponent
       }
-  ]
+    ]
   }
 ];
 

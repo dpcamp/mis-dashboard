@@ -15,6 +15,12 @@
                 <div class="row">
                     <div class="col-lg-6 col-md-12 col-sm-12 col-xs-12">
                         <div class="form-group">
+                        <div *ngFor="let c of selectedComputer.users; let i = index">
+                        <label for="ext" >Currently Logged In:</label> <a [routerLink]="['/users', c.user_name]">{{c.first_name}} {{c.last_name}}</a>
+                                
+                        </div>
+                        </div>
+                        <div class="form-group">
                             <label for="ext">IP Address:</label>
                             <input type="text" id="ext" size="20" readonly [(ngModel)]="selectedComputer.ip_address" *ngIf="selectedComputer.ip_address">
                         </div>
@@ -50,8 +56,6 @@
             </div>
             <div class="card-footer">
                 <div class="btn-group btn-outline-primary btn-sm">
-                    <button class="btn"><clr-icon shape="edit" class="is-inverse"></clr-icon>Edit</button>
-                    <button class="btn">Delete</button>
                 </div>
             </div>
 
