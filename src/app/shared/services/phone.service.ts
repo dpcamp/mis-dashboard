@@ -116,7 +116,7 @@ export class PhoneService {
    */
 
    phoneUpdateUser(id, un) {
-     console.log(`SAMAccountName is: ${un}`)
+     //console.log(`SAMAccountName is: ${un}`)
      return this.http.post(`${this.phonesUrl}/${id}/users/`, {UserSAMAccountName: `${un}`})
    }
 

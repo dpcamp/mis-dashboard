@@ -120,32 +120,32 @@ export class PhoneListComponent implements OnInit {
   updatePhone() {
     //this.successMessage = '';
     //this.errorMessage = '';
-    if(this.selectedPhone.owners[0].user_name)
-      {
-    this.phoneService.phoneUpdateUser(this.selectedPhone.id, this.selectedPhone.owners[0].user_name)
-      .subscribe(
-      selectedPhone => {
-        //this.successMessage = selectedPhone.message;
-        this.show('success', 'Phone Record Updated', `phone ID: ${this.selectedPhone.id} phone was assigned to ${this.selectedPhone.owners[0].user_name}`);
-        this.refreshPhoneList();
-      },
-      err => {
-        //this.errorMessage = err;
-        console.error(`Error: ${err}`);
-      }
-      );
+    if (this.selectedPhone.owners[0]) {
+      this.phoneService.phoneUpdateUser(this.selectedPhone.id, this.selectedPhone.owners[0].user_name)
+        .subscribe(
+        selectedPhone => {
+          //this.successMessage = selectedPhone.message;
+          this.show('success', 'Phone Record Updated', `phone ID: ${this.selectedPhone.id} phone was assigned to ${this.selectedPhone.owners[0].user_name}`);
+          this.refreshPhoneList();
+        },
+        err => {
+          //this.errorMessage = err;
+          console.error(`Error: ${err}`);
+        }
+        );
+    }
     this.phoneService.updatePhone(this.selectedPhone)
       .subscribe(
       selectedPhone => {
         //this.successMessage = selectedPhone.message;
-        console.log('phone was updated');
+        this.show('success', 'Phone Record Updated', `Phone Record Updated`);
       },
       err => {
         //this.errorMessage = err;
         console.error(err);
       }
       );
-    }
+
   }
   /**
    * Delete a Phone
