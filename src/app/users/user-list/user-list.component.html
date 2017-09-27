@@ -27,11 +27,10 @@
                             <label for="ext">Current Computer(s):</label>
                             <div *ngFor="let c of selectedUser.computers; let i = index">
                                 <a [routerLink]="['/computers', c.computer_id]">{{c.computer_name}}</a>
-                                <!-- BUG
                                     <span class="btn-group btn-link btn-icon-link">
                                     <button class="btn" [class.is-solid]= "cnCopied" ngxClipboard [cbContent]="c.computer_name" (cbOnSuccess)="cnCopied = true"><clr-icon shape="clipboard"></clr-icon></button>
                                 </span>
-                                -->
+                                
                             </div>
 
                         </div>
