@@ -4,6 +4,7 @@ import { PhoneService } from '../../shared/services/phone.service';
 import { UserService } from '../../shared/services/user.service';
 import { Phone } from '../../shared/models/phone';
 import { User } from '../../shared/models/user';
+import { SelectedItem } from '../../shared/models/selected-item';
 import { Message } from 'primeng/primeng';
 
 import { Wizard, StringFilter } from 'clarity-angular';
@@ -30,6 +31,7 @@ export class PhoneListComponent implements OnInit {
   phones: Phone[];
   users: User[];
   assignment: Phone[];
+  lineTypes: SelectedItem[];
 
   private userFilter = new UserFilter();
   phoneFilter = new PhoneFilter();
@@ -70,7 +72,7 @@ export class PhoneListComponent implements OnInit {
     this.phoneService.getPhones()
       .subscribe(phones => {
         this.phones = phones
-        //console.log(phones)
+        console.log(phones)
       });
     this.userService.getUsers()
       .subscribe(users => this.users = users);
@@ -80,6 +82,12 @@ export class PhoneListComponent implements OnInit {
         this.assignment = assignment
         //console.log(assignment)
       });
+      this.lineTypes = [];
+      this.lineTypes.push({label: 'All Types', value: null});
+      this.lineTypes.push({label: 'Patec Digital', value:'Patec Digital Phone Line'});
+      this.lineTypes.push({label: 'Centrex Analog', value:'Centrex Analog'})
+
+
 
   }
 

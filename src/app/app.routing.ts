@@ -14,6 +14,8 @@ import { ComputersComponent } from "./computers/computers.component";
 import { ComputerListComponent } from "./computers/computer-list/computer-list.component";
 import { ComputerSingleComponent } from "./computers/computer-single/computer-single.component";
 
+import { DashboardComponent } from "./dashboard/dashboard.component";
+import { SrReportsComponent } from "./dashboard/sr-reports/sr-reports.component";
 
 //import { LoginComponent } from './login/login.component';
 
@@ -63,6 +65,16 @@ export const routes: Routes = [
       {
         path: ':computer_id',
         component: ComputerSingleComponent
+      }
+    ]
+  },
+  {
+    path: 'dashboard',
+    component: DashboardComponent,
+    children: [
+      {
+        path: 'SR',
+        component: SrReportsComponent
       }
     ]
   }

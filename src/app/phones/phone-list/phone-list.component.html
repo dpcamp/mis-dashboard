@@ -88,7 +88,7 @@
 
     </div>
     <p-dataTable [value]="phones" selectionMode="single" [(selection)]="selectedPhone" datakey="id" [rows]="10" [paginator]="true"
-        [pageLinks]="5" [rowsPerPageOptions]="[5,10,20]" [globalFilter]="gb">
+        [pageLinks]="5" [rowsPerPageOptions]="[5,10,20]" [globalFilter]="gb" #dt>
         <p-column field="full_number" header="Telephone" [sortable]="true"></p-column>
         <p-column field="department" header="Department" [sortable]="true"></p-column>
         <p-column field="position" header="Position" [sortable]="true"></p-column>
@@ -100,7 +100,11 @@
                 </ng-template>
         </p-column>
         <p-column field="function_info" header="Function" [sortable]="true"></p-column>
-        <p-column field="model" header="Phone Model" [sortable]="true"></p-column>
+        <p-column field="line_type" header="Line Type" [filter]="true" filterMatchMode="equals">
+            <ng-template pTemplate="filter" let-col>
+                <p-dropdown [options]="lineTypes" [style]="{'width':'100%'}" (onChange)="dt.filter($event.value,col.field,col.filterMatchMode)" styleClass="ui-column-filter"></p-dropdown>
+            </ng-template>
+        </p-column>
         
     </p-dataTable>
 <!--

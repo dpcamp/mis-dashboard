@@ -7,7 +7,15 @@ import { routing } from './app.routing';
 
 import { ClarityModule } from 'clarity-angular';
 
-import { InputTextModule, ButtonModule, DataTableModule, DialogModule, GrowlModule }  from 'primeng/primeng';
+import { InputTextModule,
+          ButtonModule, 
+          DataTableModule, 
+          DialogModule, 
+          GrowlModule,  
+          DropdownModule,
+          ChartModule
+        }  from 'primeng/primeng';
+
 import { TextMaskModule } from 'angular2-text-mask';
 
 import { AppComponent } from './app.component';
@@ -29,6 +37,10 @@ import { ComputerService } from './shared/services/computer.service';
 import { ComputersComponent } from './computers/computers.component';
 import { ComputerListComponent } from './computers/computer-list/computer-list.component';
 import { ComputerSingleComponent } from './computers/computer-single/computer-single.component';
+
+import { ReportService } from './shared/services/report.service';
+import { DashboardComponent } from './dashboard/dashboard.component';
+import { SrReportsComponent } from './dashboard/sr-reports/sr-reports.component';
 
 import { FileSizePipe } from './shared/components/file-size.pipe'
 import { ClipboardModule } from 'ngx-clipboard'
@@ -57,7 +69,10 @@ import 'rxjs/add/observable/throw';
 
     ComputersComponent,
     ComputerListComponent,
-    ComputerSingleComponent
+    ComputerSingleComponent,
+
+    DashboardComponent, 
+    SrReportsComponent
 
   ],
   imports: [
@@ -65,9 +80,11 @@ import 'rxjs/add/observable/throw';
     BrowserAnimationsModule,
     ClarityModule.forRoot(),
     ClipboardModule,
+    ChartModule,
     FormsModule,
     TextMaskModule,
     DataTableModule,
+    DropdownModule,
     GrowlModule,
     HttpModule,
     InputTextModule, 
@@ -79,7 +96,8 @@ import 'rxjs/add/observable/throw';
   providers: [
     UserService,
     PhoneService, 
-    ComputerService
+    ComputerService,
+    ReportService
   ],
   bootstrap: [AppComponent]
 })

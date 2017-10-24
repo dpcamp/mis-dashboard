@@ -28,7 +28,7 @@
                             <div *ngFor="let c of selectedUser.computers; let i = index">
                                 <a [routerLink]="['/computers', c.computer_id]">{{c.computer_name}}</a>
                                     <span class="btn-group btn-link btn-icon-link">
-                                    <button class="btn" [class.is-solid]= "cnCopied" ngxClipboard [cbContent]="c.computer_name" (cbOnSuccess)="cnCopied = true"><clr-icon shape="clipboard"></clr-icon></button>
+                                    <button class="btn" [class.is-solid]= "cnCopied" ngxClipboard [cbContent]="c.computer_name" (cbOnSuccess)="cnCopied = true" alt="Copy to clipboard" title="Copy to clipboard"><clr-icon shape="clipboard"></clr-icon></button>
                                 </span>
                                 
                             </div>
