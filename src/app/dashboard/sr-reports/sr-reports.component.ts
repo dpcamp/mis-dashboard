@@ -9,11 +9,10 @@ import { Message } from 'primeng/primeng';
     templateUrl: 'sr-reports.component.html'
 })
 export class SrReportsComponent implements OnInit {
-    srReport1: any;
-    srReport2= [];
+
     data: any;
 
-    private today = new Date(); 
+    private today = new Date();
     private dd = this.today.getDate();
     private mm = this.today.getMonth();
     private curMM
@@ -31,60 +30,61 @@ export class SrReportsComponent implements OnInit {
 
     private lastMonth
     private lastThirty
-    
+
     private yyyy = this.today.getFullYear();
 
 
-constructor(
-    private reportService: ReportService,
-    private route: ActivatedRoute,
-    private router: Router
+    constructor(
+        private reportService: ReportService,
+        private route: ActivatedRoute,
+        private router: Router
 
-) { }
+    ) { }
 
-ngOnInit() {
+    ngOnInit() {
 
         this.curDD = this.dd.toString();
-        this.convDD = this.curDD.padStart(2,"0"); //adds 0 to date under 10
-        this.curMM = 1+this.mm;
+        this.convDD = this.curDD.padStart(2, "0"); //adds 0 to date under 10
+        this.curMM = 1 + this.mm;
         this.newMM = this.curMM.toString()
-        this.convMM = this.newMM.padStart(2,"0");
+        this.convMM = this.newMM.padStart(2, "0");
         this.lastMM = this.mm.toString();
-        this.lastConvMM = this.lastMM.padStart(2,"0");
-    let today = `${this.yyyy}-${this.convMM}-${this.convDD}`
-    let tParts = today.split('-');
-    let tSub30 = new Date(`${tParts[0]}-${(+tParts[1] - +1)}-${tParts[2]}`)
-    let lastMonth = `${this.yyyy}-${this.lastConvMM}-${this.convDD}`
-    console.log(`today is ${today}`)
-    console.log(`last months date is: ${lastMonth}`)
+        this.lastConvMM = this.lastMM.padStart(2, "0");
+        let today = `${this.yyyy}-${this.convMM}-${this.convDD}`
+        let tParts = today.split('-');
+        let tSub30 = new Date(`${tParts[0]}-${(+tParts[1] - +1)}-${tParts[2]}`)
+        let lastMonth = `${this.yyyy}-${this.lastConvMM}-${this.convDD}`
+        console.log(`today is ${today}`)
+        console.log(`last months date is: ${lastMonth}`)
 
+        let dataSet1= [];
+        let labels = [];
+        this.reportService.getSR('Month', lastMonth, today)
+            .subscribe(data => {
+                dataSet1.push(data.map(a => a.sr_count))
+                
+                let monthName = data.map(item => {
+                    return item.month_name
+                })
+                labels.push.apply(labels, monthName)
+                console.log(labels) //["October", "September"]
+            });
 
-    this.reportService.getSR('Month',lastMonth,today)
-        .subscribe(data => {
-            this.srCount1.push(data.map(a => a.sr_count))
-            this.dayNum1.push(data.map(a => a.month_name))
-            this.srReport1 = data.map(item => {
-                return item.month_name
-            })
-            console.log(this.srReport1)
-            this.srReport2.push.apply(this.srReport2, this.srReport1)
-        });
+        console.log(labels) // I think its [["October", "September"]]
+        console.log(dataSet1) // [[109,34]]
 
-        console.log(this.srReport2)
-
-        
         this.data = {
-            labels: this.dayNum1,
+            labels: labels, //undefined
             datasets: [
                 {
                     label: 'First Dataset',
-                    data: this.srCount1,
+                    data: dataSet1, //undefined
                     fill: false,
                     borderColor: '#4bc0c0'
                 }
 
             ]
         }
-}
+    }
 
 }
