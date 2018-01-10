@@ -62,11 +62,17 @@
 
         </div>
     </div>
-    <p-dataTable [value]="computers" selectionMode="single" [(selection)]="selectedComputer" datakey="computer_id" [rows]="10"
-        [paginator]="true" [pageLinks]="5" [rowsPerPageOptions]="[5,10,20]" [globalFilter]="gb">
+    <p-dataTable [value]="computers" exportFilname="Computer" selectionMode="single" [(selection)]="selectedComputer" datakey="computer_id" [rows]="10"
+        [paginator]="true" [pageLinks]="5" [rowsPerPageOptions]="[5,10,20]" [globalFilter]="gb" #dt>
         <p-column field="computer_name" header="Computer Name" [sortable]="true"></p-column>
         <p-column field="computer_type" header="Computer_Type" [sortable]="true"></p-column>
         <p-column field="ip_address" header="IP Address" [sortable]="true"></p-column>
-        <p-column field="mac_address" header="MAC Address" [sortable]="true"></p-column>
+        <p-column field="installed_on" header="Installed On" ></p-column>
+        <p-footer>
+            <div class="ui-helper-clearfix">
+                <button type="button" pButton icon="fa-file-o" iconPos="left" label="Export to CSV" (click)="dt.exportCSV()" style="float:right"></button>
+            </div>
+        </p-footer>
+        
     </p-dataTable>
 </section>

@@ -10,9 +10,13 @@ import { environment } from '../../../environments/environment';
 export class ReportService {
   private reportUrl: string = environment.reportUrl;
 
+  private reportSource1 = new Subject<Report[]>();
+  dataSource1$ = this.reportSource1.asObservable();
+
   constructor(private http: Http) {}
 
-  
+  // observable source
+
 
   /**
    * Get all SRs
@@ -26,9 +30,13 @@ export class ReportService {
 
     return this.http.get(`${this.reportUrl}/SR?group_by="${groupBy}"&begin_date="${beginDate}"&end_date="${endDate}"`)
       .map(res => res.json().data)
+      .do(user => this.reportCreated())
       //.do(a => a.sr_count)
       //.map(this.toUser)
       .catch(this.handleError);
+  }
+  reportCreated() {
+    this.reportSource1.next();
   }
  
   /**

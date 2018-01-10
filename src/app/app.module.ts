@@ -13,7 +13,8 @@ import { InputTextModule,
           DialogModule, 
           GrowlModule,  
           DropdownModule,
-          ChartModule
+          ChartModule,
+          SliderModule
         }  from 'primeng/primeng';
 
 import { TextMaskModule } from 'angular2-text-mask';
@@ -90,6 +91,7 @@ import 'rxjs/add/observable/throw';
     InputTextModule, 
     DialogModule,
     ButtonModule,
+    SliderModule,
     routing
   ],
   
