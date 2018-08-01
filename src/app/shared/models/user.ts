@@ -7,7 +7,8 @@ export class User {
   public title: string,
   public department: string,
   public user_name: string,
-  public display_name: string
+  public display_name: string,
+  public extension: string
    
   ){}
 }

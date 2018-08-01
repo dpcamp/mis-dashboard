@@ -48,6 +48,22 @@ export class UserService {
       .catch(this.handleError);
   }
 
+    /**
+   * Get a single user by Ext
+   */
+  getUserExt(id: number): Observable<User> {
+    // attaching a token
+    //let headers = new Headers();
+    //let token   = localStorage.getItem('auth_token');
+    //headers.append('Content-Type', 'application/json');
+    //headers.append('Authorization', `Bearer ${token}`);
+
+    return this.http.get(`${this.usersUrl}/ext/${id}`)
+      .map(res => res.json())
+      //.map(this.toUser)
+      .catch(this.handleError);
+  }
+
   /**
    * Create the user
    */

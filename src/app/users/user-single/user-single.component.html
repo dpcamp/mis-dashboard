@@ -1,23 +1,27 @@
-    <div class="card" *ngIf="selectedUser">
+    <div class="card" *ngFor="let u of selectedUser; let i =index">
         <div class="card-header">
-            Assigned Assets for {{selectedUser.first_name}} {{selectedUser.last_name}}
+            Assigned Assets for {{u.first_name}} {{u.last_name}}
         </div>
-        <div class="card-block" *ngIf="selectedUser">
+        <div class="card-block">
             <div class="card-text">
                 <div class="row">
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
                         <div class="form-group">
                             <label for="ext">Phone Number(s):</label>
-                            <div *ngFor="let p of selectedUser.phones; let i = index">
+                            <div *ngFor="let p of u.phones; let i = index">
                                 <input type="text" id="ext" size="20" readonly [(ngModel)]="p.full_number" *ngIf="p.full_number">
+                            </div>
+                            <label for="ext">Extension:</label>
+                            <div *ngFor="let p of u.phones; let i = index">
+                                <input type="text" id="ext" size="20" readonly [(ngModel)]="p.extension" *ngIf="p.extension">
                             </div>
                         </div>
 
                     </div>
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
-                        <div class="form-group">
+                        <div class="form-group" >
                             <label for="ext">Current Computer(s):</label>
-                            <div *ngFor="let c of selectedUser.computers; let i = index">
+                            <div *ngFor="let c of u.computers; let i = index">
                                 <a [routerLink]="['/computers', c.computer_id]">{{c.computer_name}}</a>
                                 <!-- BUG
                                     <span class="btn-group btn-link btn-icon-link">
@@ -32,7 +36,7 @@
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
                         <div class="form-group">
                             <label for="ext">Current Trouble Tickets(s):</label>
-                            <div *ngFor="let sr of selectedUser.service_requests; let i = index">
+                            <div *ngFor="let sr of u.service_requests; let i = index">
                                 <a [href]="['http://helpdesk/SREdit.jsp?id='+ sr.id]" class="btn btn-primary btn-sm">SR{{sr.id}} - {{sr.title}}</a>
 
                             </div>

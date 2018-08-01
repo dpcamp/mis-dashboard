@@ -18,10 +18,10 @@ export class UserSingleComponent implements OnInit {
 
     ngOnInit() {
         // grab the id from the url
-        let id = this.route.snapshot.params['user_name'];
+        let id = this.route.snapshot.params['ext'];
 
         // use the userservice to getUser()
-        this.service.getUser(id)
+        this.service.getUserExt(id)
             .subscribe(user => {
                 this.selectedUser = user
                 console.log(user)

@@ -34,7 +34,7 @@ export const routes: Routes = [
         component: UserListComponent
       },
       {
-        path: ':user_name',
+        path: 'ext/:ext',
         component: UserSingleComponent
       }
       /*
