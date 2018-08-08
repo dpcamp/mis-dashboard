@@ -35,14 +35,14 @@ export class UserService {
   /**
    * Get a single user
    */
-  getUser(id: number): Observable<User> {
+  getUser(un: string): Observable<User> {
     // attaching a token
     //let headers = new Headers();
     //let token   = localStorage.getItem('auth_token');
     //headers.append('Content-Type', 'application/json');
     //headers.append('Authorization', `Bearer ${token}`);
 
-    return this.http.get(`${this.usersUrl}/${id}`)
+    return this.http.get(`${this.usersUrl}/${un}`)
       .map(res => res.json())
       //.map(this.toUser)
       .catch(this.handleError);

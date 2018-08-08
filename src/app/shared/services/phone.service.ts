@@ -29,6 +29,13 @@ export class PhoneService {
       //.map(phones => phones.data.owners.toString())
       .catch(this.handleError);
   }
+
+  PhoneAssignment(): Observable<Phone[]> {
+    return this.http.get(`${this.phonesUrl}`)
+      .map(res => res.json().data[0].owners)
+      //.map(phones => phones.data.owners.toString())
+      .catch(this.handleError);
+  }
   /**
    * Get all phones
    */
@@ -48,6 +55,19 @@ export class PhoneService {
     //headers.append('Content-Type', 'application/json');
 
     return this.http.get(`${this.phonesUrl}/${id}`)
+      .map(res => res.json())
+      //.map(this.toPhone)
+      .catch(this.handleError);
+  }
+  /**
+   * Get a single phone
+   */
+  getPhoneByEXT(ext: number): Observable<Phone[]> {
+    // attaching a token
+    //let headers = new Headers();
+    //headers.append('Content-Type', 'application/json');
+
+    return this.http.get(`${this.phonesUrl}/getEXT/${ext}`)
       .map(res => res.json())
       //.map(this.toPhone)
       .catch(this.handleError);
@@ -116,7 +136,7 @@ export class PhoneService {
    */
 
    phoneUpdateUser(id, un) {
-     //console.log(`SAMAccountName is: ${un}`)
+     console.log(`SAMAccountName is: ${un}`)
      return this.http.post(`${this.phonesUrl}/${id}/users/`, {UserSAMAccountName: `${un}`})
    }
 
