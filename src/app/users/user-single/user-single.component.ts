@@ -5,7 +5,8 @@ import { Phone } from '../../shared/models/phone';
 import { UserService } from '../../shared/services/user.service';
 import { PhoneService } from '../../shared/services/phone.service';
 import { Message } from 'primeng/primeng';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
+import { map, switchMap, catchError, mergeMap, tap } from 'rxjs/operators';
 import { PhoneSidebarComponent } from '../../phones/phone-sidebar/phone-sidebar.component';
 
 @Component({
@@ -21,87 +22,87 @@ export class UserSingleComponent implements OnInit {
     selectedPhone: Phone;
     msgs: Message[] = [];
     user: User;
-    data: any = []; 
+    data: any = [];
     constructor(
         private route: ActivatedRoute,
-        private router: Router, 
-        private service: UserService, 
+        private router: Router,
+        private service: UserService,
         private phoneService: PhoneService
-        
-        ) { }
+
+    ) { }
 
     ngOnInit() {
         // grab the id from the url
-        this.currentExt= this.route.snapshot.params['ext'];
+        this.currentExt = this.route.snapshot.params['ext'];
         let id = this.currentExt;
         this.service.getUsers()
-        .subscribe(users => this.users = users);   
+            .subscribe(users => this.users = users);
         // use the userservice to getUser()
         this.loadUser()
-            
-     }
-     loadUser() 
-     {
+
+    }
+    loadUser() {
         this.service.getUserExt(this.currentExt)
-        .subscribe(user => {
-            this.selectedUser = user
-            console.log(user)
-        });
-     }
+            .subscribe(user => {
+                this.selectedUser = user
+                console.log(user)
+            });
+    }
 
-     /**
-      * Delete a user
-      */
+    /**
+     * Delete a user
+     */
 
-      deleteUser() {
-          this.service.deleteUser(this.selectedUser.id)
-          .subscribe(data => {
-              this.router.navigate(['users']);
-          });
+    deleteUser() {
+        this.service.deleteUser(this.selectedUser.id)
+            .subscribe(data => {
+                this.router.navigate(['users']);
+            });
 
-      }
-      getUsers() {
+    }
+    getUsers() {
         this.service.getUsers()
-        .subscribe(users => this.users = users) ;   
-      }
+            .subscribe(users => this.users = users);
+    }
 
-      updatePhone() {
+    updatePhone() {
         console.log(this.selectedUser.user_name);
-        this.phoneService.getPhoneByEXT(this.currentExt)  
-        //.do( res => this.data = res)
-            .flatMap(dataResults => Observable.from(dataResults))
-            .switchMap(phoneID => this.phoneService.phoneUpdateUser(phoneID.id, this.selectedUser.user_name))
-            .subscribe(
-                  newUser => {
+        this.phoneService.getPhoneByEXT(this.currentExt)
+            .pipe(
+            mergeMap(dataResults => of(dataResults)),
+            switchMap(phoneID => this.phoneService.phoneUpdateUser(phoneID[0].id, this.selectedUser.user_name))
+            ).
+            subscribe(
+                newUser => {
                     //this.successMessage = selectedPhone.message;
                     console.log(`selectedPhone ID: ${newUser}, user_name: ${this.selectedUser.user_name}`)
                     this.show('success', 'Phone Record Updated', `Extension: ${this.currentExt} phone was assigned to ${this.selectedUser.user_name}`);
                     this.loadUser()
-                    
-                  },
-                  err => {
+
+                },
+                err => {
                     //this.errorMessage = err;
                     this.show('error', 'ERROR', `${err}`);
-                  }
-                  );
-              
-             ;
-        
-            
+                }
+            );
+
+        ;
+
+
         //this.successMessage = '';
         //this.errorMessage = '';
-        
 
 
-}
 
-  /**
-   * Shows the Growl message 
-   */
+    }
 
-  show(sev: string, sum: string, msg: string) {
+    /**
+     * Shows the Growl message 
+     */
 
-    this.msgs = [];
-    this.msgs.push({ severity: `${sev}`, summary: `${sum}`, detail: `${msg}` });
-  }
+    show(sev: string, sum: string, msg: string) {
+
+        this.msgs = [];
+        this.msgs.push({ severity: `${sev}`, summary: `${sum}`, detail: `${msg}` });
+    }
 }

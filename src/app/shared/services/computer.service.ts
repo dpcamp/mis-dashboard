@@ -1,7 +1,9 @@
+
+import {throwError as observableThrowError} from 'rxjs';
 import { Injectable } from '@angular/core';
 import { Http, Response } from '@angular/http';
-import { Observable } from 'rxjs/Observable';
-import { Subject } from 'rxjs/Subject';
+import { Observable } from 'rxjs';
+import { map, switchMap, catchError, mergeMap, tap } from 'rxjs/operators';
 import { Computer } from '../models/computer';
 import { environment } from '../../../environments/environment';
 
@@ -15,8 +17,10 @@ export class ComputerService {
      */
     getComputers(): Observable<Computer[]> {
         return this.http.get(`${this.computersUrl}`)
-            .map(res => res.json().data)
-            .catch(this.handleError);
+            .pipe(
+                map(res => res.json().data),
+                catchError(this.handleError)
+            )
     }
 
     /**
@@ -28,9 +32,10 @@ export class ComputerService {
         //headers.append('Content-Type', 'application/json');
 
         return this.http.get(`${this.computersUrl}/${id}`)
-            .map(res => res.json())
-            //.map(this.toPhone)
-            .catch(this.handleError);
+            .pipe(
+                map(res => res.json()),
+                catchError(this.handleError)
+            )
     }
     private handleError(err) {
         let errMessage: string;
@@ -43,6 +48,6 @@ export class ComputerService {
             errMessage = err.message ? err.message : err.toString();
         }
 
-        return Observable.throw(errMessage);
+        return observableThrowError(errMessage);
     }
 }

@@ -1,6 +1,9 @@
+
+import {throwError as observableThrowError} from 'rxjs';
 import { Injectable } from '@angular/core';
 import { Http, Response } from '@angular/http';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
+import { map, switchMap, catchError, mergeMap, tap } from 'rxjs/operators';
 import { Subject } from 'rxjs/Subject';
 import { Report } from '../models/report';
 import { environment } from '../../../environments/environment';
@@ -29,11 +32,11 @@ export class ReportService {
     //headers.append('Authorization', `Bearer ${token}`);
 
     return this.http.get(`${this.reportUrl}/SR?group_by="${groupBy}"&begin_date="${beginDate}"&end_date="${endDate}"`)
-      .map(res => res.json().data)
-      .do(user => this.reportCreated())
-      //.do(a => a.sr_count)
-      //.map(this.toUser)
-      .catch(this.handleError);
+      .pipe(
+        map(res => res.json().data),
+        tap(user => this.reportCreated()),
+        catchError(this.handleError)
+      )
   }
   reportCreated() {
     this.reportSource1.next();
@@ -53,7 +56,7 @@ export class ReportService {
       errMessage = err.message ? err.message : err.toString();
     }
 
-    return Observable.throw(errMessage);
+    return observableThrowError(errMessage);
   }
 
 }

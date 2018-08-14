@@ -1,6 +1,9 @@
+
+import {throwError as observableThrowError} from 'rxjs';
 import { Injectable } from '@angular/core';
 import { Http, Response } from '@angular/http';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
+import { map, switchMap, catchError, mergeMap, tap } from 'rxjs/operators';
 import { Subject } from 'rxjs/Subject';
 import { User } from '../models/user';
 import { environment } from '../../../environments/environment';
@@ -25,9 +28,11 @@ export class UserService {
    */
   getUsers(): Observable<User[]> {
     return this.http.get(this.usersUrl)
-      .map(res => res.json().data)
+      .pipe(
+        map(res => res.json().data),
       //.map(users => users.map(this.toUser))
-      .catch(this.handleError);
+       catchError(this.handleError)
+    )
             
 
   }
@@ -43,9 +48,10 @@ export class UserService {
     //headers.append('Authorization', `Bearer ${token}`);
 
     return this.http.get(`${this.usersUrl}/${un}`)
-      .map(res => res.json())
-      //.map(this.toUser)
-      .catch(this.handleError);
+      .pipe(
+        map(res => res.json()),
+        catchError(this.handleError)
+      )
   }
 
     /**
@@ -59,9 +65,10 @@ export class UserService {
     //headers.append('Authorization', `Bearer ${token}`);
 
     return this.http.get(`${this.usersUrl}/ext/${id}`)
-      .map(res => res.json())
-      //.map(this.toUser)
-      .catch(this.handleError);
+      .pipe(
+        map(res => res.json()),
+       catchError(this.handleError)
+      )
   }
 
   /**
@@ -69,9 +76,11 @@ export class UserService {
    */
   createUser(user: User): Observable<User> {
     return this.http.post(this.usersUrl, user)
-      .map(res => res.json())
-      .do(user => this.userCreated(user))
-      .catch(this.handleError);
+      .pipe(
+        map(res => res.json()),
+        tap(user => this.userCreated(user)),
+       catchError(this.handleError)
+      )
   }
 
   /**
@@ -79,8 +88,10 @@ export class UserService {
    */
   updateUser(user: User): Observable<User> {
     return this.http.put(`${this.usersUrl}/${user.id}`, user)
-      .map(res => res.json())
-      .catch(this.handleError);
+      .pipe(
+        map(res => res.json()),
+        catchError(this.handleError)
+      )
   }
 
   /**
@@ -88,25 +99,12 @@ export class UserService {
    */
   deleteUser(id: string): Observable<any> {
     return this.http.delete(`${this.usersUrl}/${id}`)
-      .do(res => this.userDeleted())
-      .catch(this.handleError);
+    .pipe(
+      tap(res => this.userDeleted()),
+      catchError(this.handleError)
+    )
   }
-  /**
-   * Convert user info from the API to our standard/format
-   */
-  /** 
-  private toUser(user): User {
-    return {
-      id: user.user_id,
-      name: `${user.first_name} ${user.last_name}`,
-      first_name: user.first_name,
-      last_name: user.last_name,
-      username: user.username,
-      email: user.email,
-      phone: user.number,
-    };
-  }
-*/
+
   /**
    * The user was created. add this info to our stream
    */
@@ -136,7 +134,7 @@ export class UserService {
       errMessage = err.message ? err.message : err.toString();
     }
 
-    return Observable.throw(errMessage);
+    return observableThrowError(errMessage);
   }
 
 }
