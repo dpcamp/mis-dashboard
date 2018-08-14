@@ -3,6 +3,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
+import { HttpClientModule } from '@angular/common/http';
 import { routing } from './app.routing';
 
 import { ClarityModule } from 'clarity-angular';
@@ -43,14 +44,18 @@ import { ReportService } from './shared/services/report.service';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { SrReportsComponent } from './dashboard/sr-reports/sr-reports.component';
 
+import { AuthService } from './shared/services/auth.service';
+import { WinAuthInterceptor } from './shared/interceptors/winauth.interceptor';
+
 import { FileSizePipe } from './shared/components/file-size.pipe'
 import { ClipboardModule } from 'ngx-clipboard'
 
-import 'rxjs/add/operator/map';
-import 'rxjs/add/operator/toPromise';
-import 'rxjs/add/operator/catch';
-import 'rxjs/add/operator/do';
-import 'rxjs/add/observable/throw';
+
+
+
+
+
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -88,6 +93,7 @@ import 'rxjs/add/observable/throw';
     DropdownModule,
     GrowlModule,
     HttpModule,
+    HttpClientModule,
     InputTextModule, 
     DialogModule,
     ButtonModule,
@@ -96,6 +102,12 @@ import 'rxjs/add/observable/throw';
   ],
   
   providers: [
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: WinAuthInterceptor,
+      multi: true
+    },
+    AuthService,
     UserService,
     PhoneService, 
     ComputerService,
