@@ -10,14 +10,12 @@ import { LoggedUser } from '../models/logged-user'
 
 @Injectable()
 export class AuthService {
-  //private authUrl: string = 'https://reqres.in/api';
-  private loggedIn: boolean = false;
-  
+
   constructor(
     private http: HttpClient
   ) {
     // look at localStorage to check if the user is logged in
-    //this.loggedIn = !!localStorage.getItem('auth_token');
+    // this.loggedIn = !!localStorage.getItem('auth_token');
   }
 
   /**
@@ -33,11 +31,11 @@ export class AuthService {
     return this.http.get(`${environment.authUrl}auth/getuser`)
         .pipe(
         map(res => res),
-      //.map(users => users.map(this.toUser))
+      // .map(users => users.map(this.toUser))
        catchError(this.handleError)
     )
  //         this.loggedIn = true;
-        
+
 
   }
 
@@ -45,8 +43,6 @@ export class AuthService {
    * Log the user out
    */
   logout() {
-    //localStorage.removeItem('auth_token');
-    this.loggedIn = false;
   }
 
   /**
@@ -56,8 +52,8 @@ export class AuthService {
     let errMessage: string;
 
     if (err instanceof Response) {
-      let body   = err.json() || '';
-      let error  = body.error || JSON.stringify(body);
+      const body   = err.json() || '';
+      const error  = body.error || JSON.stringify(body);
       errMessage = `${err.status} - ${err.statusText || ''} ${error}`;
     } else {
       errMessage = err.message ? err.message : err.toString();

@@ -10,14 +10,14 @@ import { UserCreateComponent } from './users/user-create/user-create.component';
 import { PhonesComponent } from './phones/phones.component';
 import { PhoneListComponent } from './phones/phone-list/phone-list.component';
 
-import { ComputersComponent } from "./computers/computers.component";
-import { ComputerListComponent } from "./computers/computer-list/computer-list.component";
-import { ComputerSingleComponent } from "./computers/computer-single/computer-single.component";
+import { ComputersComponent } from './computers/computers.component';
+import { ComputerListComponent } from './computers/computer-list/computer-list.component';
+import { ComputerSingleComponent } from './computers/computer-single/computer-single.component';
 
-import { DashboardComponent } from "./dashboard/dashboard.component";
-import { SrReportsComponent } from "./dashboard/sr-reports/sr-reports.component";
+import { DashboardComponent } from './dashboard/dashboard.component';
+import { SrReportsComponent } from './dashboard/sr-reports/sr-reports.component';
 
-//import { LoginComponent } from './login/login.component';
+// import { LoginComponent } from './login/login.component';
 
 export const routes: Routes = [
   {
@@ -36,12 +36,11 @@ export const routes: Routes = [
       {
         path: 'ext/:ext',
         component: UserSingleComponent
-      }
-      /*
+      },
       {
-        path: ':id/edit',
-        component: UserEditComponent
-      } */
+        path: 'create',
+        component: UserCreateComponent
+      }
     ]
   },
   {

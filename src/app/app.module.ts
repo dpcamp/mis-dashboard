@@ -6,17 +6,20 @@ import { HttpModule } from '@angular/http';
 import { HttpClientModule } from '@angular/common/http';
 import { routing } from './app.routing';
 
-import { ClarityModule } from 'clarity-angular';
+import { ClarityModule, ClrFormsNextModule } from '@clr/angular';
 
 import { InputTextModule,
-          ButtonModule, 
-          DataTableModule, 
-          DialogModule, 
-          GrowlModule,  
+          ButtonModule,
+          DataTableModule,
+          DialogModule,
+          GrowlModule,
           DropdownModule,
           ChartModule,
           SliderModule
-        }  from 'primeng/primeng';
+        } from 'primeng/primeng';
+import {TableModule} from 'primeng/table';
+import {DataViewModule} from 'primeng/dataview';
+
 
 import { TextMaskModule } from 'angular2-text-mask';
 
@@ -62,7 +65,7 @@ import { HTTP_INTERCEPTORS } from '@angular/common/http';
     AppComponent,
 
     FileSizePipe,
-    
+
     UsersComponent,
     UserListComponent,
     UserSingleComponent,
@@ -71,13 +74,13 @@ import { HTTP_INTERCEPTORS } from '@angular/common/http';
 
     PhonesComponent,
     PhoneListComponent,
-    PhoneSidebarComponent, 
+    PhoneSidebarComponent,
 
     ComputersComponent,
     ComputerListComponent,
     ComputerSingleComponent,
 
-    DashboardComponent, 
+    DashboardComponent,
     SrReportsComponent
 
   ],
@@ -85,22 +88,25 @@ import { HTTP_INTERCEPTORS } from '@angular/common/http';
     BrowserModule,
     BrowserAnimationsModule,
     ClarityModule.forRoot(),
+    ClrFormsNextModule,
     ClipboardModule,
     ChartModule,
     FormsModule,
     TextMaskModule,
     DataTableModule,
+    DataViewModule,
+    TableModule,
     DropdownModule,
     GrowlModule,
     HttpModule,
     HttpClientModule,
-    InputTextModule, 
+    InputTextModule,
     DialogModule,
     ButtonModule,
     SliderModule,
     routing
   ],
-  
+
   providers: [
     {
       provide: HTTP_INTERCEPTORS,
@@ -109,7 +115,7 @@ import { HTTP_INTERCEPTORS } from '@angular/common/http';
     },
     AuthService,
     UserService,
-    PhoneService, 
+    PhoneService,
     ComputerService,
     ReportService
   ],

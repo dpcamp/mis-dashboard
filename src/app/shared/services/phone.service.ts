@@ -24,12 +24,12 @@ export class PhoneService {
   phoneUpdated$ = this.phoneUpdatedSource.asObservable();
   phoneCreated$ = this.phoneCreatedSource.asObservable();
   phoneDeleted$ = this.phoneDeletedSource.asObservable();
-  
+
   constructor(private http: Http) {}
 
   getPhoneAssignment(): Observable<Phone[]> {
     return this.http.get(`${this.phonesUrl}`)
-    .pipe(    
+    .pipe(
     map(res => res.json().data[0].owners),
     catchError(this.handleError)
     )
@@ -50,13 +50,13 @@ export class PhoneService {
    */
   getPhone(id: number): Observable<Phone> {
     // attaching a token
-    //let headers = new Headers();
-    //headers.append('Content-Type', 'application/json');
+    // let headers = new Headers();
+    // headers.append('Content-Type', 'application/json');
 
     return this.http.get(`${this.phonesUrl}/${id}`)
     .pipe(
       map(res => res.json()),
-      //.map(this.toPhone)
+      // .map(this.toPhone)
       catchError(this.handleError)
     )
   }
@@ -65,8 +65,8 @@ export class PhoneService {
    */
   getPhoneByEXT(ext: number): Observable<Phone[]> {
     // attaching a token
-    //let headers = new Headers();
-    //headers.append('Content-Type', 'application/json');
+    // let headers = new Headers();
+    // headers.append('Content-Type', 'application/json');
 
     return this.http.get(`${this.phonesUrl}/getEXT/${ext}`)
       .pipe(
@@ -90,8 +90,8 @@ export class PhoneService {
    * Update the phone
    */
   updatePhone(phone: Phone): Observable<Phone> {
-    //let headers = new Headers();
-    //headers.append('Content-Type', 'application/json');
+    // let headers = new Headers();
+    // headers.append('Content-Type', 'application/json');
 
     return this.http.put(`${this.phonesUrl}/${phone.id}`, phone)
       .pipe(
@@ -99,8 +99,7 @@ export class PhoneService {
         tap(phone => this.http.post(`${this.phonesUrl}/${phone.id}/users/`, phone)),
         catchError(this.handleError)
   )
-      
-  } 
+  }
 
     /**
    * Delete the user
@@ -132,7 +131,7 @@ export class PhoneService {
    */
 
    phoneUpdateUser(id, un) {
-     //console.log(`SAMAccountName is: ${un}`)
+     // console.log(`SAMAccountName is: ${un}`)
      return this.http.post(`${this.phonesUrl}/${id}/users/`, {UserSAMAccountName: `${un}`})
    }
 

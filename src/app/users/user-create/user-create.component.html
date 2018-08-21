@@ -1,1 +1,44 @@
-<router-outlet></router-outlet>
+<form clrForm (ngSubmit)="CreateUser()">
+    <section class="form-block" *ngIf="createdUser">
+        <label>New User Form</label>
+        <clr-input-container>
+            <label>User Information:</label>
+            <input clrInput type="text" [(ngModel)]="createdUser.first_name" name="first_name" placeholder="First Name">
+        </clr-input-container>
+        <clr-input-container>
+            <input clrInput type="text" [(ngModel)]="createdUser.last_name" name="last_name" placeholder="Last Name">
+        </clr-input-container>
+        <clr-input-container>
+            <input clrInput type="text" [(ngModel)]="createdUser.display_name || createdUser.last_name + ', ' + createdUser.first_name" name="display_name" placeholder="Display Name">
+        </clr-input-container>
+        <clr-input-container>
+            <input clrInput type="text" [(ngModel)]="createdUser.user_name || createdUser.last_name | slice:0:6 + createdUser.first_name | slice:0:1" name="user_name" user placeholder="Username">
+        </clr-input-container>
+        <clr-input-container>
+            <input clrInput type="text" [(ngModel)]="createdUser.description" name="descripion" placeholder="Description">
+        </clr-input-container>
+
+
+        <clr-input-container>
+            <label>Copy User:</label>
+            <select clrInput [ngModel]="createdUser.copy_user" name="copy_user" (ngModelChange)="createdUser.copy_user = $event">
+                <option name="UserSAMAccountName" *ngFor="let user of users" [value]="user.user_name">
+                    {{ user.display_name }}
+                </option>
+            </select>
+        </clr-input-container>
+        <div class="form-group">
+            <label>User Options:</label>
+            <clr-checkbox [(ngModel)]="createdUser.create_mbx" name="create_mbx" [clrInline]="true">
+                Mailbox
+            </clr-checkbox>
+            <clr-checkbox [(ngModel)]="createdUser.sup_man_execs" name="sup_man_execs" [clrInline]="true">
+                Sup/Man/Execs
+            </clr-checkbox>
+            <clr-checkbox [(ngModel)]="createdUser.home_drive" name="home_drive" [clrInline]="true">
+                H Drive
+            </clr-checkbox>
+        </div>
+        <button type="submit" class="btn btn-primary">Create User</button>
+    </section>
+</form>

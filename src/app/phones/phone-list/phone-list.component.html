@@ -3,10 +3,10 @@
 <h1>Phones</h1>
 <button (click)="createPhoneWizard()" class="btn btn-sm">Add Phone</button> 
     <div class="card">
-        <div class="card-header">
-            <clr-icon shape="search"></clr-icon>
-            <input #gb type="text" pInputText size="25" placeholder="Search Phones">
-        </div>
+            <div class="card-header">
+                    <clr-icon shape="search"></clr-icon>
+                    <input type="text" size="25" placeholder="Search Phones" (input)="dt.filterGlobal($event.target.value, 'contains')">
+                </div>
     </div>
     <div class="card" *ngIf="selectedPhone">
         <div class="card-header">
@@ -87,6 +87,30 @@
 
 
     </div>
+<p-table [columns]="cols" [value]="phones" selectionMode="single" [(selection)]="selectedPhone" datakey="id" [rows]="15" [paginator]="true"
+    [pageLinks]="5"  #dt>
+    <ng-template pTemplate="header" let-columns>
+            <tr>
+                <th *ngFor="let col of columns" [pSortableColumn]="col.field">
+                <p-sortIcon [field]="col.field" ariaLabel="Activate to sort" ariaLabelDesc="Activate to sort in descending order" ariaLabelAsc="Activate to sort in ascending order"></p-sortIcon>
+                    {{col.header}}
+                </th>
+
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-phone let-columns="columns">
+            <tr [pSelectableRow]="phone">
+                    <td *ngFor="let col of columns">
+                              {{phone[col.field]}}
+
+                         </td>
+
+            </tr>
+        </ng-template>
+</p-table>
+
+
+<!--     
     <p-dataTable [value]="phones" selectionMode="single" [(selection)]="selectedPhone" datakey="id" [rows]="10" [paginator]="true"
         [pageLinks]="5" [rowsPerPageOptions]="[5,10,20]" [globalFilter]="gb" #dt>
         <p-column field="full_number" header="Telephone" [sortable]="true"></p-column>
@@ -107,32 +131,7 @@
         </p-column>
         
     </p-dataTable>
-<!--
-<clr-datagrid [(clrDgSingleSelected)]="selectedPhone">
-    <clr-dg-column clrDgField="full_number">
-        Telephone
-        </clr-dg-column>
-    
-    <clr-dg-column>Location</clr-dg-column>
-    <clr-dg-column clrDgField="owners.0.display_name">
-        Assigned To 
-   
-    </clr-dg-column>
-    <clr-dg-column>Phone Model</clr-dg-column>
-
-    <clr-dg-row *clrDgItems="let phone of phones" [clrDgItem]="phone" >
-        <clr-dg-cell>{{phone.full_number}}</clr-dg-cell>
-        <clr-dg-cell>{{phone.location}}</clr-dg-cell>
-        <clr-dg-cell>{{phone.owners[0] ? phone.owners[0].displayName: 'Unnassigned'}}</clr-dg-cell>
-        <clr-dg-cell>{{phone.model}}</clr-dg-cell>
-    </clr-dg-row>
-
-    <clr-dg-footer>
-    {{pagination.firstItem + 1}} - {{pagination.lastItem + 1}}
-    of {{pagination.totalItems}} phones
-    <clr-dg-pagination #pagination [clrDgPageSize]="15"></clr-dg-pagination>
-    </clr-dg-footer>
-</clr-datagrid>    
+  
 -->
 </section>
 

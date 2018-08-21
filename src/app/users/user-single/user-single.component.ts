@@ -10,14 +10,14 @@ import { map, switchMap, catchError, mergeMap, tap } from 'rxjs/operators';
 import { PhoneSidebarComponent } from '../../phones/phone-sidebar/phone-sidebar.component';
 
 @Component({
-    //selector: 'selector-name',
+    // selector: 'selector-name',
     templateUrl: 'user-single.component.html'
 })
 
 export class UserSingleComponent implements OnInit {
     selectedUser: User;
     users: User[];
-    phoneOpened: boolean = true;
+    phoneOpened = true;
     currentExt: number;
     selectedPhone: Phone;
     msgs: Message[] = [];
@@ -34,7 +34,7 @@ export class UserSingleComponent implements OnInit {
     ngOnInit() {
         // grab the id from the url
         this.currentExt = this.route.snapshot.params['ext'];
-        let id = this.currentExt;
+        const id = this.currentExt;
         this.service.getUsers()
             .subscribe(users => this.users = users);
         // use the userservice to getUser()
@@ -74,14 +74,16 @@ export class UserSingleComponent implements OnInit {
             ).
             subscribe(
                 newUser => {
-                    //this.successMessage = selectedPhone.message;
+                    // this.successMessage = selectedPhone.message;
                     console.log(`selectedPhone ID: ${newUser}, user_name: ${this.selectedUser.user_name}`)
-                    this.show('success', 'Phone Record Updated', `Extension: ${this.currentExt} phone was assigned to ${this.selectedUser.user_name}`);
+                    this.show('success',
+                    'Phone Record Updated',
+                    `Extension: ${this.currentExt} phone was assigned to ${this.selectedUser.user_name}`);
                     this.loadUser()
 
                 },
                 err => {
-                    //this.errorMessage = err;
+                    // this.errorMessage = err;
                     this.show('error', 'ERROR', `${err}`);
                 }
             );
@@ -89,15 +91,11 @@ export class UserSingleComponent implements OnInit {
         ;
 
 
-        //this.successMessage = '';
-        //this.errorMessage = '';
-
-
 
     }
 
     /**
-     * Shows the Growl message 
+     * Shows the Growl message
      */
 
     show(sev: string, sum: string, msg: string) {

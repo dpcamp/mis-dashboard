@@ -2,8 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { map, switchMap, catchError, mergeMap, tap } from 'rxjs/operators';
 import { Observable, of } from 'rxjs';
-import { User } from './shared/models/user';
-import { LoggedUser } from './shared/models/logged-user'
+import { User, LoggedUser } from './shared/models/user';
 import { UserService } from './shared/services/user.service';
 import { AuthService } from './shared/services/auth.service';
 
@@ -15,7 +14,7 @@ export class AppComponent implements OnInit {
   users: User[];
   loggedUser: LoggedUser;
   currentUser: User;
-  cnCopied: boolean = false
+  cnCopied = false
 
   constructor(
     private userService: UserService,
@@ -41,9 +40,7 @@ export class AppComponent implements OnInit {
     switchMap(loggedUser => this.userService.getUser(loggedUser.user_name))
     )
     .subscribe(currentUser => {this.currentUser = currentUser
-    //console.log(this.currentUser)
+    // console.log(this.currentUser)
     })
   }
-   
-
 }

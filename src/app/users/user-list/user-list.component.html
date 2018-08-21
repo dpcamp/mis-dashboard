@@ -3,7 +3,7 @@
     <div class="card">
         <div class="card-header">
             <clr-icon shape="search"></clr-icon>
-            <input #gb type="text" pInputText size="25" placeholder="Search Users">
+            <input type="text" size="25" placeholder="Search Users">
         </div>
     </div>
     <div class="card" *ngIf="selectedUser">
@@ -19,6 +19,12 @@
                             <div *ngFor="let p of selectedUser.phones; let i = index">
                                 <input type="text" id="ext" size="20" readonly [(ngModel)]="p.full_number" *ngIf="p.full_number">
                             </div>
+                            <div *ngFor="let p of selectedUser.phones; let i = index">
+                                <label for="ext" *ngIf="p.extension">Extension:</label>
+                                <div>
+                                    <input type="text" id="ext" size="20" readonly [(ngModel)]="p.extension" *ngIf="p.full_number">
+                                </div>
+                            </div>
                         </div>
 
                     </div>
@@ -27,10 +33,13 @@
                             <label for="ext">Current Computer(s):</label>
                             <div *ngFor="let c of selectedUser.computers; let i = index">
                                 <a [routerLink]="['/computers', c.computer_id]">{{c.computer_name}}</a>
-                                    <span class="btn-group btn-link btn-icon-link">
-                                    <button class="btn" [class.is-solid]= "cnCopied" ngxClipboard [cbContent]="c.computer_name" (cbOnSuccess)="cnCopied = true" alt="Copy to clipboard" title="Copy to clipboard"><clr-icon shape="clipboard"></clr-icon></button>
+                                <span class="btn-group btn-link btn-icon-link">
+                                    <button class="btn" [class.is-solid]="cnCopied" ngxClipboard [cbContent]="c.computer_name" (cbOnSuccess)="cnCopied = true"
+                                        alt="Copy to clipboard" title="Copy to clipboard">
+                                        <clr-icon shape="clipboard"></clr-icon>
+                                    </button>
                                 </span>
-                                
+
                             </div>
 
                         </div>
@@ -55,12 +64,25 @@
 
         </div>
     </div>
-    <p-dataTable [value]="users" selectionMode="single" [(selection)]="selectedUser" datakey="id" [rows]="10" [paginator]="true"
-        [pageLinks]="5" [rowsPerPageOptions]="[5,10,20]" [globalFilter]="gb">
-        <p-column field="display_name" header="Display Name" [sortable]="true"></p-column>
-        <p-column field="user_name" header="Username" [sortable]="true"></p-column>
-        <p-column field="email" header="email" [sortable]="true"></p-column>
-        <p-column field="department" header="Department" [sortable]="true"></p-column>
-        <p-column field="title" header="Title" [sortable]="true"></p-column>
-    </p-dataTable>
+    <p-table #dt [columns]="cols" [value]="users" selectionMode="single" [(selection)]="selectedUser" datakey="id" [rows]="15"
+        [paginator]="true" [pageLinks]="5">
+        <ng-template pTemplate="header" let-columns>
+            <tr>
+                <th *ngFor="let col of columns" [pSortableColumn]="col.field">
+                    <p-sortIcon [field]="col.field" ariaLabel="Activate to sort" ariaLabelDesc="Activate to sort in descending order" ariaLabelAsc="Activate to sort in ascending order"></p-sortIcon>
+                    {{col.header}}
+                </th>
+
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-user let-columns="columns">
+            <tr [pSelectableRow]="user">
+                <td *ngFor="let col of columns">
+                    {{user[col.field]}}
+                </td>
+
+            </tr>
+        </ng-template>
+
+    </p-table>
 </section>

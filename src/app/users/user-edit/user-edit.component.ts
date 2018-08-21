@@ -8,14 +8,14 @@ import { ActivatedRoute } from '@angular/router';
 })
 export class UserEditComponent implements OnInit {
   user: User;
-  successMessage: string = '';
-  errorMessage: string = '';
+  successMessage = '';
+  errorMessage = '';
 
   constructor(private service: UserService, private route: ActivatedRoute) { }
 
-  ngOnInit() { 
+  ngOnInit() {
     // grab the user
-    let id = this.route.snapshot.params['id'];
+    const id = this.route.snapshot.params['id'];
     this.service.getUser(id).subscribe(user => this.user = user);
   }
 
@@ -35,9 +35,7 @@ export class UserEditComponent implements OnInit {
         err => {
           this.errorMessage = err;
           console.error(err);
-        }        
+        }
       );
   }
-
-
 }

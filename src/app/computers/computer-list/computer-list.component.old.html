@@ -3,7 +3,7 @@
     <div class="card">
         <div class="card-header">
             <clr-icon shape="search"></clr-icon>
-            <input type="text" size="25" placeholder="Search Computers" (input)="dt.filterGlobal($event.target.value, 'contains')">
+            <input #gb type="text" pInputText size="25" placeholder="Search Computers">
         </div>
     </div>
     <div class="card" *ngIf="selectedComputer">
@@ -15,11 +15,10 @@
                 <div class="row">
                     <div class="col-lg-6 col-md-12 col-sm-12 col-xs-12">
                         <div class="form-group">
-                            <div *ngFor="let c of selectedComputer.users; let i = index">
-                                <label for="ext">Currently Logged In:</label>
-                                <a [routerLink]="['/users', c.user_name]">{{c.first_name}} {{c.last_name}}</a>
-
-                            </div>
+                        <div *ngFor="let c of selectedComputer.users; let i = index">
+                        <label for="ext" >Currently Logged In:</label> <a [routerLink]="['/users', c.user_name]">{{c.first_name}} {{c.last_name}}</a>
+                                
+                        </div>
                         </div>
                         <div class="form-group">
                             <label for="ext">IP Address:</label>
@@ -32,7 +31,7 @@
                                 (ngModelChange)="selectedComputer.memory_physical=$event" *ngIf="selectedComputer.computer_attribute">
 
                         </div>
-                        <div class="form-group">
+                                                    <div class="form-group">
                             <label for="ext">Disk Space:</label>
                             <input type="text" id="ext" size="6" readonly [ngModel]="selectedComputer.computer_attribute.disks_size + ' GB'" *ngIf="selectedComputer.computer_attribute">
 
@@ -63,25 +62,17 @@
 
         </div>
     </div>
-    <p-table #dt [columns]="cols" [value]="computers" exportFilename="All Computers" selectionMode="single" [(selection)]="selectedComputer" datakey="computer_id"
-        [rows]="15" [paginator]="true" [pageLinks]="5" >
-        <ng-template pTemplate="header" let-columns>
-            <tr>
-                <th *ngFor="let col of columns" [pSortableColumn]="col.field">
-                        <p-sortIcon [field]="col.field" ariaLabel="Activate to sort" ariaLabelDesc="Activate to sort in descending order" ariaLabelAsc="Activate to sort in ascending order"></p-sortIcon>
-                    {{col.header}}
-                </th>
-
-            </tr>
-        </ng-template>
-        <ng-template pTemplate="body" let-computer let-columns="columns">
-            <tr [pSelectableRow]="computer">
-                <td *ngFor="let col of columns">
-                    {{computer[col.field]}}
-                </td>
-
-            </tr>
-        </ng-template>
-
-    </p-table>
+    <p-dataTable [value]="computers" exportFilename="All Computers" selectionMode="single" [(selection)]="selectedComputer" datakey="computer_id" [rows]="10"
+        [paginator]="true" [pageLinks]="5" [rowsPerPageOptions]="[5,10,20]" [globalFilter]="gb" #dt>
+        <p-column field="computer_name" header="Computer Name" [sortable]="true"></p-column>
+        <p-column field="computer_type" header="Computer_Type" [sortable]="true"></p-column>
+        <p-column field="ip_address" header="IP Address" [sortable]="true"></p-column>
+        <p-column field="installed_on" header="Installed On" [sortable]="true" ></p-column>
+        <p-footer>
+            <div class="ui-helper-clearfix">
+                <button type="button" class="btn btn-icon btn-primary" title="Export to CSV" (click)="dt.exportCSV()" style="float:right"><clr-icon shape="download"></clr-icon></button>
+            </div>
+        </p-footer>
+        
+    </p-dataTable>
 </section>

@@ -11,11 +11,18 @@ export class ComputerListComponent {
     selectedComputer: Computer;
     yearFilter: number;
     yearTimeout: any;
+    cols: any[];
     constructor(private service: ComputerService) { }
 
       ngOnInit() { 
     this.service.getComputers()
-      .subscribe(computers => this.computers = computers);   
+      .subscribe(computers => this.computers = computers);
+      this.cols = [
+        { field: 'computer_name', header: 'Computer Name' },
+        { field: 'computer_type', header: 'Computer Type' },
+        { field: 'ip_address', header: 'IP Address' },
+        { field: 'installed_on', header: 'Date Installed' }
+    ];   
   }
   onYearChange(event, dt, col) {
     if(this.yearTimeout) {

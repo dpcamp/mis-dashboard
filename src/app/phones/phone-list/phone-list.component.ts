@@ -7,7 +7,9 @@ import { User } from '../../shared/models/user';
 import { SelectedItem } from '../../shared/models/selected-item';
 import { Message } from 'primeng/primeng';
 
-import { Wizard, StringFilter } from 'clarity-angular';
+
+
+import { Wizard, StringFilter } from '@clr/angular';
 
 class UserFilter implements StringFilter<Phone> {
   accepts(phone: Phone, search: string): boolean {
@@ -32,6 +34,7 @@ export class PhoneListComponent implements OnInit {
   users: User[];
   assignment: Phone[];
   lineTypes: SelectedItem[];
+  cols: any[];
 
   private userFilter = new UserFilter();
   phoneFilter = new PhoneFilter();
@@ -86,7 +89,14 @@ export class PhoneListComponent implements OnInit {
       this.lineTypes.push({label: 'All Types', value: null});
       this.lineTypes.push({label: 'Patec Digital', value:'Patec Digital Phone Line'});
       this.lineTypes.push({label: 'Centrex Analog', value:'Centrex Analog'})
-
+      this.cols = [
+        { field: 'full_number', header: 'Telephone' },
+        { field: 'extension', header: 'Extension' },
+        { field: 'location', header: 'Location' },
+        //{ field: 'owners',  subfield: '0', header: 'Assigned To' },
+        { field: 'function', header: 'Function' },
+        { field: 'line_type', header: 'LineType' }
+    ];   
 
 
   }

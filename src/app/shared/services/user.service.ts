@@ -5,13 +5,14 @@ import { Http, Response } from '@angular/http';
 import { Observable } from 'rxjs';
 import { map, switchMap, catchError, mergeMap, tap } from 'rxjs/operators';
 import { Subject } from 'rxjs/Subject';
-import { User } from '../models/user';
+import { User, CreateUser } from '../models/user';
 import { environment } from '../../../environments/environment';
 
 
 @Injectable()
 export class UserService {
   private usersUrl: string = environment.usersUrl;
+  private createUsersUrl: string = environment.createUsersUrl;
 
   // observable source
   private userCreatedSource = new Subject<User>();
@@ -74,8 +75,8 @@ export class UserService {
   /**
    * Create the user
    */
-  createUser(user: User): Observable<User> {
-    return this.http.post(this.usersUrl, user)
+  createUser(user: CreateUser): Observable<CreateUser> {
+    return this.http.post(this.createUsersUrl, user)
       .pipe(
         map(res => res.json()),
         tap(user => this.userCreated(user)),
