@@ -3,7 +3,7 @@
     <div class="card">
         <div class="card-header">
             <clr-icon shape="search"></clr-icon>
-            <input type="text" size="25" placeholder="Search Users">
+            <input type="text" size="25" placeholder="Search Users" (input)="dt.filterGlobal($event.target.value, 'contains')" >
         </div>
     </div>
     <div class="card" *ngIf="selectedUser">

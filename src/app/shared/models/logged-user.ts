@@ -5,6 +5,5 @@ export class LoggedUser {
     public is_authenticated: string,
     public timestamp: string
 
-    ){}
+    ) {}
   }
-  

@@ -2,6 +2,7 @@
 import {throwError as observableThrowError} from 'rxjs';
 import { Injectable } from '@angular/core';
 import { Http, Response } from '@angular/http';
+import { HttpClient, HttpHeaders, HttpRequest, HttpResponse } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { map, switchMap, catchError, mergeMap, tap } from 'rxjs/operators';
 import { Subject } from 'rxjs/Subject';
@@ -22,7 +23,10 @@ export class UserService {
   userCreated$ = this.userCreatedSource.asObservable();
   userDeleted$ = this.userDeletedSource.asObservable();
 
-  constructor(private http: Http) {}
+  constructor(
+    private http: Http,
+    protected httpClient: HttpClient
+  ) {}
 
   /**
    * Get all users
@@ -31,10 +35,10 @@ export class UserService {
     return this.http.get(this.usersUrl)
       .pipe(
         map(res => res.json().data),
-      //.map(users => users.map(this.toUser))
+      // .map(users => users.map(this.toUser))
        catchError(this.handleError)
     )
-            
+
 
   }
 
@@ -43,10 +47,10 @@ export class UserService {
    */
   getUser(un: string): Observable<User> {
     // attaching a token
-    //let headers = new Headers();
-    //let token   = localStorage.getItem('auth_token');
-    //headers.append('Content-Type', 'application/json');
-    //headers.append('Authorization', `Bearer ${token}`);
+    // let headers = new Headers();
+    // let token   = localStorage.getItem('auth_token');
+    // headers.append('Content-Type', 'application/json');
+    // headers.append('Authorization', `Bearer ${token}`);
 
     return this.http.get(`${this.usersUrl}/${un}`)
       .pipe(
@@ -60,10 +64,10 @@ export class UserService {
    */
   getUserExt(id: number): Observable<User> {
     // attaching a token
-    //let headers = new Headers();
-    //let token   = localStorage.getItem('auth_token');
-    //headers.append('Content-Type', 'application/json');
-    //headers.append('Authorization', `Bearer ${token}`);
+    // let headers = new Headers();
+    // let token   = localStorage.getItem('auth_token');
+    // headers.append('Content-Type', 'application/json');
+    // headers.append('Authorization', `Bearer ${token}`);
 
     return this.http.get(`${this.usersUrl}/ext/${id}`)
       .pipe(
@@ -75,11 +79,10 @@ export class UserService {
   /**
    * Create the user
    */
-  createUser(user: CreateUser): Observable<CreateUser> {
-    return this.http.post(this.createUsersUrl, user)
+  createUser(cUser: CreateUser): Observable<CreateUser> {
+    return this.httpClient.post(this.createUsersUrl, cUser)
       .pipe(
-        map(res => res.json()),
-        tap(user => this.userCreated(user)),
+        map(res => res),
        catchError(this.handleError)
       )
   }
@@ -119,8 +122,6 @@ export class UserService {
   userDeleted() {
     this.userDeletedSource.next();
   }
-
-  
   /**
    * Handle any errors from the API
    */
@@ -128,8 +129,8 @@ export class UserService {
     let errMessage: string;
 
     if (err instanceof Response) {
-      let body   = err.json() || '';
-      let error  = body.error || JSON.stringify(body);
+      const body   = err.json() || '';
+      const error  = body.error || JSON.stringify(body);
       errMessage = `${err.status} - ${err.statusText || ''} ${error}`;
     } else {
       errMessage = err.message ? err.message : err.toString();

@@ -23,7 +23,7 @@ export class UserCreateComponent implements OnInit {
 
   CreateUser() {
     console.log(this.createdUser)
-    
+
     this.service.createUser(this.createdUser)
       .subscribe(createdUser => {
         this.show('success', 'User Created', `Phone: ${this.createdUser.display_name} was successfully created`)
