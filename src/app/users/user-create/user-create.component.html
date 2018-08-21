@@ -12,7 +12,7 @@
             <input clrInput type="text" [(ngModel)]="createdUser.display_name || createdUser.last_name + ', ' + createdUser.first_name" name="display_name" placeholder="Display Name">
         </clr-input-container>
         <clr-input-container>
-            <input clrInput type="text" [(ngModel)]="createdUser.user_name || createdUser.last_name | slice:0:6 + createdUser.first_name | slice:0:1" name="user_name" user placeholder="Username">
+            <input clrInput type="text" [(ngModel)]="createdUser.user_name" name="user_name" user placeholder="Username">
         </clr-input-container>
         <clr-input-container>
             <input clrInput type="text" [(ngModel)]="createdUser.description" name="descripion" placeholder="Description">
