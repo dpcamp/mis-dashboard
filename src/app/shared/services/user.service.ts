@@ -16,7 +16,7 @@ export class UserService {
   private createUsersUrl: string = environment.createUsersUrl;
 
   // observable source
-  private userCreatedSource = new Subject<User>();
+  private userCreatedSource = new Subject<CreateUser>();
   private userDeletedSource = new Subject();
 
   // observable stream
@@ -83,6 +83,7 @@ export class UserService {
     return this.httpClient.post(this.createUsersUrl, cUser)
       .pipe(
         map(res => res),
+        tap(res => this.userCreated(cUser)),
        catchError(this.handleError)
       )
   }
@@ -112,7 +113,7 @@ export class UserService {
   /**
    * The user was created. add this info to our stream
    */
-  userCreated(user: User) {
+  userCreated(user: CreateUser) {
     this.userCreatedSource.next(user);
   }
 

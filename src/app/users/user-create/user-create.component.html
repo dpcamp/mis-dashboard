@@ -1,3 +1,4 @@
+<p-growl [(value)]="msgs"></p-growl>
 <form clrForm (ngSubmit)="CreateUser()">
     <section class="form-block" *ngIf="createdUser">
         <label>New User Form</label>
@@ -39,6 +40,6 @@
                 H Drive
             </clr-checkbox>
         </div>
-        <button type="submit" class="btn btn-primary">Create User</button>
+        <button [clrLoading]="submitBtnState" type="submit" class="btn btn-primary">Create User</button>
     </section>
 </form>
