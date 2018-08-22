@@ -48,6 +48,7 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { SrReportsComponent } from './dashboard/sr-reports/sr-reports.component';
 
 import { AuthService } from './shared/services/auth.service';
+import { ValidationService } from './shared/services/validation.service';
 import { WinAuthInterceptor } from './shared/interceptors/winauth.interceptor';
 
 import { FileSizePipe } from './shared/components/file-size.pipe'
@@ -117,7 +118,8 @@ import { HTTP_INTERCEPTORS } from '@angular/common/http';
     UserService,
     PhoneService,
     ComputerService,
-    ReportService
+    ReportService,
+    ValidationService
   ],
   bootstrap: [AppComponent]
 })

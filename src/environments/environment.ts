@@ -10,6 +10,7 @@ export const environment = {
   computersUrl: 'http://192.168.235.96:3000/api/computers',
   phonesUrl: 'http://192.168.235.96:3000/api/phones',
   reportUrl: 'http://192.168.235.96:3000/api/reports',
-  authUrl: 'http://GRF-MISDEV:8888/'
+  authUrl: 'http://GRF-MISDEV:8888/',
+  validationUrl: 'http://GRF-MISDEV:8889/validate'
 
 };

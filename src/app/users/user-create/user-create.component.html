@@ -1,5 +1,5 @@
 <p-growl [(value)]="msgs"></p-growl>
-<form clrForm (ngSubmit)="CreateUser()">
+<form clrForm (ngSubmit)="createUser()">
     <section class="form-block" *ngIf="createdUser">
         <label>New User Form</label>
         <clr-input-container>
@@ -13,7 +13,7 @@
             <input clrInput type="text" [(ngModel)]="createdUser.display_name" name="display_name" placeholder="Display Name">
         </clr-input-container>
         <clr-input-container>
-            <input clrInput type="text" [(ngModel)]="createdUser.user_name" name="user_name" user placeholder="Username">
+            <input clrInput type="text" [(ngModel)]="createdUser.user_name" name="user_name" user placeholder="Username" (blur)="validateUserName()">
         </clr-input-container>
         <clr-input-container>
             <input clrInput type="text" [(ngModel)]="createdUser.description" name="descripion" placeholder="Description">
