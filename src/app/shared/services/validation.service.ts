@@ -6,7 +6,7 @@ import { Observable } from 'rxjs';
 import { map, switchMap, catchError, mergeMap, tap } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
 
-import { UNValidation } from '../models/validation'
+import { UNValidation, DNValidation } from '../models/validation'
 import { CreateUser } from '../models/user';
 
 @Injectable()
@@ -22,20 +22,25 @@ export class ValidationService {
 
 
   /**
-   * Log the user in
+   * Validates username. Accepts { user_name: model.value }
    */
   validateUserName(UN: CreateUser): Observable<UNValidation> {
     return this.httpClient.post(`${environment.validationUrl}/username`, UN)
         .pipe(
         map(res => res),
-        // tap(users => users.map(this.toUser))
        catchError(this.handleError)
     )
- //         this.loggedIn = true;
-
-
-  }
-
+ }
+  /**
+   * Validates Display Name. Accepts { display_name: model.value }
+   */
+  validateDisplayName(DN: CreateUser): Observable<DNValidation> {
+    return this.httpClient.post(`${environment.validationUrl}/displayname`, DN)
+        .pipe(
+        map(res => res),
+       catchError(this.handleError)
+    )
+ }
   /**
    * Handle any errors from the API
    */

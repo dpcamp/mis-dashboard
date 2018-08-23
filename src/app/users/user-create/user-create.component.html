@@ -3,25 +3,60 @@
     <section class="form-block" *ngIf="createdUser">
         <label>New User Form</label>
         <clr-input-container>
-            <label>User Information:</label>
-            <input clrInput type="text" [(ngModel)]="createdUser.first_name" name="first_name" placeholder="First Name">
+            <label>First Name</label>
+            <input clrInput type="text" [(ngModel)]="createdUser.first_name" name="first_name" placeholder="First Name" (blur)="concatDisplayName()" required>
+            <clr-control-error>First name required</clr-control-error>
         </clr-input-container>
         <clr-input-container>
-            <input clrInput type="text" [(ngModel)]="createdUser.last_name" name="last_name" placeholder="Last Name">
+            <label>Last Name</label>
+            <input clrInput type="text" [(ngModel)]="createdUser.last_name" name="last_name" placeholder="Last Name" (blur)="concatDisplayName()" required>
+            <clr-control-error>Last name required</clr-control-error>
         </clr-input-container>
-        <clr-input-container>
-            <input clrInput type="text" [(ngModel)]="createdUser.display_name" name="display_name" placeholder="Display Name">
+        <div class="clr-form-control" [ngClass]="
+        {'clr-error': dnExists || (display_name.invalid && (display_name.dirty || display_name.touched))}">
+                <label for="example" class="clr-control-label">Display Name</label>
+                <div class="clr-control-container">
+                  <div class="clr-input-wrapper">
+                    <input [(ngModel)]="createdUser.display_name" name="display_name" user placeholder="Last Name, First Name" (blur)="validateDisplayName()" required  class="clr-input" #display_name="ngModel">
+                    <clr-icon class="clr-validate-icon" shape="exclamation-circle"></clr-icon>
+                  </div>
+                  <div *ngIf="display_name.invalid && (display_name.dirty || display_name.touched)">
+                  <span class="clr-subtext" *ngIf="display_name.errors.required">Username required</span>
+                  </div>
+                  <span class="clr-subtext" *ngIf="dnExists">Display Name already exists (suggested display name {{createdUser.first_name}} {{createdUser.last_name}})</span>
+                </div>
+              </div>
+        <div class="clr-form-control" [ngClass]="
+        {'clr-error': unExists || (user_name.invalid && (user_name.dirty || user_name.touched))}">
+                <label for="example" class="clr-control-label">Username</label>
+                <div class="clr-control-container">
+                  <div class="clr-input-wrapper">
+                    <input [(ngModel)]="createdUser.user_name" name="user_name" user placeholder="Username" (blur)="validateUserName()" required minlength="7"  class="clr-input" #user_name="ngModel">
+                    <clr-icon class="clr-validate-icon" shape="exclamation-circle"></clr-icon>
+                  </div>
+                  <div *ngIf="user_name.invalid && (user_name.dirty || user_name.touched)">
+                  <span class="clr-subtext" *ngIf="user_name.errors.required">Username required</span>
+                  <span class="clr-subtext" *ngIf="user_name.errors.minlength">Username must be at least 7 characters</span>
+                  </div>
+                  <span class="clr-subtext" *ngIf="unExists">Username already exists</span>
+                </div>
+              </div>
+ <!--       <clr-input-container>
+            <input clrInput type="text" [(ngModel)]="createdUser.user_name" name="user_name" user placeholder="Username" (blur)="validateUserName()" required minlength="6">
+            <clr-control-error *clrIfError="'required'">Field Required</clr-control-error>
+            <clr-control-error *clrIfError="'minlength'">Username Must be at least 6 characters</clr-control-error>
+            <clr-control-error *clrIfError="unExists">Username already exists!</clr-control-error>
         </clr-input-container>
+    -->
+
         <clr-input-container>
-            <input clrInput type="text" [(ngModel)]="createdUser.user_name" name="user_name" user placeholder="Username" (blur)="validateUserName()">
-        </clr-input-container>
-        <clr-input-container>
+                <label>Title</label>
             <input clrInput type="text" [(ngModel)]="createdUser.description" name="descripion" placeholder="Description">
         </clr-input-container>
 
 
         <clr-input-container>
-            <label>Copy User:</label>
+            <label>Copy User</label>
             <select clrInput [ngModel]="createdUser.copy_user" name="copy_user" (ngModelChange)="createdUser.copy_user = $event">
                 <option name="UserSAMAccountName" *ngFor="let user of users" [value]="user.user_name">
                     {{ user.display_name }}
@@ -29,7 +64,7 @@
             </select>
         </clr-input-container>
         <div class="form-group">
-            <label>User Options:</label>
+            <label for="user_options" class="clr-control-label">User Options</label>
             <clr-checkbox [(ngModel)]="createdUser.create_mbx" name="create_mbx" [clrInline]="true">
                 Mailbox
             </clr-checkbox>

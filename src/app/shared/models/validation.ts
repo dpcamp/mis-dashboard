@@ -5,7 +5,7 @@ export class UNValidation {
 }
 export class DNValidation {
   constructor(
-    public displayname_exists?: boolean
+    public display_name_exists?: boolean
   ) {}
 }
 
