@@ -4,14 +4,14 @@ export class Phone {
   telephone?: string;
   division_id?: number;
   department?: string;
-  position?:string;
-//  UserSAMAccountName?: string;
+  position?: string;
+  //  UserSAMAccountName?: string;
   location?: string;
   function_info?: string;
   notes?: string;
-  account_number?:string;
-  date_installed?:string;
-  monthly_cost?:string;
+  account_number?: string;
+  date_installed?: string;
+  monthly_cost?: string;
   investigate?: boolean;
   model?: string;
   line_type?: string;
@@ -20,9 +20,9 @@ export class Phone {
   disconnect_now?: boolean;
   disconnect_later?: boolean;
   phone_number?: string;
-  ld_changed?:string;
-  new_phone?:string;
-  switch_comments?:string;
+  ld_changed?: string;
+  new_phone?: string;
+  switch_comments?: string;
   new_location?: string;
   drop_num?: string;
   port_num?: number;
@@ -31,12 +31,12 @@ export class Phone {
   binding_post?: number;
   provider?: string;
   pin?: string;
-  date_created?:string;
+  date_created?: string;
   owners?: {
     user_name?: string;
     display_name?: string;
   };
   message?: string;
 
-  //owner: string;
+  // owner: string;
 }

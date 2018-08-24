@@ -1,5 +1,15 @@
 <p-growl [(value)]="msgs"></p-growl>
-<form clrForm (ngSubmit)="createUser()">
+<div class="alert alert-success" *ngIf="!isAdmin == true">
+        <div class="alert-items">
+            <div class="alert-item static">
+                <div class="alert-icon-wrapper">
+                    <clr-icon class="alert-icon" shape="check-circle"></clr-icon>
+                </div>
+                <span class="alert-text">Looks like you're and Admin.. Proceed..</span>
+            </div>
+        </div>
+    </div>
+<form clrForm (ngSubmit)="createUser()" *ngIf="!isAdmin == true">
     <section class="form-block" *ngIf="createdUser">
         <label>New User Form</label>
         <clr-input-container>

@@ -9,7 +9,8 @@ export class User {
   public user_name: string,
   public display_name: string,
   public extension: string,
-  public length: string
+  public length: string,
+  public is_admin?: boolean
   ) {}
 }
 export class CreateUser {
@@ -31,6 +32,7 @@ export class LoggedUser {
   public guid: string,
   public user_name: string,
   public is_authenticated: string,
+  public is_admin: boolean,
   public timestamp: string
 
   ) {}

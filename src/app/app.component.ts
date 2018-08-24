@@ -5,6 +5,7 @@ import { Observable, of } from 'rxjs';
 import { User, LoggedUser } from './shared/models/user';
 import { UserService } from './shared/services/user.service';
 import { AuthService } from './shared/services/auth.service';
+import { isAbsolute } from 'path';
 
 @Component({
   selector: 'app-root',
@@ -14,7 +15,8 @@ export class AppComponent implements OnInit {
   users: User[];
   loggedUser: LoggedUser;
   currentUser: User;
-  cnCopied = false
+  cnCopied = false;
+  isAdmin = false;
 
   constructor(
     private userService: UserService,
@@ -28,6 +30,7 @@ export class AppComponent implements OnInit {
         users => this.users = users
       );
     this.UserAuth()
+    console.log(this.isAdmin)
   }
 
   UserAuth() {
@@ -36,11 +39,24 @@ export class AppComponent implements OnInit {
       loggedUser => this.loggedUser = loggedUser
     )*/
     .pipe(
+      /*
+      tap(res => {
+        console.log(res)
+        if (res.is_admin === true) {
+          this.isAdmin = true;
+        }
+      }),*/
       mergeMap(dataresults => of(dataresults)),
     switchMap(loggedUser => this.userService.getUser(loggedUser.user_name))
     )
-    .subscribe(currentUser => {this.currentUser = currentUser
-    // console.log(this.currentUser)
+      .subscribe(currentUser => {
+      this.currentUser = currentUser
+        if (currentUser.is_admin) {
+          this.isAdmin = true;
+        } else {
+          this.isAdmin = false;
+        }
+
     })
   }
 }
