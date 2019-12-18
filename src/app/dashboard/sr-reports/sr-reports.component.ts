@@ -70,7 +70,7 @@ export class SrReportsComponent implements OnInit {
         let test = []
 
         this.reportService.getSR('Day', lastMonth, today)
-        .subscribe(res => {         
+        .subscribe(res => {
             this.data.datasets[0].data = res.map(a =>  a.sr_count);
             this.data.labels = res.map(a =>  a.day_num);
         });
@@ -80,7 +80,7 @@ export class SrReportsComponent implements OnInit {
             this.chart.refresh();
         });
         this.reportService.getSR('Month', lastYear, today)
-        .subscribe(res => {         
+        .subscribe(res => {
             this.data2.datasets[0].data = res.map(a =>  a.sr_count);
             this.data2.labels = res.map(a =>  a.month_name);
             this.chart2.refresh();

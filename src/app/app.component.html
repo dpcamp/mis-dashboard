@@ -13,8 +13,8 @@
       </div>
       <div class="header-actions" *ngIf="currentUser"> <clr-dropdown>
         <button class="nav-text" clrDropdownTrigger>
-
-        <clr-icon shape="administrator" class="is-solid" *ngIf="!isAdmin == true"></clr-icon>
+          <span *ngIf="!isAdmin">Hello</span>
+        <clr-icon shape="administrator" class="is-solid" *ngIf="isAdmin"></clr-icon>
 
          {{currentUser.first_name}} {{currentUser.last_name}}
             <clr-icon shape="caret down"></clr-icon>

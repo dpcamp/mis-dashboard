@@ -5,7 +5,6 @@ import { Observable, of } from 'rxjs';
 import { User, LoggedUser } from './shared/models/user';
 import { UserService } from './shared/services/user.service';
 import { AuthService } from './shared/services/auth.service';
-import { isAbsolute } from 'path';
 
 @Component({
   selector: 'app-root',
@@ -39,20 +38,20 @@ export class AppComponent implements OnInit {
       loggedUser => this.loggedUser = loggedUser
     )*/
     .pipe(
-      /*
       tap(res => {
         console.log(res)
         if (res.is_admin === true) {
           this.isAdmin = true;
+          console.log(this.isAdmin)
         }
-      }),*/
+      }),
       mergeMap(dataresults => of(dataresults)),
     switchMap(loggedUser => this.userService.getUser(loggedUser.user_name))
     )
       .subscribe(currentUser => {
       this.currentUser = currentUser
         if (currentUser.is_admin) {
-          this.isAdmin = true;
+          this.isAdmin = false;
         } else {
           this.isAdmin = false;
         }
