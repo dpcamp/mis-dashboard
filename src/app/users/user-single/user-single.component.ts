@@ -32,6 +32,9 @@ export class UserSingleComponent implements OnInit {
     ) { }
 
     ngOnInit() {
+        if(this.route.snapshot.params['ext'])
+        {
+            console.log('params is EXT')
         // grab the id from the url
         this.currentExt = this.route.snapshot.params['ext'];
         const id = this.currentExt;
@@ -39,6 +42,17 @@ export class UserSingleComponent implements OnInit {
             .subscribe(users => this.users = users);
         // use the userservice to getUser()
         this.loadUser()
+
+        }
+        else {
+            console.log('pararms is user_name')
+            this.service.getUser(this.route.snapshot.params['user_name'])
+            .subscribe(user => {
+                this.selectedUser = user
+                console.log(user)
+            })
+        }
+
 
     }
     loadUser() {

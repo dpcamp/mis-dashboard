@@ -6,19 +6,14 @@ import { HttpModule } from '@angular/http';
 import { HttpClientModule } from '@angular/common/http';
 import { routing } from './app.routing';
 
-import { ClarityModule, ClrFormsNextModule } from '@clr/angular';
+import { ClarityModule } from '@clr/angular';
 
-import { InputTextModule,
-          ButtonModule,
-          DataTableModule,
-          DialogModule,
-          GrowlModule,
-          DropdownModule,
-          ChartModule,
-          SliderModule
-        } from 'primeng/primeng';
+        
 import {TableModule} from 'primeng/table';
 import {DataViewModule} from 'primeng/dataview';
+import {ToastModule} from 'primeng/toast';
+import { ChartModule } from 'primeng/chart';
+import {MessageService} from 'primeng/api';
 
 
 import { TextMaskModule } from 'angular2-text-mask';
@@ -88,23 +83,19 @@ import { HTTP_INTERCEPTORS } from '@angular/common/http';
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
-    ClarityModule.forRoot(),
-    ClrFormsNextModule,
+    ClarityModule,
     ClipboardModule,
-    ChartModule,
+
     FormsModule,
     TextMaskModule,
-    DataTableModule,
     DataViewModule,
     TableModule,
-    DropdownModule,
-    GrowlModule,
+    ToastModule,
+    ChartModule,
+
     HttpModule,
     HttpClientModule,
-    InputTextModule,
-    DialogModule,
-    ButtonModule,
-    SliderModule,
+
     routing
   ],
 
@@ -119,7 +110,8 @@ import { HTTP_INTERCEPTORS } from '@angular/common/http';
     PhoneService,
     ComputerService,
     ReportService,
-    ValidationService
+    ValidationService,
+    MessageService
   ],
   bootstrap: [AppComponent]
 })

@@ -5,20 +5,20 @@ import { UserService } from '../../shared/services/user.service';
 import { Phone } from '../../shared/models/phone';
 import { User } from '../../shared/models/user';
 import { SelectedItem } from '../../shared/models/selected-item';
-import { Message } from 'primeng/primeng';
+import {MessageService} from 'primeng/api';
 
 
 
-import { Wizard, StringFilter } from '@clr/angular';
+import { ClrWizard, ClrDatagridStringFilterInterface } from '@clr/angular';
 
-class UserFilter implements StringFilter<Phone> {
+class UserFilter implements ClrDatagridStringFilterInterface<Phone> {
   accepts(phone: Phone, search: string): boolean {
     return "" + phone.owners[0].display_name == search
       || phone.owners[0].display_name.toLowerCase().indexOf(search) >= 0;
   }
 }
 
-class PhoneFilter implements StringFilter<Phone> {
+class PhoneFilter implements ClrDatagridStringFilterInterface<Phone> {
   accepts(phone: Phone, search: string): boolean {
     return "" + phone.full_number == search
 
@@ -40,7 +40,7 @@ export class PhoneListComponent implements OnInit {
   phoneFilter = new PhoneFilter();
 
   totalRecords: number;
-  msgs: Message[] = [];
+  //msgs: Message[] = [];
 
   selectedPhone: Phone;
   newPhone: Phone = {};
@@ -50,8 +50,8 @@ export class PhoneListComponent implements OnInit {
 
   mask = ['(', /[1-9]/, /\d/, /\d/, ')', ' ', /\d/, /\d/, /\d/, '-', /\d/, /\d/, /\d/, /\d/]
 
-  @ViewChild('createlg') createLarge: Wizard;
-  @ViewChild('updatelg') updateLarge: Wizard;
+  @ViewChild('createlg', {static: false}) createLarge: ClrWizard;
+  @ViewChild('updatelg', {static: false}) updateLarge: ClrWizard;
 
   createOpen: boolean = false;
   updateOpen: boolean = false;
@@ -64,6 +64,7 @@ export class PhoneListComponent implements OnInit {
     private userService: UserService,
     private route: ActivatedRoute,
     private router: Router,
+    private messageService: MessageService
 
 
 
@@ -101,12 +102,12 @@ export class PhoneListComponent implements OnInit {
 
   }
 
-  createPhoneWizard() {
+  createPhoneClrWizard() {
     this.createOpen = !this.createOpen;
     //console.log(`_ open is: ${this.createOpen}`)
   }
 
-  updatePhoneWizard() {
+  updatePhoneClrWizard() {
     this.updateOpen = !this.updateOpen;
     //console.log(`_ open is: ${this.updateOpen}`)
   }
@@ -193,9 +194,12 @@ export class PhoneListComponent implements OnInit {
 
   show(sev: string, sum: string, msg: string) {
 
-    this.msgs = [];
-    this.msgs.push({ severity: `${sev}`, summary: `${sum}`, detail: `${msg}` });
+    this.messageService.add({ severity: `${sev}`, summary: `${sum}`, detail: `${msg}` });
   }
+
+  clear() {
+    this.messageService.clear();
+}
 
   /**
    * Decodes User Array

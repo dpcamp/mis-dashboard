@@ -1,5 +1,21 @@
 <section class="wrapper">
-<p-growl [(value)]="msgs"></p-growl>
+    <p-toast [modal]="true" [baseZIndex]="5000">
+        <ng-template let-message pTemplate="message">
+            <div style="text-align: center">
+                <i class="pi pi-exclamation-triangle" style="font-size: 3em"></i>
+                <h3>{{message.summary}}</h3>
+                <p>{{message.detail}}</p>
+            </div>
+            <div class="ui-g ui-fluid">
+                <div class="ui-g-6">
+                    <button type="button" pButton (click)="onConfirm()" label="Yes" class="ui-button-success"></button>
+                </div>
+                <div class="ui-g-6">
+                    <button type="button" pButton (click)="onReject()" label="No" class="ui-button-secondary"></button>
+                </div>
+            </div>
+        </ng-template>
+    </p-toast>
 <h1>Phones</h1>
 <button (click)="createPhoneWizard()" class="btn btn-sm">Add Phone</button> 
     <div class="card">
@@ -46,20 +62,25 @@
                             <label for="vm" *ngIf="selectedPhone.date_installed">Date Installed:</label>
                             <input type="text" id="vm" size="10" readonly [(ngModel)]="selectedPhone.date_installed" *ngIf="selectedPhone.date_installed">
                         </div>
-                        <div class="form-group">
-                            <div class="checkbox-inline">
-                                <clr-checkbox id="disconnect_now" readonly [(ngModel)]="selectedPhone.disconnect_now" *ngIf="selectedPhone.disconnect_now">Disconnect</clr-checkbox>
-                            </div>
-                            <div class="checkbox-inline">
-                                <clr-checkbox id="disconnect_later" readonly [(ngModel)]="selectedPhone.disconnect_later" *ngIf="selectedPhone.disconnect_later">Disconnect Later</clr-checkbox>
-                            </div>
-                            <div class="checkbox-inline">
-                                <clr-checkbox id="need_voicemail" readonly [(ngModel)]="selectedPhone.need_voicemail" *ngIf="selectedPhone.need_voicemail">Voicemail</clr-checkbox>
-                            </div>
-                            <div class="checkbox-inline">
-                                <clr-checkbox id="investigate" readonly [(ngModel)]="selectedPhone.investigate" *ngIf="selectedPhone.investigate">Investigate</clr-checkbox>
-                            </div>
-                        </div>
+                        <clr-checkbox-container>
+                            <clr-checkbox-wrapper>
+                                <input type="checkbox" clrCheckbox id="disconnect_now" readonly [(ngModel)]="selectedPhone.disconnect_now" *ngIf="selectedPhone.disconnect_now">
+                               <label>Disconnect</label> 
+                            </clr-checkbox-wrapper>
+                            
+                            <clr-checkbox-wrapper>
+                                <input type="checkbox" clrCheckbox id="disconnect_later" readonly [(ngModel)]="selectedPhone.disconnect_later" *ngIf="selectedPhone.disconnect_later">
+                                <label>Disconnect Later</label> 
+                            </clr-checkbox-wrapper>
+                            <clr-checkbox-wrapper>
+                                <input type="checkbox" clrCheckbox id="need_voicemail" readonly [(ngModel)]="selectedPhone.need_voicemail" *ngIf="selectedPhone.need_voicemail">
+                               <label>Voicemail</label> Voicemail
+                            </clr-checkbox-wrapper>
+                            <clr-checkbox-wrapper>
+                                <input type="checkbox" clrCheckbox id="investigate" readonly [(ngModel)]="selectedPhone.investigate" *ngIf="selectedPhone.investigate">
+                                <label>Investigate</label> 
+                            </clr-checkbox-wrapper>
+                        </clr-checkbox-container>
                     </div>
                     <div class="col-lg-6 col-md-12 col-sm-12 col-xs-12">
                         <div class="form-group">

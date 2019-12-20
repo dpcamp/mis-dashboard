@@ -1,4 +1,20 @@
-<p-growl [(value)]="msgs"></p-growl>
+<p-toast [modal]="true" [baseZIndex]="5000">
+    <ng-template let-message pTemplate="message">
+        <div style="text-align: center">
+            <i class="pi pi-exclamation-triangle" style="font-size: 3em"></i>
+            <h3>{{message.summary}}</h3>
+            <p>{{message.detail}}</p>
+        </div>
+        <div class="ui-g ui-fluid">
+            <div class="ui-g-6">
+                <button type="button" pButton (click)="onConfirm()" label="Yes" class="ui-button-success"></button>
+            </div>
+            <div class="ui-g-6">
+                <button type="button" pButton (click)="onReject()" label="No" class="ui-button-secondary"></button>
+            </div>
+        </div>
+    </ng-template>
+</p-toast>
 <div class="alert alert-success" *ngIf="!isAdmin == true">
         <div class="alert-items">
             <div class="alert-item static">
@@ -73,18 +89,21 @@
                 </option>
             </select>
         </clr-input-container>
-        <div class="form-group">
+        <clr-checkbox-container clrInline>
             <label for="user_options" class="clr-control-label">User Options</label>
-            <clr-checkbox [(ngModel)]="createdUser.create_mbx" name="create_mbx" [clrInline]="true">
-                Mailbox
-            </clr-checkbox>
-            <clr-checkbox [(ngModel)]="createdUser.sup_man_execs" name="sup_man_execs" [clrInline]="true">
-                Sup/Man/Execs
-            </clr-checkbox>
-            <clr-checkbox [(ngModel)]="createdUser.home_drive" name="home_drive" [clrInline]="true">
-                H Drive
-            </clr-checkbox>
-        </div>
+            <clr-checkbox-wrapper>
+            <input type="checkbox" clrCheckbox [(ngModel)]="createdUser.create_mbx" name="create_mbx">
+                <label>Mailbox</label>
+            </clr-checkbox-wrapper>
+            <clr-checkbox-wrapper>
+            <input type="checkbox" clrCheckbox [(ngModel)]="createdUser.sup_man_execs" name="sup_man_execs">
+                <label>Sup/Man/Execs</label> 
+            </clr-checkbox-wrapper>
+            <clr-checkbox-wrapper>
+            <input type="checkbox" clrCheckbox [(ngModel)]="createdUser.home_drive" name="home_drive">
+               <label>H Drive</label> 
+            </clr-checkbox-wrapper>
+        </clr-checkbox-container>
         <button [clrLoading]="submitBtnState" type="submit" class="btn btn-primary">Create User</button>
     </section>
 </form>

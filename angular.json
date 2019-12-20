@@ -33,7 +33,8 @@
             "scripts": [
               "node_modules/mutationobserver-shim/dist/mutationobserver.min.js",
               "node_modules/@webcomponents/custom-elements/custom-elements.min.js",
-              "node_modules/@clr/icons/clr-icons.min.js"
+              "node_modules/@clr/icons/clr-icons.min.js",
+              "node_modules/chart.js/dist/Chart.js"
             ]
           },
           "configurations": {
@@ -84,7 +85,8 @@
             "scripts": [
               "node_modules/mutationobserver-shim/dist/mutationobserver.min.js",
               "node_modules/@webcomponents/custom-elements/custom-elements.min.js",
-              "node_modules/@clr/icons/clr-icons.min.js"
+              "node_modules/@clr/icons/clr-icons.min.js",
+              "../node_modules/chart.js/dist/Chart.js"
             ],
             "styles": [
               "node_modules/@clr/ui/clr-ui.min.css",

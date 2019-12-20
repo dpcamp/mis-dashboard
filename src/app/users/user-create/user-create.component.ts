@@ -4,8 +4,9 @@ import { User, CreateUser } from '../../shared/models/user';
 import { UNValidation, DNValidation } from '../../shared/models/validation';
 import { UserService } from '../../shared/services/user.service'
 import { ValidationService } from '../../shared/services/validation.service'
-import { Message } from 'primeng/primeng';
-import { ClrLoadingState, Loading } from '@clr/angular'
+import {MessageService} from 'primeng/api';
+import { ClrLoadingState, ClrLoading } from '@clr/angular'
+import {ToastModule} from 'primeng/toast';
 import { concat } from 'rxjs/operators';
 
 @Component({
@@ -17,7 +18,7 @@ export class UserCreateComponent implements OnInit {
   createdUser: CreateUser = {};
   unValidation: UNValidation;
   dnValidation: DNValidation;
-  msgs: Message[] = [];
+  //msgs: <MessageService>[] = [];
   submitBtnState: ClrLoadingState = ClrLoadingState.DEFAULT
   userForm: FormGroup
   unExists = false;
@@ -25,6 +26,7 @@ export class UserCreateComponent implements OnInit {
   constructor(
     private service: UserService,
     private validationService: ValidationService,
+    private messageService: MessageService
 
   ) { }
 
@@ -67,9 +69,12 @@ export class UserCreateComponent implements OnInit {
   get user_name() { return this.userForm.get('user_name'); }
   show(sev: string, sum: string, msg: string) {
 
-    this.msgs = [];
-    this.msgs.push({ severity: `${sev}`, summary: `${sum}`, detail: `${msg}` });
+    this.messageService.add({ severity: `${sev}`, summary: `${sum}`, detail: `${msg}` })
+
   }
+  clear() {
+    this.messageService.clear();
+}
   concatDisplayName() {
     if (this.createdUser.last_name && this.createdUser.first_name) {
     this.createdUser.display_name = `${this.createdUser.last_name}, ${this.createdUser.first_name}`

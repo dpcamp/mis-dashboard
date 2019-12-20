@@ -2,7 +2,9 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { ReportService } from '../../shared/services/report.service';
 import { Report } from '../../shared/models/report';
-import { Message, UIChart  } from 'primeng/primeng';
+
+
+import {ChartModule} from 'primeng/chart';
 import * as _ from 'lodash';
 
 @Component({
@@ -11,8 +13,8 @@ import * as _ from 'lodash';
 })
 
 export class SrReportsComponent implements OnInit {
-    @ViewChild('chart') chart: UIChart
-    @ViewChild('chart2') chart2: UIChart
+    //@ViewChild('chart', {static: true}) chart: ChartModule
+    //@ViewChild('chart2', {static: true}) chart2: ChartModule
     data: any;
     data2: any;
     private today = new Date();
@@ -68,6 +70,7 @@ export class SrReportsComponent implements OnInit {
         let lastYear = `${this.lastYear}-${this.convMM}-${this.convDD}`
 
         let test = []
+        
 
         this.reportService.getSR('Day', lastMonth, today)
         .subscribe(res => {
@@ -77,13 +80,13 @@ export class SrReportsComponent implements OnInit {
         this.reportService.getSR('Day', last2Month, lastMonth)
         .subscribe(res => {
             this.data.datasets[1].data = res.map(a =>  a.sr_count);
-            this.chart.refresh();
+            //this.chart.refresh();
         });
         this.reportService.getSR('Month', lastYear, today)
         .subscribe(res => {
             this.data2.datasets[0].data = res.map(a =>  a.sr_count);
             this.data2.labels = res.map(a =>  a.month_name);
-            this.chart2.refresh();
+            //this.chart2.
         });
 
         this.data = {
@@ -115,6 +118,8 @@ export class SrReportsComponent implements OnInit {
             ]
         }
 
-
+        
     }
+       
+    
 }
