@@ -53,6 +53,19 @@ export class UserCreateComponent implements OnInit {
       .subscribe(users => this.users = users);
   }
 
+  createUserForm(){
+    this.createdUser.submitted_by = localStorage.getItem('user_name')
+    console.log(this.createdUser)
+    this.service.createUserForm(this.createdUser)
+    .subscribe(createdUser => {
+      this.show('success', 'Form Saved', `Form for ${createdUser.display_name} was successfully Saved`)
+      this.submitBtnState = ClrLoadingState.SUCCESS;
+    },
+      err => {
+        this.show('error', 'Error', `${err}`)
+        this.submitBtnState = ClrLoadingState.ERROR;
+      })
+  }
   createUser() {
     console.log(this.createdUser)
     this.submitBtnState = ClrLoadingState.LOADING;

@@ -3,7 +3,7 @@
     <div class="card">
         <div class="card-header">
             <clr-icon shape="search"></clr-icon>
-            <input type="text" size="25" placeholder="Search Users" (input)="dt.filterGlobal($event.target.value, 'contains')" >
+            <input class="clr-input" type="text" size="25" placeholder="Search By Name" (input)="dt.filterGlobal($event.target.value, 'contains')" >
         </div>
     </div>
     <div class="card" *ngIf="selectedUser">
@@ -17,12 +17,12 @@
                         <div class="form-group">
                             <label for="ext">Phone Number(s):</label>
                             <div *ngFor="let p of selectedUser.phones; let i = index">
-                                <input type="text" id="ext" size="20" readonly [(ngModel)]="p.full_number" *ngIf="p.full_number">
+                                <input class="clr-input" type="text" id="ext" size="20" readonly [(ngModel)]="p.full_number" *ngIf="p.full_number">
                             </div>
                             <div *ngFor="let p of selectedUser.phones; let i = index">
                                 <label for="ext" *ngIf="p.extension">Extension:</label>
                                 <div>
-                                    <input type="text" id="ext" size="20" readonly [(ngModel)]="p.extension" *ngIf="p.full_number">
+                                    <input class="clr-input" type="text" id="ext" size="20" readonly [(ngModel)]="p.extension" *ngIf="p.full_number">
                                 </div>
                             </div>
                         </div>

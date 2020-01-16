@@ -104,6 +104,7 @@
                <label>H Drive</label> 
             </clr-checkbox-wrapper>
         </clr-checkbox-container>
+        <button [clrLoading]="submitBtnState" (click)="createUserForm()" class="btn btn-primary">Save Form</button>
         <button [clrLoading]="submitBtnState" type="submit" class="btn btn-primary">Create User</button>
     </section>
 </form>

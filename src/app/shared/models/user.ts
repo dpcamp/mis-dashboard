@@ -15,6 +15,7 @@ export class User {
 }
 export class CreateUser {
   constructor(
+  public id?: string,
   public first_name?: string,
   public last_name?: string,
   public display_name?: string,
@@ -23,7 +24,9 @@ export class CreateUser {
   public copy_user?: string,
   public sup_man_execs?: boolean,
   public create_mbx?: boolean,
-  public home_drive?: boolean
+  public home_drive?: boolean,
+  public submitted_by?: string, 
+  public created_by?: string
 
   ) {}
 }

@@ -17,11 +17,11 @@
         </ng-template>
     </p-toast>
 <h1>Phones</h1>
-<button (click)="createPhoneWizard()" class="btn btn-sm">Add Phone</button> 
+<button (click)="createPhoneClrWizard()" class="btn btn-sm">Add Phone</button> 
     <div class="card">
             <div class="card-header">
                     <clr-icon shape="search"></clr-icon>
-                    <input type="text" size="25" placeholder="Search Phones" (input)="dt.filterGlobal($event.target.value, 'contains')">
+                    <input class="clr-input" type="text" size="25" placeholder="Search By Phone Number" (input)="dt.filterGlobal($event.target.value, 'contains')">
                 </div>
     </div>
     <div class="card" *ngIf="selectedPhone">
@@ -34,33 +34,33 @@
                     <div class="col-lg-6 col-md-12 col-sm-12 col-xs-12">
                         <div class="form-group">
                             <label for="ext" >Username:</label>
-                            <input type="text" id="ext" size="20" readonly [(ngModel)]="selectedPhone.owners[0].user_name" *ngIf="selectedPhone.owners[0]">
+                            <input class="clr-input" type="text" id="ext" size="20" readonly [(ngModel)]="selectedPhone.owners[0].user_name" *ngIf="selectedPhone.owners[0]">
                             <label for="ext" *ngIf="selectedPhone.extension">Extension:</label>
-                            <input type="text" id="ext" size="7" readonly [(ngModel)]="selectedPhone.extension" *ngIf="selectedPhone.extension">
+                            <input class="clr-input" type="text" id="ext" size="7" readonly [(ngModel)]="selectedPhone.extension" *ngIf="selectedPhone.extension">
                             <label for="ext" *ngIf="selectedPhone.vm_id">Voicemail:</label>
-                            <input type="text" id="ext" size="7" readonly [(ngModel)]="selectedPhone.vm_id" *ngIf="selectedPhone.vm_id">
+                            <input class="clr-input" type="text" id="ext" size="7" readonly [(ngModel)]="selectedPhone.vm_id" *ngIf="selectedPhone.vm_id">
                         </div>
                         <div class="form-group">
                             <label for="dn" *ngIf="selectedPhone.drop_num">Drop Number:</label>
-                            <input type="text" id="dn" size="10" readonly [(ngModel)]="selectedPhone.drop_num" *ngIf="selectedPhone.drop_num">
+                            <input class="clr-input" type="text" id="dn" size="10" readonly [(ngModel)]="selectedPhone.drop_num" *ngIf="selectedPhone.drop_num">
                             <label for="pn" *ngIf="selectedPhone.port_num">Port Number:</label>
-                            <input type="text" id="pn" size="10" readonly [(ngModel)]="selectedPhone.port_num" *ngIf="selectedPhone.port_num">
+                            <input class="clr-input" type="text" id="pn" size="10" readonly [(ngModel)]="selectedPhone.port_num" *ngIf="selectedPhone.port_num">
                             <label for="pn" *ngIf="selectedPhone.binding_post">Binding Post:</label>
-                            <input type="text" id="bp" size="10" readonly [(ngModel)]="selectedPhone.binding_post" *ngIf="selectedPhone.binding_post">
+                            <input class="clr-input" type="text" id="bp" size="10" readonly [(ngModel)]="selectedPhone.binding_post" *ngIf="selectedPhone.binding_post">
                         </div>
                         <div class="form-group">
                             <label for="ext" *ngIf="selectedPhone.provider">LD Provider:</label>
-                            <input type="text" id="ext" size="10" readonly [(ngModel)]="selectedPhone.provider" *ngIf="selectedPhone.provider">
+                            <input class="clr-input" type="text" id="ext" size="10" readonly [(ngModel)]="selectedPhone.provider" *ngIf="selectedPhone.provider">
                             <label for="vm" *ngIf="selectedPhone.long_distance">Need LD?</label>
-                            <input type="text" id="vm" size="10" readonly [(ngModel)]="selectedPhone.long_distance" *ngIf="selectedPhone.long_distance">
+                            <input class="clr-input" type="text" id="vm" size="10" readonly [(ngModel)]="selectedPhone.long_distance" *ngIf="selectedPhone.long_distance">
                         </div>
                         <div class="form-group">
                             <label for="ext" *ngIf="selectedPhone.line_type">Line Type:</label>
-                            <input type="text" id="cost" size="10" readonly [(ngModel)]="selectedPhone.line_type" *ngIf="selectedPhone.monthly_cost">
+                            <input class="clr-input"type="text" id="cost" size="10" readonly [(ngModel)]="selectedPhone.line_type" *ngIf="selectedPhone.monthly_cost">
                             <label for="ext" *ngIf="selectedPhone.monthly_cost">Monthly Cost:</label>
-                            <input type="text" id="cost" size="10" readonly [(ngModel)]="selectedPhone.monthly_cost" *ngIf="selectedPhone.monthly_cost">
+                            <input class="clr-input" type="text" id="cost" size="10" readonly [(ngModel)]="selectedPhone.monthly_cost" *ngIf="selectedPhone.monthly_cost">
                             <label for="vm" *ngIf="selectedPhone.date_installed">Date Installed:</label>
-                            <input type="text" id="vm" size="10" readonly [(ngModel)]="selectedPhone.date_installed" *ngIf="selectedPhone.date_installed">
+                            <input class="clr-input" type="text" id="vm" size="10" readonly [(ngModel)]="selectedPhone.date_installed" *ngIf="selectedPhone.date_installed">
                         </div>
                         <clr-checkbox-container>
                             <clr-checkbox-wrapper>
@@ -85,11 +85,11 @@
                     <div class="col-lg-6 col-md-12 col-sm-12 col-xs-12">
                         <div class="form-group">
                             <label for="notes" *ngIf="selectedPhone.notes">Notes:</label>
-                            <textarea id="notes" rows="2" readonly [(ngModel)]="selectedPhone.notes" *ngIf="selectedPhone.notes"></textarea>
+                            <textarea class="clr-textarea" id="notes" rows="2" readonly [(ngModel)]="selectedPhone.notes" *ngIf="selectedPhone.notes"></textarea>
                         </div>
                         <div class="form-group">
                             <label for="switch" *ngIf="selectedPhone.switch_comments">Switch Comments:</label>
-                            <textarea id="switch" rows="1" readonly [(ngModel)]="selectedPhone.switch_comments" *ngIf="selectedPhone.switch_comments"></textarea>
+                            <textarea class="clr-textarea" id="switch" rows="1" readonly [(ngModel)]="selectedPhone.switch_comments" *ngIf="selectedPhone.switch_comments"></textarea>
                         </div>
                     </div>
 
@@ -170,20 +170,20 @@
 <form class="compact" *ngIf="newPhone">
         <div class="form-group" >
             <label>Full Number:</label>
-            <input type="text" placeholder="Enter value here" size="35" name="full_number" [(ngModel)]="newPhone.full_number">
+            <input class="clr-input" type="text" placeholder="Enter value here" size="35" name="full_number" [(ngModel)]="newPhone.full_number">
         </div>
         <div class="form-group" >
             <label>Extension:</label>
-            <input type="text" placeholder="Enter value here" size="35" name="extension" [(ngModel)]="newPhone.extension">
+            <input class="clr-input" type="text" placeholder="Enter value here" size="35" name="extension" [(ngModel)]="newPhone.extension">
         </div>
                 <div class="form-group" >
             <label>Voice Mail:</label>
-            <input type="text" placeholder="Enter value here" size="35" name="vm_id" [(ngModel)]="newPhone.vm_id">
+            <input class="clr-input" type="text" placeholder="Enter value here" size="35" name="vm_id" [(ngModel)]="newPhone.vm_id">
         </div>
         <div class="form-group">
             <label>Function:</label>
-            <div class="select">
-                <select name="function_info" [(ngModel)]="newPhone.function_info">
+            <div class="clr-select-wrapper">
+                <select class="clr-select" name="function_info" [(ngModel)]="newPhone.function_info">
                     <option>Voice</option>
                     <option>Modem</option>
                     <option>Fax</option>
@@ -197,8 +197,8 @@
         </div>
         <div class="form-group">
             <label>Phone Model</label>
-            <div class="select">
-                <select name="model" [(ngModel)]="newPhone.model">
+            <div class="clr-select-wrapper">
+                <select class="clr-select" name="model" [(ngModel)]="newPhone.model">
                     <option>InterTel Basic</option>
                     <option>Intertel Standard</option>
                     <option>InterTel Executive</option>
@@ -215,8 +215,8 @@
         </div>
                 <div class="form-group">
             <label>Line Type:</label>
-            <div class="select">
-                <select name="line_type" [(ngModel)]="newPhone.line_type">
+            <div class="clr-select-wrapper">
+                <select class="clr-select" name="line_type" [(ngModel)]="newPhone.line_type">
                     <option>DID</option>
                     <option>Centrex Analog</option>
                     <option>Centrex ISDN</option>
@@ -227,25 +227,27 @@
         </div>
         <div class="form-group" >
             <label>Location:</label>
-            <input type="text" placeholder="Enter value here" size="35" name="location" [(ngModel)]="newPhone.location">
+            <input class="clr-input" type="text" placeholder="Enter value here" size="35" name="location" [(ngModel)]="newPhone.location">
         </div>
                         <div class="form-group" >
             <label>Long Distance:</label>
-            <input type="text" placeholder="Enter value here" size="35" name="long_distance" [(ngModel)]="newPhone.long_distance">
+            <input class="clr-input" type="text" placeholder="Enter value here" size="35" name="long_distance" [(ngModel)]="newPhone.long_distance">
         </div>
                 <div class="form-group" >
             <label>Assigned to:</label>
-            <input type="text" placeholder="Enter value here" size="35" name="location" [(ngModel)]="newPhone.UserSAMAccountName">
+            <input class="clr-input" type="text" placeholder="Enter value here" size="35" name="location" [(ngModel)]="newPhone.UserSAMAccountName">
                 </div>
         <div class="form-group" >
             <label>Monthly Cost:</label>
-            <input type="text" placeholder="Enter value here" size="35" name="monthly_cost" [(ngModel)]="newPhone.monthly_cost">
+            <input class="clr-input" type="text" placeholder="Enter value here" size="35" name="monthly_cost" [(ngModel)]="newPhone.monthly_cost">
 
         </div>
                 <div class="form-group" >
-            <label>Date Installed:</label>
-            <input type="date" placeholder="Enter value here" size="35" name="date_installed" [(ngModel)]="newPhone.date_installed">
-
+            
+            <clr-date-container>
+                <label>Date Installed:</label>
+            <input type="date" clrDate placeholder="Enter value here" size="35" name="date_installed" [(ngModel)]="newPhone.date_installed">
+        </clr-date-container>
         </div>
         
         </form>
@@ -307,7 +309,7 @@
         <div class="form-group">
             <label>Phone Model</label>
             <div class="select">
-                <select name="model" [(ngModel)]="selectedPhone.model">
+                <select class="clr-select" name="model" [(ngModel)]="selectedPhone.model">
                     <option>InterTel Basic</option>
                     <option>Intertel Standard</option>
                     <option>InterTel Executive</option>
@@ -325,7 +327,7 @@
                 <div class="form-group">
             <label>Line Type:</label>
             <div class="select">
-                <select name="line_type" [(ngModel)]="selectedPhone.line_type">
+                <select class="clr-select" name="line_type" [(ngModel)]="selectedPhone.line_type">
                     <option>DID</option>
                     <option>Centrex Analog</option>
                     <option>Centrex ISDN</option>
@@ -359,9 +361,10 @@
 
         </div>
                 <div class="form-group" >
+                    <clr-date-container>   
             <label>Date Installed:</label>
-            <input type="date" placeholder="Enter value here" size="35" name="date_installed" [(ngModel)]="selectedPhone.date_installed">
-
+            <input clrDate type="date" placeholder="Enter value here" size="35" name="date_installed" [(ngModel)]="selectedPhone.date_installed">
+                    </clr-date-container>
         </div>
         
         </form>

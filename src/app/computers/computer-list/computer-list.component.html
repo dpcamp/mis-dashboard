@@ -2,7 +2,7 @@
     <div class="card">
         <div class="card-header">
             <clr-icon shape="search"></clr-icon>
-            <input type="text" size="25" placeholder="Search Computers" (input)="dt.filterGlobal($event.target.value, 'contains')">
+            <input class="clr-input" type="text" size="25" placeholder="Search By Computer Name" (input)="dt.filterGlobal($event.target.value, 'contains')">
         </div>
     </div>
     <div class="card" *ngIf="selectedComputer">
@@ -22,34 +22,34 @@
                         </div>
                         <div class="form-group">
                             <label for="ext">IP Address:</label>
-                            <input type="text" id="ext" size="20" readonly [(ngModel)]="selectedComputer.ip_address" *ngIf="selectedComputer.ip_address">
+                            <input class="clr-input" type="text" id="ext" size="20" readonly [(ngModel)]="selectedComputer.ip_address" *ngIf="selectedComputer.ip_address">
                         </div>
 
                         <div class="form-group">
                             <label for="ext">Memory:</label>
-                            <input type="text" id="ext" size="20" readonly [ngModel]="selectedComputer.computer_attribute.memory_physical | fileSize"
+                            <input class="clr-input" type="text" id="ext" size="20" readonly [ngModel]="selectedComputer.computer_attribute.memory_physical | fileSize"
                                 (ngModelChange)="selectedComputer.memory_physical=$event" *ngIf="selectedComputer.computer_attribute">
 
                         </div>
                         <div class="form-group">
                             <label for="ext">Disk Space:</label>
-                            <input type="text" id="ext" size="6" readonly [ngModel]="selectedComputer.computer_attribute.disks_size + ' GB'" *ngIf="selectedComputer.computer_attribute">
+                            <input class="clr-input" type="text" id="ext" size="6" readonly [ngModel]="selectedComputer.computer_attribute.disks_size + ' GB'" *ngIf="selectedComputer.computer_attribute">
 
                         </div>
                     </div>
                     <div class="col-lg-6 col-md-12 col-sm-12 col-xs-12">
                         <div class="form-group">
                             <label for="ext">Operating System:</label>
-                            <input type="text" id="ext" size="30" readonly [(ngModel)]="selectedComputer.computer_attribute.os_type" *ngIf="selectedComputer.computer_attribute.os_type">
+                            <input class="clr-input" type="text" id="ext" size="30" readonly [(ngModel)]="selectedComputer.computer_attribute.os_type" *ngIf="selectedComputer.computer_attribute.os_type">
                         </div>
 
                         <div class="form-group">
                             <label for="ext">Service Pack:</label>
-                            <input type="text" id="ext" size="30" readonly [(ngModel)]="selectedComputer.computer_attribute.os_service_pack" *ngIf="selectedComputer.computer_attribute.os_service_pack">
+                            <input class="clr-input" type="text" id="ext" size="30" readonly [(ngModel)]="selectedComputer.computer_attribute.os_service_pack" *ngIf="selectedComputer.computer_attribute.os_service_pack">
                         </div>
                         <div class="form-group">
                             <label for="ext">Serial Number:</label>
-                            <input type="text" id="ext" size="30" readonly [(ngModel)]="selectedComputer.computer_attribute.os_serial" *ngIf="selectedComputer.computer_attribute.os_serial">
+                            <input class="clr-input" type="text" id="ext" size="30" readonly [(ngModel)]="selectedComputer.computer_attribute.os_serial" *ngIf="selectedComputer.computer_attribute.os_serial">
                         </div>
                     </div>
                 </div>

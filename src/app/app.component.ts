@@ -39,8 +39,11 @@ export class AppComponent implements OnInit {
     )*/
     .pipe(
       tap(res => {
-        console.log(res)
+        console.log('result' + JSON.stringify(res))
+        localStorage.setItem('user_name', res.user_name)
+        localStorage.setItem('isAdmin', res.is_admin)
         if (res.is_admin === true) {
+
           this.isAdmin = true;
           console.log(this.isAdmin)
         }

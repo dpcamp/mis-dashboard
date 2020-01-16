@@ -14,6 +14,7 @@ import { environment } from '../../../environments/environment';
 export class UserService {
   private usersUrl: string = environment.usersUrl;
   private createUsersUrl: string = environment.createUsersUrl;
+  private formUrl: string = environment.formsUrl;
 
   // observable source
   private userCreatedSource = new Subject<CreateUser>();
@@ -46,11 +47,7 @@ export class UserService {
    * Get a single user
    */
   getUser(un: string): Observable<User> {
-    // attaching a token
-    // let headers = new Headers();
-    // let token   = localStorage.getItem('auth_token');
-    // headers.append('Content-Type', 'application/json');
-    // headers.append('Authorization', `Bearer ${token}`);
+
 
     return this.http.get(`${this.usersUrl}/${un}`)
       .pipe(
@@ -63,11 +60,7 @@ export class UserService {
    * Get a single user by Ext
    */
   getUserExt(id: number): Observable<User> {
-    // attaching a token
-    // let headers = new Headers();
-    // let token   = localStorage.getItem('auth_token');
-    // headers.append('Content-Type', 'application/json');
-    // headers.append('Authorization', `Bearer ${token}`);
+
 
     return this.http.get(`${this.usersUrl}/ext/${id}`)
       .pipe(
@@ -79,12 +72,45 @@ export class UserService {
   /**
    * Create the user
    */
-  createUser(cUser: CreateUser): Observable<CreateUser> {
+  createUser(cUser: CreateUser): Observable<any> {
     return this.httpClient.post(this.createUsersUrl, cUser)
       .pipe(
         map(res => res),
         tap(res => this.userCreated(cUser)),
        catchError(this.handleError)
+      )
+  }
+    /**
+   * Create the user
+   */
+  createUserForm(cUser: CreateUser): Observable<any> {
+    return this.httpClient.post(this.formUrl, cUser)
+      .pipe(
+        map(res => res),
+        tap(res => this.userCreated(cUser)),
+       catchError(this.handleError)
+      )
+  }
+    /**
+   * Get a single user form
+   */
+  getUserForm(id: string): Observable<User> {
+
+
+    return this.http.get(`${this.formUrl}/${id}`)
+      .pipe(
+        map(res => res.json()),
+        catchError(this.handleError)
+      )
+  }
+    /**
+   * Update the user form
+   */
+  updateUserForm(form: CreateUser): Observable<any> {
+    return this.http.put(`${this.formUrl}/${form.id}`, form)
+      .pipe(
+        map(res => res.json()),
+        catchError(this.handleError)
       )
   }
 
