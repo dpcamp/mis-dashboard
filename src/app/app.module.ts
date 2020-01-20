@@ -1,7 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 import { HttpClientModule } from '@angular/common/http';
 import { routing } from './app.routing';
@@ -26,6 +26,7 @@ import { UserListComponent } from './users/user-list/user-list.component';
 import { UserSingleComponent } from './users/user-single/user-single.component';
 import { UserEditComponent } from './users/user-edit/user-edit.component';
 import { UserCreateComponent } from './users/user-create/user-create.component';
+import { UserOnboardComponent } from './users/user-onboard/user-onboard.component';
 
 import { PhoneService } from './shared/services/phone.service';
 import { PhonesComponent } from './phones/phones.component';
@@ -67,6 +68,7 @@ import { HTTP_INTERCEPTORS } from '@angular/common/http';
     UserSingleComponent,
     UserEditComponent,
     UserCreateComponent,
+    UserOnboardComponent,
 
     PhonesComponent,
     PhoneListComponent,
@@ -85,6 +87,7 @@ import { HTTP_INTERCEPTORS } from '@angular/common/http';
     BrowserAnimationsModule,
     ClarityModule,
     ClipboardModule,
+    ReactiveFormsModule,
 
     FormsModule,
     TextMaskModule,

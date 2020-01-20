@@ -7,6 +7,7 @@ import { UserSingleComponent } from './users/user-single/user-single.component';
 import { UserEditComponent } from './users/user-edit/user-edit.component';
 
 import { UserCreateComponent } from './users/user-create/user-create.component';
+import { UserOnboardComponent } from './users/user-onboard/user-onboard.component';
 
 import { PhonesComponent } from './phones/phones.component';
 import { PhoneListComponent } from './phones/phone-list/phone-list.component';
@@ -45,6 +46,10 @@ export const routes: Routes = [
       {
         path: 'create',
         component: UserCreateComponent
+      },
+      {
+        path: 'onboard',
+        component: UserOnboardComponent
       }
     ]
   },
