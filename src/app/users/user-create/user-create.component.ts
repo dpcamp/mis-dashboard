@@ -8,6 +8,7 @@ import {MessageService} from 'primeng/api';
 import { ClrLoadingState, ClrLoading } from '@clr/angular'
 import {ToastModule} from 'primeng/toast';
 import { concat } from 'rxjs/operators';
+import { DatePipe } from '@angular/common';
 
 @Component({
   templateUrl: 'user-create.component.html'
@@ -34,7 +35,7 @@ export class UserCreateComponent implements OnInit {
     this.userForm = new FormGroup({
       'user_name': new FormControl(this.createdUser.user_name, [
         Validators.required,
-        Validators.minLength(6)
+        Validators.minLength(3)
       ]),
       'display_name': new FormControl(this.createdUser.display_name, [
         Validators.required
@@ -50,7 +51,9 @@ export class UserCreateComponent implements OnInit {
     this.unValidation = {user_name_exists: false}
     this.dnValidation = {display_name_exists: false}
     this.service.getUsers()
-      .subscribe(users => this.users = users);
+      .subscribe(users => {this.users = users
+      console.log(this.users)}
+        );
   }
 
   createUserForm(){

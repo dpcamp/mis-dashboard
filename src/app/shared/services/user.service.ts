@@ -15,6 +15,7 @@ export class UserService {
   private usersUrl: string = environment.usersUrl;
   private createUsersUrl: string = environment.createUsersUrl;
   private formUrl: string = environment.formsUrl;
+  private mailUrl: string = environment.mailUrl;
 
   // observable source
   private userCreatedSource = new Subject<CreateUser>();
@@ -91,6 +92,16 @@ export class UserService {
        catchError(this.handleError)
       )
   }
+      /**
+   * sends mail data to server. Takes recipient email address, and new employees guid
+   */
+  sendMail(email: string, user_id: string): Observable<any> {
+    return this.httpClient.post(this.mailUrl, {email: email, id:user_id})
+      .pipe(
+        map(res => res),
+       catchError(this.handleError)
+      )
+  }
     /**
    * Get a single user form
    */
@@ -100,6 +111,18 @@ export class UserService {
     return this.http.get(`${this.formUrl}/${id}`)
       .pipe(
         map(res => res.json()),
+        catchError(this.handleError)
+      )
+  }
+      /**
+   * Get Dayforce user data. Takes Employee ID
+   */
+  getDayForceUser(id: string): Observable<any> {
+
+
+    return this.http.get(`${this.usersUrl}/emp_id/${id}`)
+      .pipe(
+        map(res => res.json().data),
         catchError(this.handleError)
       )
   }

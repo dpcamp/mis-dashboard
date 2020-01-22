@@ -5,6 +5,7 @@
 
 export const environment = {
   production: false,
+  mailUrl: 'http://192.168.235.96:3000/sendmail',
   usersUrl: 'http://192.168.235.96:3000/api/users',
   createUsersUrl: 'http://GRF-MISDEV:8889/auth/create',
   computersUrl: 'http://192.168.235.96:3000/api/computers',

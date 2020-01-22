@@ -11,190 +11,183 @@
 
 <h2>New Employee Request Form</h2>
 <p class="p1">Please complete this form to request a new account and equipment for an employee. You will receive a notification via email when set up is complete.</p>
-
-<div class="clr-row">
-
-      <div class="card">
-
-          <div class="card-block">
-            <div class="card-title">
-              New Hire Information
-          </div>
-            <div class="card-text">
-<form clrForm>
-
+<form clrStepper [formGroup]="form" *ngIf="newEmp" #simpleForm="ngForm">
+    <clr-stepper-panel formGroupName="name" >
+    <clr-step-title>Employee Information</clr-step-title>
+    <clr-step-description>Enter Employee Info</clr-step-description>
+    <clr-step-content *clrIfExpanded>
     <clr-input-container>
         
           <label>Employee ID</label>
-          <input  clrInput type="text" [(ngModel)]="newEmp.employee_id"  name="employee_id" (blur)="getDFUser(newEmp.employee_id)" />
+          <input  clrInput type="text" [(ngModel)]="newEmp.employee_id"  formControlName="employee_id"  />
             <clr-control-helper>Enter the employee's ID to autofill this section</clr-control-helper>
             <clr-control-error>This field is required!</clr-control-error>
           </clr-input-container>
           <clr-input-container>
       <label>First name</label>
-      <input  clrInput type="text" [(ngModel)]="newEmp.first_name" name="first_name"  required [readonly]="isUserReadOnly"/>
-      
+      <input  clrInput type="text" [(ngModel)]="newEmp.first_name" formControlName="first_name"  required/>
+      <clr-control-helper>Helper text</clr-control-helper>
       <clr-control-error>This field is required!</clr-control-error>
     </clr-input-container>
     <clr-input-container>
         <label>Last name</label>
-        <input  clrInput type="text"[(ngModel)]="newEmp.last_name" name="last_name"  required [readonly]="isUserReadOnly"/>
-        
+        <input  clrInput type="text"[(ngModel)]="newEmp.last_name" formControlName="last_name"  required/>
+        <clr-control-helper>Helper text</clr-control-helper>
         <clr-control-error>This field is required!</clr-control-error>
       </clr-input-container>
       <clr-input-container>
         <label>Full name</label>
-        <input  clrInput [(ngModel)]="newEmp.display_name" name="display_name" [readonly]="isUserReadOnly" />
-        
+        <input  clrInput [(ngModel)]="newEmp.display_name" formControlName="display_name"  />
+        <clr-control-helper>Helper text</clr-control-helper>
         <clr-control-error>This field is required!</clr-control-error>
       </clr-input-container>
       <clr-input-container>
         <label>Job Title</label>
-        <input  clrInput [(ngModel)]="newEmp.job_title" name="job_title"  [readonly]="isUserReadOnly"/>
-        
+        <input  clrInput [(ngModel)]="newEmp.job_title" formControlName="job_title"  />
+        <clr-control-helper>Helper text</clr-control-helper>
         <clr-control-error>This field is required!</clr-control-error>
       </clr-input-container>
       <clr-input-container>
         <label>What Building will they be working from?</label>
-        <input  clrInput [(ngModel)]="newEmp.building" name="building"  [readonly]="isReadOnly"/>
-        
+        <input  clrInput [(ngModel)]="newEmp.building" formControlName="building"  />
+        <clr-control-helper>Helper text</clr-control-helper>
         <clr-control-error>This field is required!</clr-control-error>
       </clr-input-container>
-      <clr-date-container *ngIf="!emp_id">
+      <clr-date-container>
         <label >Start Date</label>
-        <input type="date"  name="start_date" clrDate value="newEmp.start_date" [(ngModel)]="newEmp.start_date" >
+        <input type="date" name="start_date" clrDate [(ngModel)]="newEmp.start_date"  formControlName="start_date">
     </clr-date-container>
-    <clr-input-container *ngIf="emp_id">
-      <label>Start Date</label>
-      <input clrInput [(ngModel)]="startDate" name="start_date"  readonly/>
-      
-      <clr-control-error>This field is required!</clr-control-error>
-    </clr-input-container>
-                  <clr-radio-container>
+      <button clrStepButton="next">next</button>
+    </clr-step-content>
+</clr-stepper-panel>
+<clr-stepper-panel formGroupName="computer">
+    <clr-step-title>Computer Requirement</clr-step-title>
+    <clr-step-description>Enter computer information</clr-step-description>
+    <clr-step-content *clrIfExpanded>
+
+            <clr-radio-container>
                 <label>Is there a computer in the work area currently?</label>
                 <clr-radio-wrapper>
-                  <input type="radio" clrRadio name="need_computer"  value="true"  [(ngModel)]="newEmp.need_computer" [readonly]="isReadOnly" />
+                  <input type="radio" clrRadio formControlName="need_computer"  value="true"  [(ngModel)]="newEmp.need_computer" />
                   <label>Yes</label>
                 </clr-radio-wrapper>
                 <clr-radio-wrapper>
-                  <input type="radio" clrRadio name="need_computer"  value ="false" [(ngModel)]="newEmp.need_computer" [readonly]="isReadOnly" />
+                  <input type="radio" clrRadio formControlName="need_computer"  value ="false" [(ngModel)]="newEmp.need_computer" />
                   <label>No</label>
                 </clr-radio-wrapper>
-                
+                <clr-control-helper>Helper text</clr-control-helper>
                 <clr-control-error>This field is required!</clr-control-error>
               </clr-radio-container>
               <clr-input-container>
             <label>PC Number</label>
-            <input  clrInput [(ngModel)]="newEmp.pc_number" name="pc_number"  />
+            <input  clrInput [(ngModel)]="newEmp.pc_number" formControlName="pc_number"  />
             <clr-control-helper>Located on a red tag or written in marker on top of the computer</clr-control-helper>
             <clr-control-error>This field is required!</clr-control-error>
           </clr-input-container>
-
-
-          <clr-select-container>
+              <button clrStepButton="next">next</button>
+    </clr-step-content>
+  </clr-stepper-panel>
+  <clr-stepper-panel formGroupName="account">
+    <clr-step-title>Account Information</clr-step-title>
+    <clr-step-description>List the following requirements</clr-step-description>
+    <clr-step-content *clrIfExpanded>
+        <clr-input-container>
             <label>Who is the new hire replacing:</label>
-            <select clrSelect [ngModel]="newEmp.copy_user" name="copy_user" (ngModelChange)="newEmp.copy_user = $event" [disabled]="isReadOnly">
-                <option name="UserSAMAccountName" *ngFor="let user of users" [value]="user.user_name" >
-                    {{ user.display_name }}
-                </option>
-                
-            </select>
+            <input  clrInput [(ngModel)]="newEmp.copy_user" formControlName="copy_user"  />
             <clr-control-helper>If this is a new position, list an employee who has similar access/programs that the new hire requires</clr-control-helper>
             <clr-control-error>This field is required!</clr-control-error>
-        </clr-select-container>
+          </clr-input-container>
           <clr-checkbox-container clrInline>
-            <label>Select Any programs needed:</label>
+            <label>Select Any programs needed from below</label>
             <clr-checkbox-wrapper>
-              <input type="checkbox" clrCheckbox name="needs_ax"   [(ngModel)]="newEmp.needs_ax" [readonly]="isReadOnly" />
+              <input type="checkbox" clrCheckbox formControlName="needs_ax"   [(ngModel)]="newEmp.needs_ax" />
               <label>Dynamics AX</label>
             </clr-checkbox-wrapper>
             <clr-checkbox-wrapper>
-              <input type="checkbox" clrCheckbox name="needs_ice"  [(ngModel)]="newEmp.needs_ice" [readonly]="isReadOnly" />
+              <input type="checkbox" clrCheckbox formControlName="needs_ice"  [(ngModel)]="newEmp.needs_ice" />
               <label>ICE</label>
             </clr-checkbox-wrapper>
             <clr-checkbox-wrapper>
-                <input type="checkbox" clrCheckbox name="needs_stellar"  [(ngModel)]="newEmp.needs_stellar" [readonly]="isReadOnly" />
+                <input type="checkbox" clrCheckbox formControlName="needs_stellar"  [(ngModel)]="newEmp.needs_stellar" />
                 <label>STELLAR</label>
               </clr-checkbox-wrapper>
               <clr-checkbox-wrapper>
-                <input type="checkbox" clrCheckbox name="needs_onbase" [(ngModel)]="newEmp.needs_onbase" [readonly]="isReadOnly" />
+                <input type="checkbox" clrCheckbox formControlName="needs_onbase" r [(ngModel)]="newEmp.needs_onbase" />
                 <label>OnBase</label>
               </clr-checkbox-wrapper>
               <clr-checkbox-wrapper>
-                <input type="checkbox" clrCheckbox name="needs_dl"  [(ngModel)]="newEmp.needs_dl" [readonly]="isReadOnly" />
+                <input type="checkbox" clrCheckbox formControlName="needs_dl"  [(ngModel)]="newEmp.needs_dl" />
                 <label>Dwelling Live</label>
               </clr-checkbox-wrapper>
               <clr-checkbox-wrapper>
-                <input type="checkbox" clrCheckbox name="needs_scan"  [(ngModel)]="newEmp.needs_scan" [readonly]="isReadOnly" />
+                <input type="checkbox" clrCheckbox formControlName="needs_scan"  [(ngModel)]="newEmp.needs_scan" />
                 <label>Scan Folder</label>
               </clr-checkbox-wrapper>
               <clr-checkbox-wrapper>
-                <input type="checkbox" clrCheckbox name="needs_PDF"  [(ngModel)]="newEmp.needs_PDF" [readonly]="isReadOnly" />
+                <input type="checkbox" clrCheckbox formControlName="needs_PDF"  [(ngModel)]="newEmp.needs_PDF" />
                 <label>PDF Editor</label>
               </clr-checkbox-wrapper>
               <clr-checkbox-wrapper>
-                <input type="checkbox" clrCheckbox name="needs_autocad"  [(ngModel)]="newEmp.needs_autocad" [readonly]="isReadOnly" />
+                <input type="checkbox" clrCheckbox formControlName="needs_autocad"  [(ngModel)]="newEmp.needs_autocad" />
                 <label>AutoCAD</label>
               </clr-checkbox-wrapper>
               <clr-checkbox-wrapper>
-                <input type="checkbox" clrCheckbox name="needs_publisher"  [(ngModel)]="newEmp.needs_publisher" [readonly]="isReadOnly" />
+                <input type="checkbox" clrCheckbox formControlName="needs_publisher"  [(ngModel)]="newEmp.needs_publisher" />
                 <label>Publisher</label>
               </clr-checkbox-wrapper>
               <clr-checkbox-wrapper>
-                <input type="checkbox" clrCheckbox name="needs_visio"  [(ngModel)]="newEmp.needs_visio" [readonly]="isReadOnly" />
+                <input type="checkbox" clrCheckbox formControlName="needs_visio"  [(ngModel)]="newEmp.needs_visio" />
                 <label>Visio</label>
               </clr-checkbox-wrapper>
               <clr-checkbox-wrapper>
-                <input type="checkbox" clrCheckbox name="needs_shoretel"  [(ngModel)]="newEmp.needs_shoretel" [readonly]="isReadOnly" />
+                <input type="checkbox" clrCheckbox formControlName="needs_shoretel"  [(ngModel)]="newEmp.needs_shoretel" />
                 <label>ShoreTel</label>
               </clr-checkbox-wrapper>
               <clr-checkbox-wrapper>
-                <input type="checkbox" clrCheckbox name="needs_sec"  [(ngModel)]="newEmp.needs_sec" [readonly]="isReadOnly" />
+                <input type="checkbox" clrCheckbox formControlName="needs_sec"  [(ngModel)]="newEmp.needs_sec" />
                 <label>Security Video Access</label>
               </clr-checkbox-wrapper>
-            
+            <clr-control-helper>Helper text</clr-control-helper>
             <clr-control-error>This field is required!</clr-control-error>
           </clr-checkbox-container>
           <clr-input-container>
             <label>Shared Mailbox Access:</label>
-            <input  clrInput [(ngModel)]="newEmp.shared_mbx" name="shared_mbx"  [readonly]="isReadOnly" />
+            <input  clrInput [(ngModel)]="newEmp.shared_mbx" formControlName="shared_mbx"  />
             <clr-control-helper>List N/A if this is a new position...</clr-control-helper>
             <clr-control-error>This field is required!</clr-control-error>
           </clr-input-container>
             <clr-textarea-container>
               <label>Additional Programs or access needed</label>
-              <textarea clrTextarea [(ngModel)]="newEmp.description" name="description"></textarea>
-              
+              <textarea clrTextarea [(ngModel)]="newEmp.description" formControlName="description"></textarea>
+              <clr-control-helper>Helper text</clr-control-helper>
                     
             </clr-textarea-container>
-
+          <button clrStepButton="next">next</button>
+    </clr-step-content>
+  </clr-stepper-panel>
+  <clr-stepper-panel formGroupName="telephone">
+    <clr-step-title>Telephone Information</clr-step-title>
+    <clr-step-description>List Employee's phone requirements</clr-step-description>
+    <clr-step-content *clrIfExpanded>
         <clr-checkbox-container clrInline>
             <clr-checkbox-wrapper>
-              <input type="checkbox" clrCheckbox name="needs_deskphone" [(ngModel)]="newEmp.needs_deskphone" [readonly]="isReadOnly" />
+              <input type="checkbox" clrCheckbox formControlName="needs_deskphone" [(ngModel)]="newEmp.needs_deskphone" />
               <label>Requires A Desk Phone</label>
             </clr-checkbox-wrapper>
             <clr-checkbox-wrapper>
-              <input type="checkbox" clrCheckbox name="needs_cell" [(ngModel)]="newEmp.needs_cell" [readonly]="isReadOnly" />
+              <input type="checkbox" clrCheckbox formControlName="needs_cell" [(ngModel)]="newEmp.needs_cell" />
               <label>Requires a Cell Phone</label>
             </clr-checkbox-wrapper>
-            
+            <clr-control-helper>Helper text</clr-control-helper>
             <clr-control-error>This field is required!</clr-control-error>
           </clr-checkbox-container>
           <clr-input-container>
             <label>If there is a phone at the desk list the Extension:</label>
-            <input  clrInput [(ngModel)]="newEmp.phone_ext" name="phone_ext" [readonly]="isReadOnly" />
+            <input  clrInput [(ngModel)]="newEmp.phone_ext" formControlName="phone_ext" />
             <clr-control-helper>List N/A if this is a new position...</clr-control-helper>
             <clr-control-error>This field is required!</clr-control-error>
           </clr-input-container>
-          <button class="btn btn-primary" (click)="createUserForm()" *ngIf="!emp_id">submit</button>
-          <button class="btn btn-primary" (click)="createUserForm()" *ngIf="emp_id">Create User</button>
-
-
-
+      <button clrStepButton="submit" (click)="createUserForm()" >submit</button>
+    </clr-step-content>
+  </clr-stepper-panel>
 </form>
-</div>
-</div>
-
-</div>
-
-</div>

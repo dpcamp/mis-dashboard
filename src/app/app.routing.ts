@@ -51,6 +51,7 @@ export const routes: Routes = [
         path: 'onboard',
         component: UserOnboardComponent
       }
+
     ]
   },
   {
