@@ -24,8 +24,8 @@ export class ValidationService {
   /**
    * Validates username. Accepts { user_name: model.value }
    */
-  validateUserName(UN: CreateUser): Observable<UNValidation> {
-    return this.httpClient.post(`${environment.validationUrl}/username`, UN)
+  validateUserName(UN: string): Observable<UNValidation> {
+    return this.httpClient.get(`${environment.usersUrl}/validate?user_name=${UN}`)
         .pipe(
         map(res => res),
        catchError(this.handleError)

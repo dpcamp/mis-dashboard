@@ -27,11 +27,14 @@ import { UserSingleComponent } from './users/user-single/user-single.component';
 import { UserEditComponent } from './users/user-edit/user-edit.component';
 import { UserCreateComponent } from './users/user-create/user-create.component';
 import { UserOnboardComponent } from './users/user-onboard/user-onboard.component';
+import { UserOnboardStatusComponent } from './users/user-onboard-status/user-onboard-status.component';
 
 import { PhoneService } from './shared/services/phone.service';
 import { PhonesComponent } from './phones/phones.component';
 import { PhoneListComponent } from './phones/phone-list/phone-list.component';
 import { PhoneSidebarComponent } from './phones/phone-sidebar/phone-sidebar.component';
+
+import {UsernameValidator} from './shared/validators/username'
 
 
 import { ComputerService } from './shared/services/computer.service';
@@ -69,6 +72,7 @@ import { HTTP_INTERCEPTORS } from '@angular/common/http';
     UserEditComponent,
     UserCreateComponent,
     UserOnboardComponent,
+    UserOnboardStatusComponent,
 
     PhonesComponent,
     PhoneListComponent,
@@ -114,7 +118,8 @@ import { HTTP_INTERCEPTORS } from '@angular/common/http';
     ComputerService,
     ReportService,
     ValidationService,
-    MessageService
+    MessageService, 
+    UsernameValidator
   ],
   bootstrap: [AppComponent]
 })

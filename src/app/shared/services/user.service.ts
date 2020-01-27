@@ -73,11 +73,40 @@ export class UserService {
   /**
    * Create the user
    */
-  createUser(cUser: CreateUser): Observable<any> {
-    return this.httpClient.post(this.createUsersUrl, cUser)
+  createUser(cUser: CreateUser): Observable<CreateUser> {
+    return this.httpClient.post<CreateUser>(this.createUsersUrl, cUser)
+      .pipe(
+        map((res : any) => res),
+        tap(res => this.userCreated(cUser)),
+       catchError(this.handleError)
+      )
+  }
+      /**
+   * Gets all user onboard status
+   */
+  getUserForms(queryParams?: string): Observable<any> {
+    if(queryParams){
+      return this.httpClient.get(`${this.formUrl}?${queryParams}`)
       .pipe(
         map(res => res),
-        tap(res => this.userCreated(cUser)),
+       catchError(this.handleError)
+      )
+    } else {
+      return this.httpClient.get(this.formUrl)
+      .pipe(
+        map(res => res),
+       catchError(this.handleError)
+      )
+    }
+
+  }
+    /**
+   * Gets user onboard status filtered by submitted_by
+   */
+  getUserFormSubmittedBy(user_name: string): Observable<any> {
+    return this.httpClient.get(`${this.formUrl}?submitted_by=${user_name}`)
+      .pipe(
+        map(res => res),
        catchError(this.handleError)
       )
   }
@@ -105,7 +134,7 @@ export class UserService {
     /**
    * Get a single user form
    */
-  getUserForm(id: string): Observable<User> {
+  getUserForm(id: string): Observable<any> {
 
 
     return this.http.get(`${this.formUrl}/${id}`)

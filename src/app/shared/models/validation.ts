@@ -1,6 +1,6 @@
 export class UNValidation {
   constructor(
-    public user_name_exists?: boolean
+    public user_exists?: boolean
   ) {}
 }
 export class DNValidation {

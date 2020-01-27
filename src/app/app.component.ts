@@ -15,7 +15,8 @@ export class AppComponent implements OnInit {
   loggedUser: LoggedUser;
   currentUser: User;
   cnCopied = false;
-  isAdmin = false;
+  isAdmin: boolean;
+  hireCount: number;
 
   constructor(
     private userService: UserService,
@@ -29,7 +30,10 @@ export class AppComponent implements OnInit {
         users => this.users = users
       );
     this.UserAuth()
-    console.log(this.isAdmin)
+    this.userService.getUserForms('get_status=pending')
+    .subscribe(res => {
+      this.hireCount = res.count
+    })
   }
 
   UserAuth() {
@@ -42,22 +46,18 @@ export class AppComponent implements OnInit {
         console.log('result' + JSON.stringify(res))
         localStorage.setItem('user_name', res.user_name)
         localStorage.setItem('isAdmin', res.is_admin)
-        if (res.is_admin === true) {
-
-          this.isAdmin = true;
-          console.log(this.isAdmin)
-        }
+        this.isAdmin = JSON.parse(localStorage.getItem('isAdmin'))
       }),
       mergeMap(dataresults => of(dataresults)),
     switchMap(loggedUser => this.userService.getUser(loggedUser.user_name))
     )
       .subscribe(currentUser => {
       this.currentUser = currentUser
-        if (currentUser.is_admin) {
-          this.isAdmin = false;
-        } else {
-          this.isAdmin = false;
-        }
+        // if (currentUser.is_admin) {
+        //   this.isAdmin = false;
+        // } else {
+        //   this.isAdmin = false;
+        // }
 
     })
   }

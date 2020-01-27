@@ -13,16 +13,16 @@
       </div>
       <div class="header-actions" *ngIf="currentUser"> <clr-dropdown>
         <button class="nav-text" clrDropdownTrigger>
-          <span *ngIf="!isAdmin">Hello</span>
-        <clr-icon shape="administrator" class="is-solid" *ngIf="isAdmin"></clr-icon>
-
+          <span class="badge badge-danger" *ngIf="isAdmin && hireCount > 0">{{hireCount}}</span>
          {{currentUser.first_name}} {{currentUser.last_name}}
             <clr-icon shape="caret down"></clr-icon>
         </button>
-        <!-- <clr-dropdown-menu *clrIfOpen clrPosition="bottom-right">
-            <a href="#" clrDropdownItem>Preferences</a>
-            <a href="#" clrDropdownItem>Log out</a>
-        </clr-dropdown-menu> -->
+        <clr-dropdown-menu *clrIfOpen clrPosition="bottom-right" >
+          <a [routerLink]="['/users/onboard-status']" routerLinkActive="router-link-active"  clrDropdownItem *ngIf="!isAdmin">My Pending Hire Requests</a>
+          <a [routerLink]="['/users/onboard-status']" routerLinkActive="router-link-active"  clrDropdownItem *ngIf="isAdmin">Hire Requests <span class="badge badge-danger" *ngIf="hireCount > 0">{{hireCount}}</span></a>
+          <a [routerLink]="['/users/create']" clrDropdownItem *ngIf="isAdmin">Create User</a>
+      </clr-dropdown-menu>
+
     </clr-dropdown>
     </div>
   </header>

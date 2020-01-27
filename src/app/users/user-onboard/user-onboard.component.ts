@@ -8,9 +8,9 @@ import {MessageService} from 'primeng/api';
 import { ClrLoadingState, ClrLoading } from '@clr/angular'
 import {ToastModule} from 'primeng/toast';
 import { concat } from 'rxjs/operators';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { DatePipe, formatDate } from '@angular/common';
-
+import {UsernameValidator} from '../../shared/validators/username'
 @Component({
    
     selector: 'user-onboard',
@@ -18,14 +18,22 @@ import { DatePipe, formatDate } from '@angular/common';
     styleUrls: ['user-onboard.component.scss']
 })
 export class UserOnboardComponent implements OnInit {
+    isAdmin: boolean;
+    unExists: boolean = false;
+    dnExists: boolean = false;
+    userExistsModal: boolean = false;
+    successModal: boolean = false;
+    createdModal: boolean = false;
     isUserReadOnly: boolean = false;
     isReadOnly: boolean = false;
     startDate: string;
-    users: User[];
+    users: User[] = [];
     newEmp: CreateUser = {};
     emp_id: string;
     form: FormGroup;
-    submitBtnState: ClrLoadingState = ClrLoadingState.DEFAULT
+    userForm: FormGroup;
+    submitBtnState: ClrLoadingState = ClrLoadingState.DEFAULT;
+    unValidation: UNValidation;
     templateForm = {
         name: {
             id: '',
@@ -73,7 +81,26 @@ export class UserOnboardComponent implements OnInit {
         private userService: UserService,
         private messageService: MessageService,
         private route: ActivatedRoute,
+        private router: Router,
+        public usernameValidator: UsernameValidator,
+        private validationService: ValidationService,
     ){
+
+        this.userForm = new FormGroup({
+            'user_name': new FormControl(this.newEmp.user_name, [
+              Validators.required,
+              Validators.minLength(3)
+            ]),
+            'display_name': new FormControl(this.newEmp.display_name, [
+              Validators.required
+            ]),
+            'first_name': new FormControl(this.newEmp.first_name, [
+              Validators.required
+            ]),
+            'last_name': new FormControl(this.newEmp.last_name, [
+              Validators.required
+            ])
+          });
         this.form = this.formBuilder.group({
             name: this.formBuilder.group({
                 id: [],
@@ -126,6 +153,10 @@ export class UserOnboardComponent implements OnInit {
         this.messageService.clear();
     }
     ngOnInit(){
+      this.isAdmin = JSON.parse(localStorage.getItem('isAdmin'))
+      
+      this.userService.getUsers()
+      .subscribe(users => {this.users = users});
         this.route.queryParams
         .subscribe(params => {
             this.emp_id = params.id
@@ -135,22 +166,58 @@ export class UserOnboardComponent implements OnInit {
 
             this.isReadOnly = true;
             this.isUserReadOnly = true;
-            (console.log('EMPLOYEE ID IS NOT NULL'))
+            
              this.userService.getUserForm(this.emp_id)
              .subscribe(newEmp => {
+               
                  this.newEmp = newEmp
                  this.startDate = formatDate(this.newEmp.start_date, 'MM/dd/yyyy', 'en-US')
+                 this.concatDisplayName();
+                 this.unExists = this.users.some(e => e.user_name === this.newEmp.user_name)
                  
              })
+             
         }
 
           
           //this.unValidation = {user_name_exists: false}
           //this.dnValidation = {display_name_exists: false}
-          this.userService.getUsers()
-            .subscribe(users => {this.users = users});
+
         
     }
+    validateDisplayName(){
+        if (this.newEmp.display_name === '') {
+            this.dnExists = false;
+          }
+          if (this.newEmp.display_name) {
+              this.dnExists = this.users.some(e => e.display_name === this.newEmp.display_name)
+  
+          }
+    }
+    validateUserName() {
+        
+        if (this.newEmp.user_name === '') {
+          console.log(`user exists: ${this.unExists}`)
+          this.unExists = false;
+        }
+        if (this.newEmp.user_name) {
+          console.log(`user exists: ${this.unExists}`)
+            this.unExists = this.users.some(e => e.user_name === this.newEmp.user_name)
+
+        }
+      }
+      concatDisplayName() {
+        if (this.newEmp.last_name && this.newEmp.first_name) {
+        this.newEmp.display_name = `${this.newEmp.last_name}, ${this.newEmp.first_name}`
+        this.newEmp.user_name = `${this.newEmp.last_name
+          .substring(0, 6)
+          .toUpperCase()}${this.newEmp.first_name
+            .substring(0, 1)
+            .toUpperCase()}`
+            this.validateUserName()
+            //this.validateDisplayName()
+        }
+      }
     getDFUser(id: string){
         console.log(id)
         if (id){
@@ -187,14 +254,16 @@ export class UserOnboardComponent implements OnInit {
                       this.newEmp.submitted_by = localStorage.getItem('user_name'),
                       this.newEmp.status = 'pending'
 
-        console.log(this.newEmp)
+
         this.userService.createUserForm(this.newEmp)
         .subscribe(newEmp => {
-        this.emp_id = newEmp.id
-        this.userService.sendMail('derek.campanile@vmsinc.org', newEmp.id)
+            this.emp_id = newEmp.data.id;
+        this.userService.sendMail(newEmp.data.submit_user.email, newEmp.data.id)
         .subscribe(email => email)
-          this.show('success', 'Form Saved', `Form for ${newEmp.display_name}, was successfully Saved. ID is ${this.emp_id}`)
+          //this.show('success', 'Form Saved', `Form for ${newEmp.data.display_name}, was successfully Saved. ID is ${this.emp_id}`)
           this.submitBtnState = ClrLoadingState.SUCCESS;
+          this.successModal = true
+          
           
           
         },
@@ -203,5 +272,39 @@ export class UserOnboardComponent implements OnInit {
             this.submitBtnState = ClrLoadingState.ERROR;
           })
       }
+
+      createUser() {
+        this.validateUserName();
+        if (this.unExists){
+          this.userExistsModal = true;
+        }
+        else {
+        this.newEmp.created_by = localStorage.getItem('user_name'),
+        this.newEmp.status = 'completed'
+        //console.log(this.newEmp)
+        this.submitBtnState = ClrLoadingState.LOADING;
+        this.userService.createUser(this.newEmp)
+          .subscribe(createdUser => {
+            //this.show('success', 'User Created', `${this.newEmp.display_name} was successfully created`)
+            this.userService.updateUserForm(this.newEmp)
+            .subscribe(res => res)
+            this.submitBtnState = ClrLoadingState.SUCCESS;
+            this.createdModal = true
+          },
+            err => {
+              this.show('error', 'Error', `${err}`)
+              this.submitBtnState = ClrLoadingState.ERROR;
+            })
+          }
+      }
+
+      successButton(){
+          //this.successModal = !this.successModal
+          this.router.navigate(['/users/onboard-status'], {queryParams: {id: localStorage.getItem('user_name')}})
+      }
+      createdButton(){
+        //this.successModal = !this.successModal
+        this.router.navigate(['/users'])
+    }
 
 }

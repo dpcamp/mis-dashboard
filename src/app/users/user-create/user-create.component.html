@@ -1,33 +1,8 @@
-<p-toast [modal]="true" [baseZIndex]="5000">
-    <ng-template let-message pTemplate="message">
-        <div style="text-align: center">
-            <i class="pi pi-exclamation-triangle" style="font-size: 3em"></i>
-            <h3>{{message.summary}}</h3>
-            <p>{{message.detail}}</p>
-        </div>
-        <div class="ui-g ui-fluid">
-            <div class="ui-g-6">
-                <button type="button" pButton (click)="onConfirm()" label="Yes" class="ui-button-success"></button>
-            </div>
-            <div class="ui-g-6">
-                <button type="button" pButton (click)="onReject()" label="No" class="ui-button-secondary"></button>
-            </div>
-        </div>
-    </ng-template>
-</p-toast>
-<div class="alert alert-success" *ngIf="!isAdmin == true">
-        <div class="alert-items">
-            <div class="alert-item static">
-                <div class="alert-icon-wrapper">
-                    <clr-icon class="alert-icon" shape="check-circle"></clr-icon>
-                </div>
-                <span class="alert-text">Looks like you're and Admin.. Proceed..</span>
-            </div>
-        </div>
-    </div>
-<form clrForm (ngSubmit)="createUser()" *ngIf="!isAdmin == true">
+<h2>New User Form</h2>
+
+<form clrForm (ngSubmit)="createUser()" *ngIf="isAdmin">
     <section class="form-block" *ngIf="createdUser">
-        <label>New User Form</label>
+
         <clr-input-container>
             <label>First Name</label>
             <input clrInput type="text" [(ngModel)]="createdUser.first_name" name="first_name" placeholder="First Name" (blur)="concatDisplayName()" required>
@@ -47,7 +22,7 @@
                     <clr-icon class="clr-validate-icon" shape="exclamation-circle"></clr-icon>
                   </div>
                   <div *ngIf="display_name.invalid && (display_name.dirty || display_name.touched)">
-                  <span class="clr-subtext" *ngIf="display_name.errors.required">Username required</span>
+                  <span class="clr-subtext" *ngIf="display_name.errors.required">Display Name required</span>
                   </div>
                   <span class="clr-subtext" *ngIf="dnExists">Display Name already exists (suggested display name {{createdUser.first_name}} {{createdUser.last_name}})</span>
                 </div>
@@ -57,12 +32,12 @@
                 <label for="example" class="clr-control-label">Username</label>
                 <div class="clr-control-container">
                   <div class="clr-input-wrapper">
-                    <input [(ngModel)]="createdUser.user_name" name="user_name" user placeholder="Username" (blur)="validateUserName()" required minlength="7"  class="clr-input" #user_name="ngModel">
+                    <input [(ngModel)]="createdUser.user_name" name="user_name" user placeholder="Username" (blur)="validateUserName()" required minlength="3"  class="clr-input" #user_name="ngModel">
                     <clr-icon class="clr-validate-icon" shape="exclamation-circle"></clr-icon>
                   </div>
                   <div *ngIf="user_name.invalid && (user_name.dirty || user_name.touched)">
                   <span class="clr-subtext" *ngIf="user_name.errors.required">Username required</span>
-                  <span class="clr-subtext" *ngIf="user_name.errors.minlength">Username must be at least 7 characters</span>
+                  <span class="clr-subtext" *ngIf="user_name.errors.minlength">Username must be at least 3 characters</span>
                   </div>
                   <span class="clr-subtext" *ngIf="unExists">Username already exists</span>
                 </div>
@@ -104,7 +79,29 @@
                <label>H Drive</label> 
             </clr-checkbox-wrapper>
         </clr-checkbox-container>
-        <button [clrLoading]="submitBtnState" (click)="createUserForm()" class="btn btn-primary">Save Form</button>
         <button [clrLoading]="submitBtnState" type="submit" class="btn btn-primary">Create User</button>
     </section>
 </form>
+
+<clr-modal [(clrModalOpen)]="createdModal">
+  <h3 class="modal-title">Account: {{createdUser.user_name}} Successfully Created</h3>
+  <div class="modal-body">
+      <p>You the create button. You deserve a break for your hard work.</p>
+  </div>
+  <div class="modal-footer">
+      <button [clrLoading]="submitBtnState" type="button" class="btn btn-outline" (click)="createdButton()">OK</button>
+      <!-- button type="button" class="btn btn-outline" (click)="cakeButton()">Have Some Cake.</button> -->
+      
+  </div>
+</clr-modal>
+
+<clr-modal [(clrModalOpen)]="userExistsModal">
+  <h3 class="modal-title">Account: {{createdUser.user_name}} Already exists</h3>
+  <div class="modal-body">
+      <p>Double check AD to make sure this user hasn't been created already, or change the user name.</p>
+  </div>
+  <div class="modal-footer">
+      <button type="button" class="btn btn-outline" (click)="userExistsModal = false">OK</button>
+      
+  </div>
+</clr-modal>

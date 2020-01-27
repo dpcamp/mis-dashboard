@@ -1,0 +1,26 @@
+<h3>New Hire Form Status</h3>
+<clr-datagrid *ngIf="users">
+    <clr-dg-column>New Hire Name</clr-dg-column>
+    <clr-dg-column>Start Date</clr-dg-column>
+    <clr-dg-column>Submitted By</clr-dg-column>
+    <clr-dg-column>Submitted Date</clr-dg-column>
+    <clr-dg-column>Status</clr-dg-column>
+    <clr-dg-column>Completed By</clr-dg-column>
+    <clr-dg-column>Completion Date</clr-dg-column>
+
+    <clr-dg-row *clrDgItems="let user of users" >
+        <clr-dg-cell><a [routerLink]="['/users/onboard']" [queryParams]="{id: user.id}" routerLinkActive="router-link-active" *ngIf="isAdmin"> {{user.display_name}}</a><span *ngIf="!isAdmin">{{user.display_name}}</span></clr-dg-cell>
+        <clr-dg-cell>{{user.start_date | date}}</clr-dg-cell>
+        <clr-dg-cell>{{user.submit_user.first_name}} {{user.submit_user.last_name}}</clr-dg-cell>
+        <clr-dg-cell>{{user.createdAt | date}}</clr-dg-cell>
+        <clr-dg-cell>{{user.status}}</clr-dg-cell>
+        <clr-dg-cell><div *ngIf="user.created_by">{{user.create_user.first_name}} {{user.create_user.last_name}}</div><div *ngIf="!user.created_by">N/A</div></clr-dg-cell>
+        <clr-dg-cell><div *ngIf="user.created_by">{{user.updatedAt | date}}</div><div *ngIf="!user.created_by">N/A</div></clr-dg-cell>
+    </clr-dg-row>
+
+    <clr-dg-footer> <clr-dg-pagination #pagination [clrDgPageSize]="20">
+        <clr-dg-page-size [clrPageSizeOptions]="[10,20,50,100]">Users per page</clr-dg-page-size>
+        {{pagination.firstItem + 1}} - {{pagination.lastItem + 1}}
+        of {{pagination.totalItems}} users
+    </clr-dg-pagination></clr-dg-footer>
+</clr-datagrid>

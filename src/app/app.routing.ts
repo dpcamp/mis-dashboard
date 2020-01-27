@@ -8,6 +8,7 @@ import { UserEditComponent } from './users/user-edit/user-edit.component';
 
 import { UserCreateComponent } from './users/user-create/user-create.component';
 import { UserOnboardComponent } from './users/user-onboard/user-onboard.component';
+import { UserOnboardStatusComponent } from './users/user-onboard-status/user-onboard-status.component';
 
 import { PhonesComponent } from './phones/phones.component';
 import { PhoneListComponent } from './phones/phone-list/phone-list.component';
@@ -50,7 +51,13 @@ export const routes: Routes = [
       {
         path: 'onboard',
         component: UserOnboardComponent
-      }
+      },
+        {
+          path: 'onboard-status',
+          component: UserOnboardStatusComponent
+          }
+        
+      
 
     ]
   },
