@@ -1,4 +1,5 @@
 <h2>New Employee Request Form</h2>
+{{userForm.valid}}
 <p class="p1">Please complete this form to request a new account and equipment for an employee. You will receive a notification via email when set up is complete.</p>
 
 <div class="clr-row">
@@ -15,34 +16,35 @@
     <clr-input-container>
         
           <label>Employee ID</label>
-          <input  clrInput type="text" [(ngModel)]="newEmp.employee_id"  [ngModelOptions]="{standalone: true}" name="employee_id" (blur)="getDFUser(newEmp.employee_id)" />
+          <input  clrInput type="text" [(ngModel)]="newEmp.employee_id"  formControlName="employee_id" name="employee_id" (blur)="getDFUser(newEmp.employee_id)" [readonly]="isReadOnly"/>
             <clr-control-helper>Enter the employee's ID to autofill this section</clr-control-helper>
-            <clr-control-error>This field is required!</clr-control-error>
+            <clr-control-error *clrIfError="pattern">only numbers allowed in this field</clr-control-error>
           </clr-input-container>
           <clr-input-container>
       <label>First name</label>
-      <input  clrInput type="text" [(ngModel)]="newEmp.first_name" [ngModelOptions]="{standalone: true}" name="first_name"  required [readonly]="isUserReadOnly"/>
+      <input  clrInput type="text" [(ngModel)]="newEmp.first_name" formControlName="first_name" name="first_name"  (blur)="concatDisplayName()" [readonly]="isUserReadOnly"/>
       
       <clr-control-error>This field is required!</clr-control-error>
     </clr-input-container>
     <clr-input-container>
         <label>Last name</label>
-        <input  clrInput type="text"[(ngModel)]="newEmp.last_name" [ngModelOptions]="{standalone: true}" name="last_name"  required [readonly]="isUserReadOnly"/>
+        <input  clrInput type="text"[(ngModel)]="newEmp.last_name" formControlName="last_name"  name="last_name"  (blur)="concatDisplayName()" [readonly]="isUserReadOnly"/>
         
         <clr-control-error>This field is required!</clr-control-error>
       </clr-input-container>
-      <clr-input-container *ngIf="emp_id">
+      <clr-input-container>
         <label>Full name</label>
-        <input  clrInput [(ngModel)]="newEmp.display_name" [ngModelOptions]="{standalone: true}" name="display_name" [readonly]="isUserReadOnly" />
+        <input  clrInput [(ngModel)]="newEmp.display_name" formControlName="display_name" name="display_name" [readonly]="isUserReadOnly || !newEmp.id" />
         
         <clr-control-error>This field is required!</clr-control-error>
       </clr-input-container>
+      
       <div class="clr-form-control" [ngClass]="
       {'clr-error': unExists || (user_name.invalid && (user_name.dirty || user_name.touched))}" *ngIf="newEmp.id">
               <label class="clr-control-label">Username</label>
               <div class="clr-control-container">
                 <div class="clr-input-wrapper">
-                  <input  [(ngModel)]="newEmp.user_name" [ngModelOptions]="{standalone: true}" name="user_name" user placeholder="Username" (blur)="validateUserName()" required minlength="3"  class="clr-input" #user_name="ngModel">
+                  <input  [(ngModel)]="newEmp.user_name" [ngModelOptions]="{standalone: true}" name="user_name" user placeholder="Username" (blur)="validateUserName()" class="clr-input" #user_name="ngModel" [readonly]="isReadOnly">
                   <clr-icon class="clr-validate-icon" shape="exclamation-circle"></clr-icon>
                 </div>
                 <div *ngIf="user_name.invalid && (user_name.dirty || user_name.touched)">
@@ -70,7 +72,7 @@
     </clr-date-container>
     <clr-input-container *ngIf="emp_id">
       <label>Start Date</label>
-      <input clrInput [(ngModel)]="startDate" [ngModelOptions]="{standalone: true}" name="start_date"  readonly/>
+      <input clrInput [(ngModel)]="startDate" [ngModelOptions]="{standalone: true}" name="start_date"  [readonly]="isLocked"/>
       
       <clr-control-error>This field is required!</clr-control-error>
     </clr-input-container>
@@ -89,7 +91,7 @@
               </clr-radio-container>
               <clr-input-container>
             <label>PC Number</label>
-            <input  clrInput [(ngModel)]="newEmp.pc_number" [ngModelOptions]="{standalone: true}" name="pc_number"  />
+            <input  clrInput [(ngModel)]="newEmp.pc_number" [ngModelOptions]="{standalone: true}" name="pc_number"  [readonly]="isReadOnly"/>
             <clr-control-helper>Located on a red tag or written in marker on top of the computer</clr-control-helper>
             <clr-control-error>This field is required!</clr-control-error>
           </clr-input-container>
@@ -97,14 +99,14 @@
 
           <clr-select-container>
             <label>Who is the new hire replacing:</label>
-            <select clrSelect [ngModel]="newEmp.copy_user" [ngModelOptions]="{standalone: true}" name="copy_user" (ngModelChange)="newEmp.copy_user = $event">
+            <select clrSelect [ngModel]="newEmp.copy_user" formControlName="copy_user" name="copy_user" (ngModelChange)="newEmp.copy_user = $event">
                 <option name="UserSAMAccountName" *ngFor="let user of users" [value]="user.user_name" >
                     {{ user.display_name }}
                 </option>
                 
             </select>
             <clr-control-helper>If this is a new position, list an employee who has similar access/programs that the new hire requires</clr-control-helper>
-            <clr-control-error>This field is required!</clr-control-error>
+            <clr-control-error>You must select another employee</clr-control-error>
         </clr-select-container>
           <clr-checkbox-container clrInline>
             <label>Select Any programs needed:</label>
@@ -167,7 +169,7 @@
           </clr-input-container>
             <clr-textarea-container>
               <label>Additional Programs or access needed</label>
-              <textarea clrTextarea [(ngModel)]="newEmp.description" [ngModelOptions]="{standalone: true}" name="description"></textarea>
+              <textarea clrTextarea [(ngModel)]="newEmp.description" [ngModelOptions]="{standalone: true}" name="description" [readonly]="isReadOnly"></textarea>
               
                     
             </clr-textarea-container>
@@ -186,12 +188,17 @@
           </clr-checkbox-container>
           <clr-input-container>
             <label>If there is a phone at the desk list the Extension:</label>
-            <input  clrInput [(ngModel)]="newEmp.phone_ext" [ngModelOptions]="{standalone: true}" name="phone_ext" [readonly]="isReadOnly" />
+            <input  clrInput type="text" [(ngModel)]="newEmp.phone_ext" formControlName="phone_ext" [readonly]="isReadOnly" />
             <clr-control-helper>List N/A if this is a new position...</clr-control-helper>
-            <clr-control-error>This field is required!</clr-control-error>
+            <clr-control-error *clrIfError="'minlength'">Must be 4 digits</clr-control-error>
+            <clr-control-error *clrIfError="'maxlength'">Must be 4 digits</clr-control-error>
+            <clr-control-error *clrIfError="'pattern'">Only numbers allowed in this field</clr-control-error>
           </clr-input-container>
-          <button [clrLoading]="submitBtnState" class="btn btn-primary" (click)="createUserForm()" *ngIf="!emp_id">submit</button>
-          <button [clrLoading]="submitBtnState" class="btn btn-primary" (click)="createUser()" *ngIf="emp_id">Create User</button>
+          <div (mouseover)="markTouched()">
+            <button [clrLoading]="submitBtnState" class="btn btn-primary" type="submit"  (click)="createUserForm()" [disabled]="!userForm.valid" *ngIf="!emp_id">submit</button>
+          </div>
+          
+          <button [clrLoading]="submitBtnState" class="btn btn-primary" (click)="createUser()" *ngIf="emp_id" [disabled]="isLocked || !userForm.valid">Create User</button>
 
 
 

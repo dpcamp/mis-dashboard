@@ -20,10 +20,12 @@ export class UserService {
   // observable source
   private userCreatedSource = new Subject<CreateUser>();
   private userDeletedSource = new Subject();
+  private hireCountSource = new Subject();
 
   // observable stream
   userCreated$ = this.userCreatedSource.asObservable();
   userDeleted$ = this.userDeletedSource.asObservable();
+  hireCount$ = this.hireCountSource.asObservable();
 
   constructor(
     private http: Http,
@@ -81,7 +83,18 @@ export class UserService {
        catchError(this.handleError)
       )
   }
-      /**
+    /**
+   * Gets user forms pending count
+   */
+  getPendingCount(): Observable<any> {
+      return this.httpClient.get(`${this.formUrl}?get_status=pending`)
+      .pipe(
+        map(res => res),
+        tap((res:any) => {console.log(res); this.hireCount(res.pending_count)}),
+       catchError(this.handleError)
+      )
+    }
+  /**
    * Gets all user onboard status
    */
   getUserForms(queryParams?: string): Observable<any> {
@@ -117,15 +130,36 @@ export class UserService {
     return this.httpClient.post(this.formUrl, cUser)
       .pipe(
         map(res => res),
-        tap(res => this.userCreated(cUser)),
+        tap((res: any) => {console.log(res); this.hireCount(res.pending_count)}),
        catchError(this.handleError)
       )
   }
       /**
    * sends mail data to server. Takes recipient email address, and new employees guid
    */
-  sendMail(email: string, user_id: string): Observable<any> {
-    return this.httpClient.post(this.mailUrl, {email: email, id:user_id})
+  sendMail(email: string, 
+    userId: string, 
+    firstName: string, 
+    lastName: string, 
+    submittedBy?: string, 
+    username?: string, 
+    status?: string, 
+    copyUser?: string,
+    onbase?: boolean, 
+    stellar?: boolean, 
+    dwellingLive?: boolean): Observable<any> {
+    return this.httpClient.post(this.mailUrl, {
+      email: email, 
+      id:userId, 
+      first_name: firstName, 
+      last_name: lastName,
+      submitted_by: submittedBy, 
+      user_name:username, 
+      status: status,
+      copy_user: copyUser,
+      onbase: onbase,
+      stellar: stellar,
+      dwelling_live: dwellingLive, })
       .pipe(
         map(res => res),
        catchError(this.handleError)
@@ -159,9 +193,10 @@ export class UserService {
    * Update the user form
    */
   updateUserForm(form: CreateUser): Observable<any> {
-    return this.http.put(`${this.formUrl}/${form.id}`, form)
+    return this.httpClient.put(`${this.formUrl}/${form.id}`, form)
       .pipe(
-        map(res => res.json()),
+        map(res => res),
+        tap((res: any) => this.hireCount(res.pending_count)),
         catchError(this.handleError)
       )
   }
@@ -194,6 +229,13 @@ export class UserService {
   userCreated(user: CreateUser) {
     this.userCreatedSource.next(user);
   }
+    /**
+   * The user was created. add this info to our stream
+   */
+  hireCount(count: number) {
+    this.hireCountSource.next(count);
+  }
+  
 
   /**
  * The user was deleted. add this info to our stream

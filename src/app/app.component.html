@@ -18,7 +18,7 @@
             <clr-icon shape="caret down"></clr-icon>
         </button>
         <clr-dropdown-menu *clrIfOpen clrPosition="bottom-right" >
-          <a [routerLink]="['/users/onboard-status']" routerLinkActive="router-link-active"  clrDropdownItem *ngIf="!isAdmin">My Pending Hire Requests</a>
+          <a [routerLink]="['/users/onboard-status']" [queryParams]="{submitted_by: currentUser.user_name}" routerLinkActive="router-link-active"  clrDropdownItem *ngIf="!isAdmin">My Hire Requests</a>
           <a [routerLink]="['/users/onboard-status']" routerLinkActive="router-link-active"  clrDropdownItem *ngIf="isAdmin">Hire Requests <span class="badge badge-danger" *ngIf="hireCount > 0">{{hireCount}}</span></a>
           <a [routerLink]="['/users/create']" clrDropdownItem *ngIf="isAdmin">Create User</a>
       </clr-dropdown-menu>

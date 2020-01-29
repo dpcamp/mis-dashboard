@@ -30,9 +30,11 @@ export class AppComponent implements OnInit {
         users => this.users = users
       );
     this.UserAuth()
-    this.userService.getUserForms('get_status=pending')
-    .subscribe(res => {
-      this.hireCount = res.count
+    this.userService.getPendingCount().subscribe(res => res)
+    this.userService.hireCount$
+    .subscribe((res: number) => {
+      console.log('hireCount is ' + res)
+      this.hireCount = res
     })
   }
 
@@ -53,6 +55,7 @@ export class AppComponent implements OnInit {
     )
       .subscribe(currentUser => {
       this.currentUser = currentUser
+      console.log(currentUser)
         // if (currentUser.is_admin) {
         //   this.isAdmin = false;
         // } else {

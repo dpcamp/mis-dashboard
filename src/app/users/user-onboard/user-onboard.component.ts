@@ -1,15 +1,14 @@
-import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators, NgForm, FormControl } from '@angular/forms';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { FormBuilder, FormGroup, Validators,  FormControl } from '@angular/forms';
 import { User, CreateUser } from '../../shared/models/user';
-import { UNValidation, DNValidation } from '../../shared/models/validation';
+import { UNValidation,  } from '../../shared/models/validation';
 import { UserService } from '../../shared/services/user.service'
 import { ValidationService } from '../../shared/services/validation.service'
 import {MessageService} from 'primeng/api';
-import { ClrLoadingState, ClrLoading } from '@clr/angular'
-import {ToastModule} from 'primeng/toast';
-import { concat } from 'rxjs/operators';
+import { ClrLoadingState, ClrForm,  } from '@clr/angular'
+
 import { ActivatedRoute, Router } from '@angular/router';
-import { DatePipe, formatDate } from '@angular/common';
+import {  formatDate } from '@angular/common';
 import {UsernameValidator} from '../../shared/validators/username'
 @Component({
    
@@ -18,6 +17,7 @@ import {UsernameValidator} from '../../shared/validators/username'
     styleUrls: ['user-onboard.component.scss']
 })
 export class UserOnboardComponent implements OnInit {
+  @ViewChild(ClrForm, {static: false}) form: ClrForm;
     isAdmin: boolean;
     unExists: boolean = false;
     dnExists: boolean = false;
@@ -26,123 +26,50 @@ export class UserOnboardComponent implements OnInit {
     createdModal: boolean = false;
     isUserReadOnly: boolean = false;
     isReadOnly: boolean = false;
+    isLocked: boolean = false;
     startDate: string;
     users: User[] = [];
     newEmp: CreateUser = {};
     emp_id: string;
-    form: FormGroup;
+    //form: FormGroup;
     userForm: FormGroup;
     submitBtnState: ClrLoadingState = ClrLoadingState.DEFAULT;
     unValidation: UNValidation;
-    templateForm = {
-        name: {
-            id: '',
-            employee_id: '',
-            first_name: '',
-            last_name: '',
-            display_name: '',
-            job_title: '',
-            building: '',
-            start_date: '',
-        },
-        computer: {
-            need_computer: '',
-            pc_number: '',
-
-        },
-        account: {
-            copy_user: '',
-            needs_ax: '',
-            needs_ice: '',
-            needs_stellar: '',
-            needs_onbase: '',
-            needs_dl: '',
-            needs_scan: '',
-            needs_PDF: '',
-            needs_autocad: '',
-            needs_publisher: '',
-            needs_visio: '',
-            needs_shoretel: '',
-            needs_sec: '',
-            shared_mbx: '',
-            description: '',
-
-
-        },
-        telephone: {
-            needs_deskphone: '',
-            needs_cell: '',
-            phone_ext: '',
-
-        },
-    }
     constructor(
-        private formBuilder: FormBuilder,
+
         private userService: UserService,
         private messageService: MessageService,
         private route: ActivatedRoute,
         private router: Router,
         public usernameValidator: UsernameValidator,
-        private validationService: ValidationService,
+        private fb: FormBuilder
+
     ){
 
-        this.userForm = new FormGroup({
-            'user_name': new FormControl(this.newEmp.user_name, [
-              Validators.required,
-              Validators.minLength(3)
-            ]),
-            'display_name': new FormControl(this.newEmp.display_name, [
+        this.userForm = this.fb.group({
+            display_name:  [ this.newEmp.display_name,
               Validators.required
-            ]),
-            'first_name': new FormControl(this.newEmp.first_name, [
+            ],
+            first_name:  [ this.newEmp.first_name,
               Validators.required
-            ]),
-            'last_name': new FormControl(this.newEmp.last_name, [
+            ],
+            last_name:  [ this.newEmp.last_name,
               Validators.required
-            ])
+            ],
+            copy_user:  [ this.newEmp.copy_user,
+              Validators.required
+            ],
+            phone_ext:  [ this.newEmp.phone_ext,[
+              Validators.minLength(4),
+              Validators.maxLength(4),
+              Validators.pattern("^[0-9]*$")]
+            ],
+            employee_id:  [ this.newEmp.employee_id,[
+              Validators.minLength(5),
+              Validators.pattern("^[0-9]*$")]
+            ]
+            
           });
-        this.form = this.formBuilder.group({
-            name: this.formBuilder.group({
-                id: [],
-                employee_id: [],
-                first_name: [],
-                last_name: [],
-                display_name: [],
-                job_title: [],
-                building: [],
-                start_date: [],
-            }),
-            computer: this.formBuilder.group({
-                need_computer: [],
-                pc_number: [],
-
-            }),
-            account: this.formBuilder.group({
-                copy_user: [],
-                needs_ax: [],
-                needs_ice: [],
-                needs_stellar: [],
-                needs_onbase: [],
-                needs_dl: [],
-                needs_scan: [],
-                needs_PDF: [],
-                needs_autocad: [],
-                needs_publisher: [],
-                needs_visio: [],
-                needs_shoretel: [],
-                needs_sec: [],
-                shared_mbx: [],
-                description: [],
-
-
-            }),
-            telephone: this.formBuilder.group({
-                needs_deskphone: [],
-                needs_cell: [],
-                phone_ext: [],
-
-            }),
-        })
     }
     show(sev: string, sum: string, msg: string) {
 
@@ -153,6 +80,8 @@ export class UserOnboardComponent implements OnInit {
         this.messageService.clear();
     }
     ngOnInit(){
+      
+      console.log(this.userForm.valid)
       this.isAdmin = JSON.parse(localStorage.getItem('isAdmin'))
       
       this.userService.getUsers()
@@ -161,12 +90,13 @@ export class UserOnboardComponent implements OnInit {
         .subscribe(params => {
             this.emp_id = params.id
         })
-       console.log(`employee_id: ${this.emp_id}`)
+      //  console.log(`employee_id: ${this.emp_id}`)
+
         if(this.emp_id){
 
-            this.isReadOnly = true;
+           if(this.newEmp.employee_id){
             this.isUserReadOnly = true;
-            
+            }
              this.userService.getUserForm(this.emp_id)
              .subscribe(newEmp => {
                
@@ -174,8 +104,16 @@ export class UserOnboardComponent implements OnInit {
                  this.startDate = formatDate(this.newEmp.start_date, 'MM/dd/yyyy', 'en-US')
                  this.concatDisplayName();
                  this.unExists = this.users.some(e => e.user_name === this.newEmp.user_name)
-                 
+                 console.log(this.newEmp.status)
+                 if(this.newEmp.status === 'completed') {
+                  this.isReadOnly = true;
+                  this.isUserReadOnly = true;
+                  this.isLocked = true;
+                  
+                }
              })
+             
+
              
         }
 
@@ -186,51 +124,52 @@ export class UserOnboardComponent implements OnInit {
         
     }
     validateDisplayName(){
-        if (this.newEmp.display_name === '') {
+        if (!this.newEmp.display_name) {
             this.dnExists = false;
           }
-          if (this.newEmp.display_name) {
+          else {
               this.dnExists = this.users.some(e => e.display_name === this.newEmp.display_name)
   
           }
     }
     validateUserName() {
         
-        if (this.newEmp.user_name === '') {
+        if (!this.newEmp.user_name) {
           console.log(`user exists: ${this.unExists}`)
           this.unExists = false;
         }
-        if (this.newEmp.user_name) {
+        else {
           console.log(`user exists: ${this.unExists}`)
             this.unExists = this.users.some(e => e.user_name === this.newEmp.user_name)
 
         }
       }
       concatDisplayName() {
+
         if (this.newEmp.last_name && this.newEmp.first_name) {
+
         this.newEmp.display_name = `${this.newEmp.last_name}, ${this.newEmp.first_name}`
+
         this.newEmp.user_name = `${this.newEmp.last_name
           .substring(0, 6)
           .toUpperCase()}${this.newEmp.first_name
             .substring(0, 1)
             .toUpperCase()}`
             this.validateUserName()
-            //this.validateDisplayName()
-        }
+            this.validateDisplayName()
+         }
       }
     getDFUser(id: string){
-        console.log(id)
         if (id){
             this.newEmp = {}
             this.isUserReadOnly = false;
         this.userService.getDayForceUser(id)
         .subscribe(dfEmp => {
             if(dfEmp[0]){
-                this.newEmp = {
+              this.newEmp = {
                     employee_id: id,
                     first_name: dfEmp[0].FirstName,
                     last_name: dfEmp[0].LastName,
-                    department: dfEmp[0].Department,
                     job_title: dfEmp[0].Title, 
                     display_name: `${dfEmp[0].LastName}, ${dfEmp[0].FirstName}`
     
@@ -239,11 +178,15 @@ export class UserOnboardComponent implements OnInit {
             }
             else{
                 console.log('DOESNT EXIST')
+                this.isUserReadOnly = false
             }
+
 
             console.log(dfEmp)
             console.log(this.newEmp)
         })
+    } else {
+      this.isUserReadOnly = false;
     }
 }
     createUserForm(){
@@ -253,12 +196,14 @@ export class UserOnboardComponent implements OnInit {
                       this.newEmp.home_drive = false,
                       this.newEmp.submitted_by = localStorage.getItem('user_name'),
                       this.newEmp.status = 'pending'
-
+        this.concatDisplayName()
 
         this.userService.createUserForm(this.newEmp)
         .subscribe(newEmp => {
             this.emp_id = newEmp.data.id;
-        this.userService.sendMail(newEmp.data.submit_user.email, newEmp.data.id)
+            let emp = newEmp.data
+            console.log(emp)
+        this.userService.sendMail(emp.submit_user.email, emp.id, emp.first_name, emp.last_name, emp.submit_user.user_name)
         .subscribe(email => email)
           //this.show('success', 'Form Saved', `Form for ${newEmp.data.display_name}, was successfully Saved. ID is ${this.emp_id}`)
           this.submitBtnState = ClrLoadingState.SUCCESS;
@@ -281,13 +226,18 @@ export class UserOnboardComponent implements OnInit {
         else {
         this.newEmp.created_by = localStorage.getItem('user_name'),
         this.newEmp.status = 'completed'
-        //console.log(this.newEmp)
+
         this.submitBtnState = ClrLoadingState.LOADING;
         this.userService.createUser(this.newEmp)
           .subscribe(createdUser => {
-            //this.show('success', 'User Created', `${this.newEmp.display_name} was successfully created`)
+          
             this.userService.updateUserForm(this.newEmp)
-            .subscribe(res => res)
+            .subscribe(res => {
+              let emp = res.data
+              this.userService.sendMail(emp.submit_user.email, emp.id, emp.first_name, emp.last_name, emp.submit_user.user_name, emp.user_name, emp.status, this.newEmp.copy_user, this.newEmp.needs_onbase, this.newEmp.needs_stellar, this.newEmp.needs_dl).subscribe(email => console.log(email))
+                          })
+            
+            
             this.submitBtnState = ClrLoadingState.SUCCESS;
             this.createdModal = true
           },
@@ -300,11 +250,18 @@ export class UserOnboardComponent implements OnInit {
 
       successButton(){
           //this.successModal = !this.successModal
-          this.router.navigate(['/users/onboard-status'], {queryParams: {id: localStorage.getItem('user_name')}})
+          this.router.navigate(['/users/onboard-status'], {queryParams: {submitted_by: localStorage.getItem('user_name')}})
       }
       createdButton(){
         //this.successModal = !this.successModal
         this.router.navigate(['/users'])
+    }
+
+    markTouched(){
+      console.log(this.userForm)
+      this.userForm.markAsTouched();
+      this.userForm.markAsDirty();
+      this.form.markAsTouched();
     }
 
 }
