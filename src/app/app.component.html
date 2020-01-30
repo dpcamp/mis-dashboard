@@ -6,7 +6,7 @@
                 <span class="title">IT Dashboard</span>
               </a>
       </div>
-      <div class="header-nav">
+      <div class="header-nav" *ngIf="isAdmin">
         <a class="nav-link" routerLink="/"><span class="nav-text">Assets</span></a>
         <a class="nav-link" routerLink="/"><span class="nav-text">Users</span></a>
         <a class="nav-link" routerLink="dashboard/SR"><span class="nav-text">Reports</span></a>
@@ -32,7 +32,7 @@
       <div class="content-area">   
       <router-outlet></router-outlet>
       </div>
-    <nav class="sidenav"> 
+    <nav class="sidenav" *ngIf="isAdmin"> 
       <phone-sidebar></phone-sidebar>
     </nav>
   </div>

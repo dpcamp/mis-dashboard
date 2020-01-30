@@ -5,7 +5,6 @@ import { ActivatedRoute } from '@angular/router';
 
 @Component({
     
-    moduleId: module.id,
     selector: 'user-onboard-status',
     templateUrl: 'user-onboard-status.component.html',
     styleUrls: ['user-onboard-status.component.scss']
