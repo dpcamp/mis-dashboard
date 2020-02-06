@@ -11,14 +11,14 @@
               New Hire Information
           </div>
             <div class="card-text">
-<form clrForm [formGroup]="userForm">
+<form clrForm [formGroup]="userForm" (keydown.enter)="$event.preventDefault()">
 
     <clr-input-container>
         
           <label>Employee ID</label>
           <input  clrInput type="text" [(ngModel)]="newEmp.employee_id"  formControlName="employee_id" name="employee_id" (blur)="getDFUser(newEmp.employee_id)" [readonly]="isReadOnly"/>
             <clr-control-helper>Enter the employee's ID to autofill this section</clr-control-helper>
-            <clr-control-error *clrIfError="pattern">only numbers allowed in this field</clr-control-error>
+            <clr-control-error *clrIfError="'pattern'">only numbers allowed in this field</clr-control-error>
           </clr-input-container>
           <clr-input-container>
       <label>First name</label>
@@ -79,11 +79,11 @@
                   <clr-radio-container>
                 <label>Is there a computer in the work area currently?</label>
                 <clr-radio-wrapper>
-                  <input type="radio" clrRadio name="need_computer"  value="true"  [(ngModel)]="newEmp.need_computer" [ngModelOptions]="{standalone: true}" [readonly]="isReadOnly" />
+                  <input type="radio" clrRadio name="needs_computer"  value="true"  [(ngModel)]="newEmp.needs_computer" [ngModelOptions]="{standalone: true}" [readonly]="isReadOnly" />
                   <label>Yes</label>
                 </clr-radio-wrapper>
                 <clr-radio-wrapper>
-                  <input type="radio" clrRadio name="need_computer"  value ="false" [(ngModel)]="newEmp.need_computer" [ngModelOptions]="{standalone: true}" [readonly]="isReadOnly" />
+                  <input type="radio" clrRadio name="needs_computer"  value ="false" [(ngModel)]="newEmp.needs_computer" [ngModelOptions]="{standalone: true}" [readonly]="isReadOnly" />
                   <label>No</label>
                 </clr-radio-wrapper>
                 
@@ -135,7 +135,7 @@
                 <label>Scan Folder</label>
               </clr-checkbox-wrapper>
               <clr-checkbox-wrapper>
-                <input type="checkbox" clrCheckbox name="needs_PDF"  [(ngModel)]="newEmp.needs_PDF" [ngModelOptions]="{standalone: true}" [readonly]="isReadOnly" />
+                <input type="checkbox" clrCheckbox name="needs_pdf"  [(ngModel)]="newEmp.needs_pdf" [ngModelOptions]="{standalone: true}" [readonly]="isReadOnly" />
                 <label>PDF Editor</label>
               </clr-checkbox-wrapper>
               <clr-checkbox-wrapper>

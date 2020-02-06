@@ -6,5 +6,7 @@ export const environment = {
   phonesUrl: 'http://172.16.10.69:3000/api/phones',
   reportUrl: 'http://172.16.10.69:3000/api/reports',
   authUrl: 'http://GRF-MISDEV:8888/',
-  validationUrl: 'http://GRF-MISDEV:8889/validate'
+  validationUrl: 'http://GRF-MISDEV:8889/validate',
+  formsUrl: 'http://172.16.10.69:3000/api/form',
+  mailUrl: 'http://172.16.10.69:3000/sendmail',
 };
