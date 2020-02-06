@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ComputerService } from '../../shared/services/computer.service';
 import { Computer } from '../../shared/models/computer';
+import {DatePipe} from '@angular/common'
 
 
 @Component({
@@ -12,16 +13,19 @@ export class ComputerListComponent {
     yearFilter: number;
     yearTimeout: any;
     cols: any[];
-    constructor(private service: ComputerService) { }
+    constructor(
+      private service: ComputerService,
+      private datePipe: DatePipe) { }
 
       ngOnInit() { 
     this.service.getComputers()
-      .subscribe(computers => this.computers = computers);
+      .subscribe(computers => {this.computers = computers; console.log(this.selectedComputer)});
       this.cols = [
-        { field: 'computer_name', header: 'Computer Name' },
-        { field: 'computer_type', header: 'Computer Type' },
+        { field: 'host_name', header: 'Computer Name' },
+        { field: 'chassis', header: 'Computer Type' },
         { field: 'ip_address', header: 'IP Address' },
-        { field: 'installed_on', header: 'Date Installed' }
+        { field: 'os_install_date', header: 'OS Install Date', type:this.datePipe},
+        { field: 'ad_when_created', header: 'AD Created Date', type:this.datePipe }
     ];   
   }
   onYearChange(event, dt, col) {

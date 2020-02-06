@@ -34,7 +34,7 @@ export class UserSingleComponent implements OnInit {
     ngOnInit() {
         if(this.route.snapshot.params['ext'])
         {
-            console.log('params is EXT')
+            //console.log('params is EXT')
         // grab the id from the url
         this.currentExt = this.route.snapshot.params['ext'];
         const id = this.currentExt;
@@ -45,11 +45,11 @@ export class UserSingleComponent implements OnInit {
 
         }
         else {
-            console.log('pararms is user_name')
+            //console.log('params is user_name: ' + this.route.snapshot.params['user_name'])
             this.service.getUser(this.route.snapshot.params['user_name'])
             .subscribe(user => {
                 this.selectedUser = user
-                console.log(user)
+                //console.log('selectedUser: ' + JSON.stringify(this.selectedUser))
             })
         }
 
@@ -59,7 +59,7 @@ export class UserSingleComponent implements OnInit {
         this.service.getUserExt(this.currentExt)
             .subscribe(user => {
                 this.selectedUser = user
-                console.log(user)
+                //console.log(user)
             });
     }
 
@@ -80,7 +80,7 @@ export class UserSingleComponent implements OnInit {
     }
 
     updatePhone() {
-        console.log(this.selectedUser.user_name);
+        //console.log(this.selectedUser.user_name);
         this.phoneService.getPhoneByEXT(this.currentExt)
             .pipe(
             mergeMap(dataResults => of(dataResults)),
@@ -89,7 +89,7 @@ export class UserSingleComponent implements OnInit {
             subscribe(
                 newUser => {
                     // this.successMessage = selectedPhone.message;
-                    console.log(`selectedPhone ID: ${newUser}, user_name: ${this.selectedUser.user_name}`)
+                    //console.log(`selectedPhone ID: ${newUser}, user_name: ${this.selectedUser.user_name}`)
                     this.show('success',
                     'Phone Record Updated',
                     `Extension: ${this.currentExt} phone was assigned to ${this.selectedUser.user_name}`);

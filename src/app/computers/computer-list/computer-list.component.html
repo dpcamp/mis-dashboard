@@ -7,49 +7,58 @@
     </div>
     <div class="card" *ngIf="selectedComputer">
         <div class="card-header">
-            Asset Tag: {{selectedComputer.computer_name}}
+            Asset Tag: {{selectedComputer.host_name}}
         </div>
         <div class="card-block" *ngIf="selectedComputer">
             <div class="card-text">
                 <div class="row">
                     <div class="col-lg-6 col-md-12 col-sm-12 col-xs-12">
-                        <div class="form-group">
-                            <div *ngFor="let c of selectedComputer.users; let i = index">
-                                <label for="ext">Currently Logged In:</label>
-                                <a [routerLink]="['/users', c.user_name]">{{c.first_name}} {{c.last_name}}</a>
+                        <div class="form-group" *ngIf="selectedComputer.online_user">
 
-                            </div>
+                                <label for="ext">Currently Logged In: </label>
+                                <a [routerLink]="['/users/sam', selectedComputer.online_user]">{{selectedComputer.user.display_name}}</a>
+
                         </div>
                         <div class="form-group">
                             <label for="ext">IP Address:</label>
                             <input class="clr-input" type="text" id="ext" size="20" readonly [(ngModel)]="selectedComputer.ip_address" *ngIf="selectedComputer.ip_address">
                         </div>
 
-                        <div class="form-group">
+                        <div class="form-group" *ngIf="selectedComputer.memory !=='0'">
                             <label for="ext">Memory:</label>
-                            <input class="clr-input" type="text" id="ext" size="20" readonly [ngModel]="selectedComputer.computer_attribute.memory_physical | fileSize"
-                                (ngModelChange)="selectedComputer.memory_physical=$event" *ngIf="selectedComputer.computer_attribute">
+                            <input class="clr-input" type="text" id="ext" size="20" readonly [ngModel]="selectedComputer.memory | fileSize"
+                                (ngModelChange)="selectedComputer.memory=$event" >
 
                         </div>
-                        <div class="form-group">
+                        <div class="form-group" *ngIf="selectedComputer.memory==='0'">
+                            <label for="ext">Memory:</label>
+                            <input class="clr-input" type="text" id="ext" size="20" readonly [ngModel]="selectedComputer.memory"
+                                >
+
+                        </div>
+                        
+                        <!-- <div class="form-group">
                             <label for="ext">Disk Space:</label>
                             <input class="clr-input" type="text" id="ext" size="6" readonly [ngModel]="selectedComputer.computer_attribute.disks_size + ' GB'" *ngIf="selectedComputer.computer_attribute">
 
-                        </div>
+                        </div> -->
                     </div>
                     <div class="col-lg-6 col-md-12 col-sm-12 col-xs-12">
                         <div class="form-group">
                             <label for="ext">Operating System:</label>
-                            <input class="clr-input" type="text" id="ext" size="30" readonly [(ngModel)]="selectedComputer.computer_attribute.os_type" *ngIf="selectedComputer.computer_attribute.os_type">
+                            <input class="clr-input" type="text" id="ext" size="30" readonly [(ngModel)]="selectedComputer.os_name" *ngIf="selectedComputer.os_name">
                         </div>
 
                         <div class="form-group">
                             <label for="ext">Service Pack:</label>
-                            <input class="clr-input" type="text" id="ext" size="30" readonly [(ngModel)]="selectedComputer.computer_attribute.os_service_pack" *ngIf="selectedComputer.computer_attribute.os_service_pack">
+                            <input class="clr-input" type="text" id="ext" size="30" readonly [(ngModel)]="selectedComputer.os_service_pack" *ngIf="selectedComputer.os_service_pack">
                         </div>
                         <div class="form-group">
-                            <label for="ext">Serial Number:</label>
-                            <input class="clr-input" type="text" id="ext" size="30" readonly [(ngModel)]="selectedComputer.computer_attribute.os_serial" *ngIf="selectedComputer.computer_attribute.os_serial">
+                            
+                            <div *ngFor="let display of selectedComputer.pdq_displays; let i = index">
+                                <label for="ext" *ngIf="display.model">Display {{i+1}}:</label>
+                            <input class="clr-input" type="text" id="ext" size="30" readonly [(ngModel)]="display.model" *ngIf="display.model">
+                        </div>
                         </div>
                     </div>
                 </div>
@@ -76,7 +85,7 @@
         <ng-template pTemplate="body" let-computer let-columns="columns">
             <tr [pSelectableRow]="computer">
                 <td *ngFor="let col of columns">
-                    {{computer[col.field]}}
+                    {{col.type ? col.type.transform(computer[col.field]) : computer[col.field]}}
                 </td>
 
             </tr>

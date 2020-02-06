@@ -59,6 +59,7 @@ import { ClipboardModule } from 'ngx-clipboard'
 
 
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { DatePipe } from '@angular/common';
 
 @NgModule({
   declarations: [
@@ -107,6 +108,7 @@ import { HTTP_INTERCEPTORS } from '@angular/common/http';
   ],
 
   providers: [
+    DatePipe,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: WinAuthInterceptor,

@@ -2,18 +2,18 @@
 
     <ng-container *ngIf="selectedUser?.length ===0">
 
-        <form (ngSubmit)="updatePhone()">
+        <form class="clr-form" (ngSubmit)="updatePhone()">
             <clr-modal [(clrModalOpen)]="phoneOpened">
                 <h3 class="modal-title">User Not Assigned</h3>
                 <div class="modal-body">
 
                     <p>Select a user to assign extension {{currentExt}} to:</p>
 
-                    <div class="form-group">
-                        <label>Assigned to:</label>
-                        <div class="select">
-                            <select [ngModel]="selectedUser" name="user_name" (ngModelChange)="selectedUser.user_name = $event">
-                                <option name="user_name" *ngFor="let user of users" [value]="user.user_name">
+                    <div class="clr-form-control">
+                        <label class="clr-control-label">Assigned to:</label>
+                        <div class="clr-select-wrapper">
+                            <select class="clr-select" [ngModel]="selectedUser" name="user_name" (ngModelChange)="selectedUser.user_name = $event">
+                                <option name="user_name" *ngFor="let user of users" [value]="user.user_name" >
                                     {{ user.display_name }}
                                 </option>
                             </select>
@@ -30,36 +30,35 @@
         </form>
 
     </ng-container>
-    <ng-container *ngFor="let u of selectedUser; let i =index">
+    <ng-container *ngIf="selectedUser">
 
         <div class="card">
             <div class="card-header">
-                Assigned Assets for {{u.first_name}} {{u.last_name}}
+                Assigned Assets for {{selectedUser.first_name}} {{selectedUser.last_name}}
             </div>
             <div class="card-block">
                 <div class="card-text">
                     <div class="row">
                         <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
-                            <div class="form-group">
-                                <label for="ext">Phone Number(s):</label>
-                                <div *ngFor="let p of u.phones; let i = index">
-                                    <input type="text" id="ext" size="20" readonly [(ngModel)]="p.full_number" *ngIf="p.full_number">
+                            <div class="clr-form-control">
+                                <label class="clr-control-label" for="phone">Phone Number(s):</label>
+                                <div *ngFor="let p of selectedUser.phones; let i = index">
+                                    <input class="clr-input" type="text" id="phone" size="20" readonly [(ngModel)]="p.full_number" *ngIf="p.full_number">
                                 </div>
-                                <label for="ext">Extension:</label>
-                                <div *ngFor="let p of u.phones; let i = index">
-                                    <input type="text" id="ext" size="20" readonly [(ngModel)]="p.extension" *ngIf="p.extension">
+                                <label class="clr-control-label" for="ext">Extension:</label>
+                                <div *ngFor="let p of selectedUser.phones; let i = index">
+                                    <input class="clr-input" type="text" id="ext" size="20" readonly [(ngModel)]="p.extension" *ngIf="p.extension">
                                 </div>
                             </div>
 
                         </div>
                         <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
-                            <div class="form-group">
-                                <label for="ext">Current Computer(s):</label>
-                                <div *ngFor="let c of u.computers; let i = index">
-                                    <a [routerLink]="['/computers', c.computer_id]">{{c.computer_name}}</a>
-
+                            <div class="clr-form-control">
+                                <label class="clr-control-label" for="host_name">Logged on to:</label>
+                                <div *ngFor="let c of selectedUser.pdq_computers; let i = index">
+                                    <a [routerLink]="['/computers', c.computer_id]">{{c.host_name}}</a>
                                     <span class="btn-group btn-link btn-icon-link">
-                                        <button class="btn" [class.is-solid]="cnCopied" ngxClipboard [cbContent]="c.computer_name" (cbOnSuccess)="cnCopied = true">
+                                        <button class="btn" [class.is-solid]="cnCopied" ngxClipboard [cbContent]="c.host_name" (cbOnSuccess)="cnCopied = true">
                                             <clr-icon shape="clipboard"></clr-icon>
                                         </button>
                                     </span>
@@ -71,8 +70,8 @@
 
                         <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
                             <div class="form-group">
-                                <label for="ext">Current Service Request(s):</label>
-                                <div *ngFor="let sr of u.service_requests; let i = index">
+                                <label for="sr">Current Service Request(s):</label>
+                                <div *ngFor="let sr of selectedUser.service_requests; let i = index">
                                     <a [href]="['http://helpdesk/SREdit.jsp?id='+ sr.id]" class="btn btn-primary btn-sm">SR{{sr.id}} - {{sr.title}}</a>
 
                                 </div>
