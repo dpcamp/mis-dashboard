@@ -31,10 +31,10 @@
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
                         <div class="form-group">
                             <label for="ext">Current Computer(s):</label>
-                            <div *ngFor="let c of selectedUser.computers; let i = index">
-                                <a [routerLink]="['/computers', c.computer_id]">{{c.computer_name}}</a>
+                            <div *ngFor="let c of selectedUser.pdq_computers; let i = index">
+                                <a [routerLink]="['/computers', c.computer_id]">{{c.host_name}}</a>
                                 <span class="btn-group btn-link btn-icon-link">
-                                    <button class="btn" [class.is-solid]="cnCopied" ngxClipboard [cbContent]="c.computer_name" (cbOnSuccess)="cnCopied = true"
+                                    <button class="btn" [class.is-solid]="cnCopied" ngxClipboard [cbContent]="c.host_name" (cbOnSuccess)="cnCopied = true"
                                         alt="Copy to clipboard" title="Copy to clipboard">
                                         <clr-icon shape="clipboard"></clr-icon>
                                     </button>
