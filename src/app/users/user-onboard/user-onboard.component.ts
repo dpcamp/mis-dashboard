@@ -81,11 +81,7 @@ export class UserOnboardComponent implements OnInit {
         this.messageService.clear();
     }
     ngOnInit(){
-      this.newEmp.create_mbx = true;
-       this.newEmp.sup_man_execs = false;
-       this.newEmp.home_drive = false;
-
-      this.isAdmin = JSON.parse(localStorage.getItem('isAdmin'))
+     this.isAdmin = JSON.parse(localStorage.getItem('isAdmin'))
       
       this.userService.getUsers()
       .subscribe(users => {this.users = users});
@@ -115,11 +111,13 @@ export class UserOnboardComponent implements OnInit {
                   
                 }
              })
-             
+            
 
              
+        } 
+        else {
+          this.newEmp = { create_mbx: true, sup_man_execs: false, home_drive: false }
         }
-
           
           //this.unValidation = {user_name_exists: false}
           //this.dnValidation = {display_name_exists: false}
@@ -235,6 +233,7 @@ export class UserOnboardComponent implements OnInit {
         this.newEmp.status = 'completed'
           
         this.submitBtnState = ClrLoadingState.LOADING;
+        console.log(this.newEmp)
         this.userService.createUser(this.newEmp)
           .subscribe(createdUser => {
           
