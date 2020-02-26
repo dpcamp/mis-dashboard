@@ -81,8 +81,10 @@ export class UserOnboardComponent implements OnInit {
         this.messageService.clear();
     }
     ngOnInit(){
-      
-      console.log(this.userForm.valid)
+      this.newEmp.create_mbx = true;
+       this.newEmp.sup_man_execs = false;
+       this.newEmp.home_drive = false;
+
       this.isAdmin = JSON.parse(localStorage.getItem('isAdmin'))
       
       this.userService.getUsers()
@@ -162,19 +164,22 @@ export class UserOnboardComponent implements OnInit {
       }
     getDFUser(id: string){
         if (id){
-            this.newEmp = {}
+          this.newEmp.employee_id = ''
+          this.newEmp.first_name = ''
+          this.newEmp.last_name = ''
+          this.newEmp.description = ''
+          this.newEmp.display_name = ''
             this.isUserReadOnly = false;
         this.userService.getDayForceUser(id)
         .subscribe(dfEmp => {
             if(dfEmp[0]){
-              this.newEmp = {
-                    employee_id: id,
-                    first_name: dfEmp[0].FirstName,
-                    last_name: dfEmp[0].LastName,
-                    job_title: dfEmp[0].Title, 
-                    display_name: `${dfEmp[0].LastName}, ${dfEmp[0].FirstName}`
+                this.newEmp.employee_id = id
+                this.newEmp.first_name = dfEmp[0].FirstName
+                this.newEmp.last_name = dfEmp[0].LastName
+                this.newEmp.description = dfEmp[0].Title,
+                this.newEmp.display_name = `${dfEmp[0].LastName}, ${dfEmp[0].FirstName}`
     
-                }
+  
                 this.isUserReadOnly = true;
             }
             else{
@@ -228,7 +233,7 @@ export class UserOnboardComponent implements OnInit {
         else {
         this.newEmp.created_by = localStorage.getItem('user_name'),
         this.newEmp.status = 'completed'
-
+          
         this.submitBtnState = ClrLoadingState.LOADING;
         this.userService.createUser(this.newEmp)
           .subscribe(createdUser => {
@@ -264,6 +269,11 @@ export class UserOnboardComponent implements OnInit {
       this.userForm.markAsTouched();
       this.userForm.markAsDirty();
       this.form.markAsTouched();
+    }
+
+    saveUserForm() {
+      this.userService.updateUserForm(this.newEmp)
+      .subscribe(res => { res} )
     }
 
 }
