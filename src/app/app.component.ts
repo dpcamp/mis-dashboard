@@ -1,14 +1,16 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { map, switchMap, catchError, mergeMap, tap } from 'rxjs/operators';
-import { Observable, of } from 'rxjs';
+import { Observable, of, Subscription } from 'rxjs';
 import { User, LoggedUser } from './shared/models/user';
 import { UserService } from './shared/services/user.service';
 import { AuthService } from './shared/services/auth.service';
-
+import gql from 'graphql-tag';
+import { Apollo } from 'apollo-angular';
 @Component({
   selector: 'app-root',
-  templateUrl: 'app.component.html'
+  templateUrl: 'app.component.html',
+  styleUrls: ['app.component.css']
 })
 export class AppComponent implements OnInit {
   users: User[];
@@ -17,14 +19,17 @@ export class AppComponent implements OnInit {
   cnCopied = false;
   isAdmin: boolean;
   hireCount: number;
+  userSubscription: Subscription;
 
   constructor(
     private userService: UserService,
     private router: Router,
-    private authSvc: AuthService
+    private authSvc: AuthService,
+    private apollo: Apollo
   ) { }
 
   ngOnInit() {
+    this.userSubscription = this.apollo.watchQuery()
     this.userService.getUsers()
       .subscribe(
         users => this.users = users

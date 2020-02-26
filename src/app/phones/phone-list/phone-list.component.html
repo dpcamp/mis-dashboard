@@ -17,30 +17,32 @@
         </ng-template>
     </p-toast>
 <h1>Phones</h1>
-<button (click)="createPhoneClrWizard()" class="btn btn-sm">Add Phone</button> 
+<button (click)="createPhoneWizard()" class="btn btn-sm">Add Phone</button> 
     <div class="card">
             <div class="card-header">
                     <clr-icon shape="search"></clr-icon>
-                    <input class="clr-input" type="text" size="25" placeholder="Search By Phone Number" (input)="dt.filterGlobal($event.target.value, 'contains')">
+                    <input class="clr-input" type="text" size="25" placeholder="Search By Phone Number" (input)="dt.filterGlobal($event.target.value, 'contains')" (blur)="this.globalFilter = $event.target.value" (click)="this.selectedPhone = null">
                 </div>
     </div>
     <div class="card" *ngIf="selectedPhone">
         <div class="card-header">
-            {{selectedPhone.full_number}}
+            Details For: {{selectedPhone.full_number}}
         </div>
         <div class="card-block" *ngIf="selectedPhone">
             <div class="card-text">
                 <div class="row">
                     <div class="col-lg-6 col-md-12 col-sm-12 col-xs-12">
-                        <div class="form-group">
-                            <label for="ext" >Username:</label>
-                            <input class="clr-input" type="text" id="ext" size="20" readonly [(ngModel)]="selectedPhone.owners[0].user_name" *ngIf="selectedPhone.owners[0]">
-                            <label for="ext" *ngIf="selectedPhone.extension">Extension:</label>
+                        <div class="clr-form-control" *ngIf="selectedPhone.owners[0]">
+                                <label for="ext">Assigned To:</label>
+                                <div *ngFor="let c of selectedPhone.owners; let i = index">
+                                    <a [routerLink]="['/users/sam', c.user_name]">{{c.display_name}}</a>
+                                </div>  
+                                <label for="ext" *ngIf="selectedPhone.extension">Extension:</label>
                             <input class="clr-input" type="text" id="ext" size="7" readonly [(ngModel)]="selectedPhone.extension" *ngIf="selectedPhone.extension">
                             <label for="ext" *ngIf="selectedPhone.vm_id">Voicemail:</label>
                             <input class="clr-input" type="text" id="ext" size="7" readonly [(ngModel)]="selectedPhone.vm_id" *ngIf="selectedPhone.vm_id">
                         </div>
-                        <div class="form-group">
+                        <div class="clr-form-control">
                             <label for="dn" *ngIf="selectedPhone.drop_num">Drop Number:</label>
                             <input class="clr-input" type="text" id="dn" size="10" readonly [(ngModel)]="selectedPhone.drop_num" *ngIf="selectedPhone.drop_num">
                             <label for="pn" *ngIf="selectedPhone.port_num">Port Number:</label>
@@ -48,13 +50,13 @@
                             <label for="pn" *ngIf="selectedPhone.binding_post">Binding Post:</label>
                             <input class="clr-input" type="text" id="bp" size="10" readonly [(ngModel)]="selectedPhone.binding_post" *ngIf="selectedPhone.binding_post">
                         </div>
-                        <div class="form-group">
+                        <div class="clr-form-control">
                             <label for="ext" *ngIf="selectedPhone.provider">LD Provider:</label>
                             <input class="clr-input" type="text" id="ext" size="10" readonly [(ngModel)]="selectedPhone.provider" *ngIf="selectedPhone.provider">
                             <label for="vm" *ngIf="selectedPhone.long_distance">Need LD?</label>
                             <input class="clr-input" type="text" id="vm" size="10" readonly [(ngModel)]="selectedPhone.long_distance" *ngIf="selectedPhone.long_distance">
                         </div>
-                        <div class="form-group">
+                        <div class="clr-form-control">
                             <label for="ext" *ngIf="selectedPhone.line_type">Line Type:</label>
                             <input class="clr-input"type="text" id="cost" size="10" readonly [(ngModel)]="selectedPhone.line_type" *ngIf="selectedPhone.monthly_cost">
                             <label for="ext" *ngIf="selectedPhone.monthly_cost">Monthly Cost:</label>
@@ -83,11 +85,11 @@
                         </clr-checkbox-container>
                     </div>
                     <div class="col-lg-6 col-md-12 col-sm-12 col-xs-12">
-                        <div class="form-group">
+                        <div class="clr-form-control">
                             <label for="notes" *ngIf="selectedPhone.notes">Notes:</label>
                             <textarea class="clr-textarea" id="notes" rows="2" readonly [(ngModel)]="selectedPhone.notes" *ngIf="selectedPhone.notes"></textarea>
                         </div>
-                        <div class="form-group">
+                        <div class="clr-form-control">
                             <label for="switch" *ngIf="selectedPhone.switch_comments">Switch Comments:</label>
                             <textarea class="clr-textarea" id="switch" rows="1" readonly [(ngModel)]="selectedPhone.switch_comments" *ngIf="selectedPhone.switch_comments"></textarea>
                         </div>
@@ -109,10 +111,11 @@
 
     </div>
 <p-table [columns]="cols" [value]="phones" selectionMode="single" [(selection)]="selectedPhone" datakey="id" [rows]="15" [paginator]="true"
-    [pageLinks]="5"  #dt>
+    [pageLinks]="5" #dt>
     <ng-template pTemplate="header" let-columns>
             <tr>
                 <th *ngFor="let col of columns" [pSortableColumn]="col.field">
+
                 <p-sortIcon [field]="col.field" ariaLabel="Activate to sort" ariaLabelDesc="Activate to sort in descending order" ariaLabelAsc="Activate to sort in ascending order"></p-sortIcon>
                     {{col.header}}
                 </th>
@@ -122,8 +125,18 @@
         <ng-template pTemplate="body" let-phone let-columns="columns">
             <tr [pSelectableRow]="phone">
                     <td *ngFor="let col of columns">
+                        <div *ngIf="col.subfield;then nested_object_content else normal_content"></div>
+                        <ng-template #nested_object_content>
+                            <div *ngIf="phone[col.field][0]">
+                                {{phone[col.field][0][col.subfield]}}
+                            </div>
+                            <div *ngIf="!phone[col.field][0]">
+                                Unassigned
+                            </div>
+                            </ng-template>
+                            <ng-template #normal_content>    
                               {{phone[col.field]}}
-
+                                </ng-template>  
                          </td>
 
             </tr>
@@ -131,29 +144,7 @@
 </p-table>
 
 
-<!--     
-    <p-dataTable [value]="phones" selectionMode="single" [(selection)]="selectedPhone" datakey="id" [rows]="10" [paginator]="true"
-        [pageLinks]="5" [rowsPerPageOptions]="[5,10,20]" [globalFilter]="gb" #dt>
-        <p-column field="full_number" header="Telephone" [sortable]="true"></p-column>
-        <p-column field="department" header="Department" [sortable]="true"></p-column>
-        <p-column field="position" header="Position" [sortable]="true"></p-column>
-        <p-column field="location" header="Location" [sortable]="true"></p-column>
-        <p-column field="owners" header="Assigned To" [sortable]="true">
-            <ng-template let-col let-owners="rowData" let-i="rowIndex" pTemplate="body">
-                <span *ngFor="let c of owners[col.field]">
-                {{c.display_name}}</span>
-                </ng-template>
-        </p-column>
-        <p-column field="function_info" header="Function" [sortable]="true"></p-column>
-        <p-column field="line_type" header="Line Type" [filter]="true" filterMatchMode="equals">
-            <ng-template pTemplate="filter" let-col>
-                <p-dropdown [options]="lineTypes" [style]="{'width':'100%'}" (onChange)="dt.filter($event.value,col.field,col.filterMatchMode)" styleClass="ui-column-filter"></p-dropdown>
-            </ng-template>
-        </p-column>
-        
-    </p-dataTable>
-  
--->
+
 </section>
 
 <!-- Create A Phone Wizard -->
@@ -167,20 +158,20 @@
 
     <clr-wizard-page>
         <ng-template clrPageTitle>Phone Info</ng-template>
-<form class="compact" *ngIf="newPhone">
-        <div class="form-group" >
+<form class="clr-form" *ngIf="newPhone">
+        <div class="clr-form-control" >
             <label>Full Number:</label>
             <input class="clr-input" type="text" placeholder="Enter value here" size="35" name="full_number" [(ngModel)]="newPhone.full_number">
         </div>
-        <div class="form-group" >
+        <div class="clr-form-control" >
             <label>Extension:</label>
-            <input class="clr-input" type="text" placeholder="Enter value here" size="35" name="extension" [(ngModel)]="newPhone.extension">
+            <input class="clr-input" type="number" placeholder="Enter value here" size="35" name="extension" [(ngModel)]="newPhone.extension">
         </div>
-                <div class="form-group" >
+                <div class="clr-form-control" >
             <label>Voice Mail:</label>
-            <input class="clr-input" type="text" placeholder="Enter value here" size="35" name="vm_id" [(ngModel)]="newPhone.vm_id">
+            <input class="clr-input" type="number" placeholder="Enter value here" size="35" name="vm_id" [(ngModel)]="newPhone.vm_id">
         </div>
-        <div class="form-group">
+        <div class="clr-form-control">
             <label>Function:</label>
             <div class="clr-select-wrapper">
                 <select class="clr-select" name="function_info" [(ngModel)]="newPhone.function_info">
@@ -195,7 +186,7 @@
                 </select>
             </div>
         </div>
-        <div class="form-group">
+        <div class="clr-form-control">
             <label>Phone Model</label>
             <div class="clr-select-wrapper">
                 <select class="clr-select" name="model" [(ngModel)]="newPhone.model">
@@ -213,7 +204,7 @@
                 </select>
             </div>
         </div>
-                <div class="form-group">
+                <div class="clr-form-control">
             <label>Line Type:</label>
             <div class="clr-select-wrapper">
                 <select class="clr-select" name="line_type" [(ngModel)]="newPhone.line_type">
@@ -225,24 +216,24 @@
                 </select>
             </div>
         </div>
-        <div class="form-group" >
+        <div class="clr-form-control" >
             <label>Location:</label>
             <input class="clr-input" type="text" placeholder="Enter value here" size="35" name="location" [(ngModel)]="newPhone.location">
         </div>
-                        <div class="form-group" >
+                        <div class="clr-form-control" >
             <label>Long Distance:</label>
             <input class="clr-input" type="text" placeholder="Enter value here" size="35" name="long_distance" [(ngModel)]="newPhone.long_distance">
         </div>
-                <div class="form-group" >
+                <div class="clr-form-control" >
             <label>Assigned to:</label>
             <input class="clr-input" type="text" placeholder="Enter value here" size="35" name="location" [(ngModel)]="newPhone.UserSAMAccountName">
                 </div>
-        <div class="form-group" >
+        <div class="clr-form-control" >
             <label>Monthly Cost:</label>
             <input class="clr-input" type="text" placeholder="Enter value here" size="35" name="monthly_cost" [(ngModel)]="newPhone.monthly_cost">
 
         </div>
-                <div class="form-group" >
+                <div class="clr-form-control" >
             
             <clr-date-container>
                 <label>Date Installed:</label>
@@ -255,11 +246,11 @@
 
     <clr-wizard-page>
         <ng-template clrPageTitle>Additional Info</ng-template>
-         <div class="form-group">
+         <div class="clr-form-control">
                             <label for="switch" >Notes:</label>
                             <textarea id="switch" rows="5" name="notes" [(ngModel)]="newPhone.notes" ></textarea>
                         </div>
-                 <div class="form-group">
+                 <div class="clr-form-control">
                             <label for="switch" >Switch Comments:</label>
                             <textarea id="switch" rows="2" name="switch_comments" [(ngModel)]="newPhone.switch_comments" ></textarea>
                         </div>
@@ -278,23 +269,23 @@
 
     <clr-wizard-page>
         <ng-template clrPageTitle>Phone Info</ng-template>
-<form class="compact" >
-        <div class="form-group" >
+<form class="clr-form" >
+        <div class="clr-form-control" >
             <label>Full Number:</label>
-            <input type="text" placeholder="Enter value here" size="35" name="full_number" [(ngModel)]="selectedPhone.full_number">
+            <input class="clr-input" type="text" placeholder="Enter value here" size="35" name="full_number" [(ngModel)]="selectedPhone.full_number">
         </div>
-        <div class="form-group" >
+        <div class="clr-form-control" >
             <label>Extension:</label>
-            <input type="text" placeholder="Enter value here" size="35" name="extension" [(ngModel)]="selectedPhone.extension">
+            <input class="clr-input" type="text" placeholder="Enter value here" size="35" name="extension" [(ngModel)]="selectedPhone.extension">
         </div>
-                <div class="form-group" >
+                <div class="clr-form-control" >
             <label>Voice Mail:</label>
-            <input type="text" placeholder="Enter value here" size="35" name="vm_id" [(ngModel)]="selectedPhone.vm_id">
+            <input class="clr-input" type="text" placeholder="Enter value here" size="35" name="vm_id" [(ngModel)]="selectedPhone.vm_id">
         </div>
-        <div class="form-group">
+        <div class="clr-form-control">
             <label>Function:</label>
-            <div class="select">
-                <select name="function_info" [(ngModel)]="selectedPhone.function_info">
+            <div class="clr-select-wrapper">
+                <select class="clr-select" name="function_info" [(ngModel)]="selectedPhone.function_info">
                     <option>Voice</option>
                     <option>Modem</option>
                     <option>Fax</option>
@@ -306,9 +297,9 @@
                 </select>
             </div>
         </div>
-        <div class="form-group">
+        <div class="clr-form-control">
             <label>Phone Model</label>
-            <div class="select">
+            <div class="clr-select-wrapper">
                 <select class="clr-select" name="model" [(ngModel)]="selectedPhone.model">
                     <option>InterTel Basic</option>
                     <option>Intertel Standard</option>
@@ -324,9 +315,9 @@
                 </select>
             </div>
         </div>
-                <div class="form-group">
+                <div class="clr-form-control">
             <label>Line Type:</label>
-            <div class="select">
+            <div class="clr-select-wrapper">
                 <select class="clr-select" name="line_type" [(ngModel)]="selectedPhone.line_type">
                     <option>DID</option>
                     <option>Centrex Analog</option>
@@ -336,31 +327,31 @@
                 </select>
             </div>
         </div>
-        <div class="form-group" >
+        <div class="clr-form-control" >
             <label>Location:</label>
-            <input type="text" placeholder="Enter value here" size="35" name="location" [(ngModel)]="selectedPhone.location">
+            <input class="clr-input" type="text" placeholder="Enter value here" size="35" name="location" [(ngModel)]="selectedPhone.location">
         </div>
-                        <div class="form-group" >
+                        <div class="clr-form-control" >
             <label>Long Distance:</label>
-            <input type="text" placeholder="Enter value here" size="35" name="long_distance" [(ngModel)]="selectedPhone.long_distance">
+            <input class="clr-input" type="text" placeholder="Enter value here" size="35" name="long_distance" [(ngModel)]="selectedPhone.long_distance">
         </div>
-                <div class="form-group" >
+                <div class="clr-form-control" >
             <label>Assigned to:</label>
                         <div class="select">
                 <select name="UserSAMAccountName" [ngModel]="selectedPhone.owners && selectedPhone.owners[0]?.user_name" 
-                (ngModelChange)="selectedPhones.owners?.length && selectedPhone.owners[0].user_name=$event">
+                (ngModelChange)="selectedPhone.owners?.length && selectedPhone.owners[0].user_name=$event">
                     <option name="UserSAMAccountName" *ngFor="let user of users" [value]="user.user_name">
                         {{ user.display_name }}
                     </option>
                 </select>
             </div>
                 </div>
-        <div class="form-group" >
+        <div class="clr-form-control" >
             <label>Monthly Cost:</label>
-            <input type="text" placeholder="Enter value here" size="35" name="monthly_cost" [(ngModel)]="selectedPhone.monthly_cost">
+            <input class="clr-input" type="text" placeholder="Enter value here" size="35" name="monthly_cost" [(ngModel)]="selectedPhone.monthly_cost">
 
         </div>
-                <div class="form-group" >
+                <div class="clr-form-control" >
                     <clr-date-container>   
             <label>Date Installed:</label>
             <input clrDate type="date" placeholder="Enter value here" size="35" name="date_installed" [(ngModel)]="selectedPhone.date_installed">
@@ -372,11 +363,11 @@
 
     <clr-wizard-page>
         <ng-template clrPageTitle>Additional Info</ng-template>
-         <div class="form-group">
+         <div class="clr-form-control">
                             <label for="switch" >Notes:</label>
                             <textarea id="switch" rows="5" name="notes" [(ngModel)]="selectedPhone.notes" ></textarea>
                         </div>
-                 <div class="form-group">
+                 <div class="clr-form-control">
                             <label for="switch" >Switch Comments:</label>
                             <textarea id="switch" rows="2" name="switch_comments" [(ngModel)]="selectedPhone.switch_comments" ></textarea>
                         </div>

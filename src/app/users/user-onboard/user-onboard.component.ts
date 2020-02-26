@@ -22,6 +22,7 @@ export class UserOnboardComponent implements OnInit {
     unExists: boolean = false;
     dnExists: boolean = false;
     userExistsModal: boolean = false;
+    invalidEmpIdModal: boolean = false;
     successModal: boolean = false;
     createdModal: boolean = false;
     isUserReadOnly: boolean = false;
@@ -178,6 +179,7 @@ export class UserOnboardComponent implements OnInit {
             }
             else{
                 console.log('DOESNT EXIST')
+                this.invalidEmpIdModal = true;
                 this.isUserReadOnly = false
             }
 

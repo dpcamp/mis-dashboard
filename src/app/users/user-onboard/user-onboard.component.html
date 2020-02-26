@@ -1,5 +1,4 @@
 <h2>New Employee Request Form</h2>
-{{userForm.valid}}
 <p class="p1">Please complete this form to request a new account and equipment for an employee. You will receive a notification via email when set up is complete.</p>
 
 <div class="clr-row">
@@ -56,13 +55,13 @@
             </div>
       <clr-input-container>
         <label>Job Title</label>
-        <input  clrInput [(ngModel)]="newEmp.job_title" [ngModelOptions]="{standalone: true}" name="job_title"  [readonly]="isUserReadOnly"/>
+        <input  clrInput [(ngModel)]="newEmp.job_title" [ngModelOptions]="{standalone: true}" name="job_title"  [readonly]="isUserReadOnly"  size="35"/>
         
         <clr-control-error>This field is required!</clr-control-error>
       </clr-input-container>
       <clr-input-container>
         <label>What Building will they be working from?</label>
-        <input  clrInput [(ngModel)]="newEmp.building" [ngModelOptions]="{standalone: true}" name="building"  [readonly]="isReadOnly"/>
+        <input  clrInput [(ngModel)]="newEmp.building" [ngModelOptions]="{standalone: true}" name="building"  [readonly]="isReadOnly" size="35"/>
         
         <clr-control-error>This field is required!</clr-control-error>
       </clr-input-container>
@@ -169,7 +168,7 @@
           </clr-input-container>
             <clr-textarea-container>
               <label>Additional Programs or access needed</label>
-              <textarea clrTextarea [(ngModel)]="newEmp.description" [ngModelOptions]="{standalone: true}" name="description" [readonly]="isReadOnly"></textarea>
+              <textarea clrTextarea [(ngModel)]="newEmp.description" [ngModelOptions]="{standalone: true}" name="description" [readonly]="isReadOnly" rows="5" cols="40"></textarea>
               
                     
             </clr-textarea-container>
@@ -240,6 +239,18 @@
   </div>
   <div class="modal-footer">
       <button type="button" class="btn btn-outline" (click)="userExistsModal = false">OK</button>
+      
+  </div>
+</clr-modal>
+
+<clr-modal [(clrModalOpen)]="invalidEmpIdModal">
+  <h3 class="modal-title">Invalid Employee ID</h3>
+  <div class="modal-body">
+      <p>This employee ID is either invalid, or has not been updated in our system.</p>
+      <p>Please contact Derek Campanile (derek.campanile@vmsinc.org) if you believe this is a valid Employee ID, or manually enter the New Employees Information.</p>
+  </div>
+  <div class="modal-footer">
+      <button type="button" class="btn btn-outline" (click)="invalidEmpIdModal = false">OK</button>
       
   </div>
 </clr-modal>

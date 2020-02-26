@@ -1,15 +1,20 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
+import { Subscription } from 'rxjs/Subscription';
 import { PhoneService } from '../../shared/services/phone.service';
 import { UserService } from '../../shared/services/user.service';
 import { Phone } from '../../shared/models/phone';
 import { User } from '../../shared/models/user';
 import { SelectedItem } from '../../shared/models/selected-item';
 import {MessageService} from 'primeng/api';
+import {Apollo} from 'apollo-angular'
+import gql from 'graphql-tag'
+import {Table} from 'primeng/table';
 
 
 
 import { ClrWizard, ClrDatagridStringFilterInterface } from '@clr/angular';
+import { style } from '@angular/animations';
 
 class UserFilter implements ClrDatagridStringFilterInterface<Phone> {
   accepts(phone: Phone, search: string): boolean {
@@ -24,11 +29,121 @@ class PhoneFilter implements ClrDatagridStringFilterInterface<Phone> {
 
   }
 }
-
+const phonesQuery = gql`
+query {
+  allPhones {
+    id
+    full_number
+    extension
+    vm_id
+    drop_num
+    port_num
+    binding_post
+    provider
+    long_distance
+    line_type
+    monthly_cost
+    date_installed
+    disconnect_now
+    disconnect_later
+    need_voicemail
+    investigate
+    notes
+    switch_comments
+    function_info
+    location
+    model
+    owners {
+      user_name
+      display_name
+    }
+  }
+}
+`;
+const usersQuery = gql`
+query {
+  allUsers {
+    user_name
+    display_name
+  }
+}
+`;
+const createPhone = gql`
+  mutation createPhone($input: newPhoneInput!) {
+      createPhone(input: $input) {
+        id
+        full_number
+        extension
+        vm_id
+        drop_num
+        port_num
+        binding_post
+        provider
+        long_distance
+        line_type
+        monthly_cost
+        date_installed
+        disconnect_now
+        disconnect_later
+        need_voicemail
+        investigate
+        notes
+        switch_comments
+        function_info
+        location
+        model
+        owners {
+          user_name
+          display_name
+        }
+    }
+  }
+`;
+const updatePhone = gql`
+  mutation updatePhone($id: String!, $input: uPhoneInput!) {
+    updatePhone(id: $id, input: $input) {
+        id
+        full_number
+        extension
+        vm_id
+        drop_num
+        port_num
+        binding_post
+        provider
+        long_distance
+        line_type
+        monthly_cost
+        date_installed
+        disconnect_now
+        disconnect_later
+        need_voicemail
+        investigate
+        notes
+        switch_comments
+        function_info
+        location
+        model
+        owners {
+          user_name
+          display_name
+        }
+    }
+  }
+`;
+const deletePhone = gql`
+  mutation deletePhone($id: String!) {
+    deletePhone(id: $id) {
+        message
+    }
+  }
+`;
 @Component({
-  templateUrl: 'phone-list.component.html'
+  templateUrl: 'phone-list.component.html',
+  styleUrls: ['phone-list.component.css']
 })
 export class PhoneListComponent implements OnInit {
+  @ViewChild('dt', {static: false} ) dt: Table;
+  globalFilter: string
   loading: boolean;
   phones: Phone[];
   users: User[];
@@ -57,35 +172,39 @@ export class PhoneListComponent implements OnInit {
   updateOpen: boolean = false;
 
   delModalOpen: boolean = false;
-
-
+  private phoneSubscription: Subscription;
+  private userSubscription: Subscription;
+  
   constructor(
     private phoneService: PhoneService,
     private userService: UserService,
     private route: ActivatedRoute,
     private router: Router,
-    private messageService: MessageService
-
-
+    private messageService: MessageService,
+    private apollo: Apollo,
 
 
   ) { }
 
 
   ngOnInit() {
-    this.phoneService.getPhones()
-      .subscribe(phones => {
-        this.phones = phones
-        console.log(phones)
-      });
-    this.userService.getUsers()
-      .subscribe(users => this.users = users);
-    this.phoneService.getPhoneAssignment()
-      .subscribe(assignment => {
-        //let assign = this.assignment.toString();
-        this.assignment = assignment
-        //console.log(assignment)
-      });
+    this.phoneSubscription = this.apollo.watchQuery<any>({
+      query: phonesQuery,
+    })
+    .valueChanges
+    .subscribe(({data}) => {
+      this.phones = data.allPhones
+    })
+
+    this.userSubscription = this.apollo.watchQuery<any>({
+      query: usersQuery,
+    })
+    .valueChanges
+    .subscribe(({data}) => {
+      this.users = data.allUsers
+    })
+    
+
       this.lineTypes = [];
       this.lineTypes.push({label: 'All Types', value: null});
       this.lineTypes.push({label: 'Patec Digital', value:'Patec Digital Phone Line'});
@@ -94,7 +213,7 @@ export class PhoneListComponent implements OnInit {
         { field: 'full_number', header: 'Telephone' },
         { field: 'extension', header: 'Extension' },
         { field: 'location', header: 'Location' },
-        //{ field: 'owners',  subfield: '0', header: 'Assigned To' },
+        { field: 'owners',  subfield: 'display_name', header: 'Assigned To' },
         { field: 'function', header: 'Function' },
         { field: 'line_type', header: 'LineType' }
     ];   
@@ -102,12 +221,12 @@ export class PhoneListComponent implements OnInit {
 
   }
 
-  createPhoneClrWizard() {
+  createPhoneWizard() {
     this.createOpen = !this.createOpen;
     //console.log(`_ open is: ${this.createOpen}`)
   }
 
-  updatePhoneClrWizard() {
+  updatePhoneWizard() {
     this.updateOpen = !this.updateOpen;
     //console.log(`_ open is: ${this.updateOpen}`)
   }
@@ -118,18 +237,21 @@ export class PhoneListComponent implements OnInit {
     * Create a phone
     */
   createPhone() {
-    //this.successMessage = '';
-    //this.errorMessage   = '';
-
-    this.phoneService.createPhone(this.newPhone)
-      .subscribe(newPhone => {
-        //this.successMessage = 'Phone was created!';
-        //console.log('phone was created');
-        this.show('success', 'Phone Created', `Phone: ${this.newPhone.full_number} was successfully created`)
-        this.refreshPhoneList();
-
-        // navigate back to the phones page
-        //this.router.navigate(['/phones']);
+      this.apollo.mutate({
+        mutation: createPhone,
+        variables: {
+          input: this.newPhone
+        }, 
+        update: (store, allPhones: any) => {
+          const data: any = store.readQuery({query: phonesQuery});
+          console.log('update data', data)
+          data.allPhones = [ ...data.allPhones, allPhones.data.createPhone ]
+          store.writeQuery({query: phonesQuery, data})
+        }
+      }).subscribe(({data}) => {
+        console.log('got data', data);
+      },(error) => {
+        console.log('ERROR', error)
       })
   }
 
@@ -137,54 +259,52 @@ export class PhoneListComponent implements OnInit {
    * Edit a phone
    */
   updatePhone() {
-    //this.successMessage = '';
-    //this.errorMessage = '';
-    if (this.selectedPhone.owners[0]) {
-      this.phoneService.phoneUpdateUser(this.selectedPhone.id, this.selectedPhone.owners[0].user_name)
-        .subscribe(
-        selectedPhone => {
-          //this.successMessage = selectedPhone.message;
-          this.show('success', 'Phone Record Updated', `phone ID: ${this.selectedPhone.id} phone was assigned to ${this.selectedPhone.owners[0].user_name}`);
-          this.refreshPhoneList();
-        },
-        err => {
-          //this.errorMessage = err;
-          console.error(`Error: ${err}`);
-        }
-        );
-    }
-    this.phoneService.updatePhone(this.selectedPhone)
-      .subscribe(
-      selectedPhone => {
-        //this.successMessage = selectedPhone.message;
-        this.show('success', 'Phone Record Updated', `Phone Record Updated`);
-      },
-      err => {
-        //this.errorMessage = err;
-        console.error(err);
+    
+    this.apollo.mutate({
+      mutation: updatePhone,
+      variables: {
+        id: this.selectedPhone.id,
+        input: this.selectedPhone
+      }, 
+      update: (store, updatePhone: any) => {
+        const data: any = store.readQuery({query: phonesQuery});
+        const index = data.allPhones.findIndex((e) => e.id === updatePhone.data.updatePhone.id);
+        data.allPhones[index] = updatePhone.data.updatePhone
+
+        store.writeQuery({query: phonesQuery, data})
       }
-      );
+    }).subscribe((data:any) => {
+      this.selectedPhone = data.data.updatePhone;
+      this.resetSearch();
+    },(error) => {
+      console.log('ERROR', error)
+    })
 
   }
   /**
    * Delete a Phone
    */
   deletePhone() {
-    this.phoneService.deletePhone(this.selectedPhone.id)
-      .subscribe(data => {
+      this.apollo.mutate({
+        mutation: deletePhone,
+        variables: {
+          id: this.selectedPhone.id
+        },
+        update: (store, updatePhone: any) => {
+          const data: any = store.readQuery({query: phonesQuery});
+          const index = data.allPhones.findIndex((e) => e.id === this.selectedPhone.id);
+          data.allPhones.splice(index, 1)
+          store.writeQuery({query: phonesQuery, data})
+          this.resetSearch()
+        }
+      })
+      .subscribe((data:any) => {
         this.deleteModal();
-        this.refreshPhoneList();
         this.selectedPhone = null;
-      });
-
-  }
-
-  /**
-   * Get Phones
-   */
-  refreshPhoneList() {
-    this.phoneService.getPhones()
-      .subscribe(res => this.phones = res);
+        
+      },(error) => {
+        console.log('ERROR', error)
+      })
 
   }
 
@@ -202,11 +322,14 @@ export class PhoneListComponent implements OnInit {
 }
 
   /**
-   * Decodes User Array
+   * Refreshes table view when filtered after gql cache is updated. 
    */
-  decodedUser() {
+resetSearch():void {
 
-
+  this.dt.filterGlobal(this.globalFilter, 'contains')
+}
+  ngOnDestroy() {
+    this.phoneSubscription.unsubscribe();
+    this.userSubscription.unsubscribe();
   }
-
 }

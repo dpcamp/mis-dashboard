@@ -2,6 +2,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { Subscription } from 'rxjs/Subscription';
 import { HttpModule } from '@angular/http';
 import { HttpClientModule } from '@angular/common/http';
 import { routing } from './app.routing';
@@ -14,6 +15,8 @@ import {DataViewModule} from 'primeng/dataview';
 import {ToastModule} from 'primeng/toast';
 import { ChartModule } from 'primeng/chart';
 import {MessageService} from 'primeng/api';
+import { ApolloModule } from 'apollo-angular';
+import { HttpLinkModule } from 'apollo-angular-link-http';
 
 
 import { TextMaskModule } from 'angular2-text-mask';
@@ -60,6 +63,7 @@ import { ClipboardModule } from 'ngx-clipboard'
 
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { DatePipe } from '@angular/common';
+import { GraphQLModule } from './graphql.module';
 
 @NgModule({
   declarations: [
@@ -101,10 +105,16 @@ import { DatePipe } from '@angular/common';
     ToastModule,
     ChartModule,
 
+    ApolloModule,
+    HttpLinkModule,
+    HttpClientModule,
+
     HttpModule,
     HttpClientModule,
 
-    routing
+    routing,
+
+    GraphQLModule
   ],
 
   providers: [
@@ -120,7 +130,7 @@ import { DatePipe } from '@angular/common';
     ComputerService,
     ReportService,
     ValidationService,
-    MessageService, 
+    MessageService,
     UsernameValidator
   ],
   bootstrap: [AppComponent]

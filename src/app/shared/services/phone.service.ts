@@ -26,14 +26,6 @@ export class PhoneService {
   phoneDeleted$ = this.phoneDeletedSource.asObservable();
 
   constructor(private http: Http) {}
-
-  getPhoneAssignment(): Observable<Phone[]> {
-    return this.http.get(`${this.phonesUrl}`)
-    .pipe(
-    map(res => res.json().data[0].owners),
-    catchError(this.handleError)
-    )
-  }
   /**
    * Get all phones
    */
