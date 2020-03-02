@@ -6,8 +6,10 @@ import { HttpClient, HttpHeaders, HttpRequest, HttpResponse } from '@angular/com
 import { Observable } from 'rxjs';
 import { map, switchMap, catchError, mergeMap, tap } from 'rxjs/operators';
 import { Subject } from 'rxjs/Subject';
-import { User, CreateUser } from '../models/user';
+import { User, CreateUser, UserQueryResponse, UserFormsQueryResponse } from '../models/user';
 import { environment } from '../../../environments/environment';
+import { userQuery, pendingQuery } from '../queries/users'
+import { Apollo } from 'apollo-angular'
 
 
 @Injectable()
@@ -29,7 +31,8 @@ export class UserService {
 
   constructor(
     private http: Http,
-    protected httpClient: HttpClient
+    protected httpClient: HttpClient,
+    private apollo: Apollo
   ) {}
 
   /**
@@ -44,6 +47,23 @@ export class UserService {
     )
 
 
+  }
+
+    /**
+   * Get a single user
+   */
+  getUserName(un: string): Observable<UserQueryResponse> {
+
+
+    return this.apollo
+        .query<UserQueryResponse>({
+          query: userQuery,
+          variables: {user_name: un}
+        })
+      .pipe(
+        map(res => res.data),
+        catchError(this.handleError)
+      )
   }
 
   /**
@@ -86,11 +106,16 @@ export class UserService {
     /**
    * Gets user forms pending count
    */
-  getPendingCount(): Observable<any> {
-      return this.httpClient.get(`${this.formUrl}?get_status=pending`)
+  getPendingCount(): Observable<UserFormsQueryResponse> {
+      return this.apollo
+      .query<UserFormsQueryResponse>({
+        query: pendingQuery
+      })
       .pipe(
-        map(res => res),
-        tap((res:any) => {console.log(res); this.hireCount(res.pending_count)}),
+        map(res => res.data.allUserForms),
+        tap((res:any) => {console.log(res); 
+          this.hireCount(res.pending_count)
+        }),
        catchError(this.handleError)
       )
     }

@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { ComputerService } from '../../shared/services/computer.service';
 import { Computer } from '../../shared/models/computer';
 import {DatePipe} from '@angular/common'
 import {Apollo} from 'apollo-angular'
@@ -16,7 +15,6 @@ export class ComputerListComponent {
     yearTimeout: any;
     cols: any[];
     constructor(
-      private service: ComputerService,
       private datePipe: DatePipe, 
       private apollo: Apollo
       ) { }
@@ -28,6 +26,7 @@ export class ComputerListComponent {
       query: gql`
       query {
         allComputers {
+          online_user
           computer_id
           chassis
           os_install_date
@@ -42,7 +41,10 @@ export class ComputerListComponent {
             model
           }
           user {
+            user_name
             display_name
+            first_name
+            last_name
           }
         }
       }

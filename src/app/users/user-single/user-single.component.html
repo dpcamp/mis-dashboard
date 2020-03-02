@@ -1,6 +1,13 @@
 <ng-container>
-
-    <ng-container *ngIf="selectedUser?.length ===0">
+    <clr-alert [clrAlertType]="msg.alert" *ngIf="msg">
+        <clr-alert-item>
+            <span class="alert-text">
+                {{msg.message}}
+            </span>
+        </clr-alert-item>
+    </clr-alert>
+    
+    <ng-container *ngIf="!selectedUser">
 
         <form class="clr-form" (ngSubmit)="updatePhone()">
             <clr-modal [(clrModalOpen)]="phoneOpened">
@@ -12,7 +19,7 @@
                     <div class="clr-form-control">
                         <label class="clr-control-label">Assigned to:</label>
                         <div class="clr-select-wrapper">
-                            <select class="clr-select" [ngModel]="selectedUser" name="user_name" (ngModelChange)="selectedUser.user_name = $event">
+                            <select class="clr-select" [ngModel]="extOwner" name="user_name" (ngModelChange)="this.extOwner = $event">
                                 <option name="user_name" *ngFor="let user of users" [value]="user.user_name" >
                                     {{ user.display_name }}
                                 </option>

@@ -78,11 +78,11 @@
                   <clr-radio-container>
                 <label>Is there a computer in the work area currently?</label>
                 <clr-radio-wrapper>
-                  <input type="radio" clrRadio name="needs_computer"  value="true"  [(ngModel)]="newEmp.needs_computer" [ngModelOptions]="{standalone: true}" [readonly]="isReadOnly" />
+                  <input type="radio" clrRadio name="needs_computer" [value]=true  [(ngModel)]="newEmp.needs_computer" [ngModelOptions]="{standalone: true}" [readonly]="isReadOnly" />
                   <label>Yes</label>
                 </clr-radio-wrapper>
                 <clr-radio-wrapper>
-                  <input type="radio" clrRadio name="needs_computer"  value ="false" [(ngModel)]="newEmp.needs_computer" [ngModelOptions]="{standalone: true}" [readonly]="isReadOnly" />
+                  <input type="radio" clrRadio name="needs_computer" [value]=false [(ngModel)]="newEmp.needs_computer" [ngModelOptions]="{standalone: true}" [readonly]="isReadOnly" />
                   <label>No</label>
                 </clr-radio-wrapper>
                 

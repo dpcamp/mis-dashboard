@@ -1,21 +1,24 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators,  FormControl } from '@angular/forms';
-import { User, CreateUser } from '../../shared/models/user';
+import { User, CreateUser, UserFormQueryResponse, UserQueryResponse } from '../../shared/models/user';
+import { getUserFormDetail, pendingQuery, usersQuery, dfUserQuery } from '../../shared/queries/users';
+import { newUserForm, updateUserForm  } from '../../shared/mutations/users';
 import { UNValidation,  } from '../../shared/models/validation';
 import { UserService } from '../../shared/services/user.service'
-import { ValidationService } from '../../shared/services/validation.service'
-import {MessageService} from 'primeng/api';
 import { ClrLoadingState, ClrForm,  } from '@clr/angular'
 
 import { ActivatedRoute, Router } from '@angular/router';
 import {  formatDate } from '@angular/common';
 import {UsernameValidator} from '../../shared/validators/username'
+import {Apollo, QueryRef} from "apollo-angular"
+import { variable } from '@angular/compiler/src/output/output_ast';
 @Component({
    
     selector: 'user-onboard',
     templateUrl: 'user-onboard.component.html',
     styleUrls: ['user-onboard.component.scss']
 })
+
 export class UserOnboardComponent implements OnInit {
   @ViewChild(ClrForm, {static: false}) form: ClrForm;
     isAdmin: boolean;
@@ -36,14 +39,19 @@ export class UserOnboardComponent implements OnInit {
     userForm: FormGroup;
     submitBtnState: ClrLoadingState = ClrLoadingState.DEFAULT;
     unValidation: UNValidation;
+    userQuery: QueryRef<UserQueryResponse>
+    userFormQuery: QueryRef<UserFormQueryResponse>
+    dfUserQuery: QueryRef<any>
+
     constructor(
 
         private userService: UserService,
-        private messageService: MessageService,
         private route: ActivatedRoute,
         private router: Router,
         public usernameValidator: UsernameValidator,
-        private fb: FormBuilder
+        private fb: FormBuilder,
+        private apollo: Apollo,
+
 
     ){
 
@@ -72,34 +80,30 @@ export class UserOnboardComponent implements OnInit {
             
           });
     }
-    show(sev: string, sum: string, msg: string) {
-
-        this.messageService.add({ severity: `${sev}`, summary: `${sum}`, detail: `${msg}` })
-    
-      }
-      clear() {
-        this.messageService.clear();
-    }
     ngOnInit(){
      this.isAdmin = JSON.parse(localStorage.getItem('isAdmin'))
-      
-      this.userService.getUsers()
-      .subscribe(users => {this.users = users});
-        this.route.queryParams
+     this.userQuery = this.apollo.watchQuery({
+       query:usersQuery
+     })
+     this.userQuery.valueChanges
+      .subscribe(({data}:any) => {this.users = data.allUsers});
+      this.route.queryParams
         .subscribe(params => {
             this.emp_id = params.id
         })
-      //  console.log(`employee_id: ${this.emp_id}`)
-
         if(this.emp_id){
 
            if(this.newEmp.employee_id){
             this.isUserReadOnly = true;
             }
-             this.userService.getUserForm(this.emp_id)
+              this.userFormQuery = this.apollo.watchQuery({
+                query: getUserFormDetail,
+                variables: {id: this.emp_id}
+              })
+             this.userFormQuery.valueChanges
              .subscribe(newEmp => {
                
-                 this.newEmp = newEmp
+                 this.newEmp = newEmp.data.userForm.form
                  this.startDate = formatDate(this.newEmp.start_date, 'MM/dd/yyyy', 'en-US')
                  this.concatDisplayName();
                  this.unExists = this.users.some(e => e.user_name === this.newEmp.user_name)
@@ -108,20 +112,12 @@ export class UserOnboardComponent implements OnInit {
                   this.isReadOnly = true;
                   this.isUserReadOnly = true;
                   this.isLocked = true;
-                  
                 }
-             })
-            
-
-             
+             })  
         } 
         else {
           this.newEmp = { create_mbx: true, sup_man_execs: false, home_drive: false }
         }
-          
-          //this.unValidation = {user_name_exists: false}
-          //this.dnValidation = {display_name_exists: false}
-
         
     }
     validateDisplayName(){
@@ -168,7 +164,11 @@ export class UserOnboardComponent implements OnInit {
           this.newEmp.description = ''
           this.newEmp.display_name = ''
             this.isUserReadOnly = false;
-        this.userService.getDayForceUser(id)
+        this.dfUserQuery = this.apollo.watchQuery({
+          query: dfUserQuery,
+          variables: {id: id}
+        })
+        this.dfUserQuery.valueChanges
         .subscribe(dfEmp => {
             if(dfEmp[0]){
                 this.newEmp.employee_id = id
@@ -176,6 +176,7 @@ export class UserOnboardComponent implements OnInit {
                 this.newEmp.last_name = dfEmp[0].LastName
                 this.newEmp.description = dfEmp[0].Title,
                 this.newEmp.display_name = `${dfEmp[0].LastName}, ${dfEmp[0].FirstName}`
+                
     
   
                 this.isUserReadOnly = true;
@@ -202,23 +203,32 @@ export class UserOnboardComponent implements OnInit {
                       this.newEmp.submitted_by = localStorage.getItem('user_name'),
                       this.newEmp.status = 'pending'
         this.concatDisplayName()
-
-        this.userService.createUserForm(this.newEmp)
-        .subscribe(newEmp => {
-            this.emp_id = newEmp.data.id;
-            let emp = newEmp.data
+        console.log(this.newEmp)
+        this.apollo.mutate( {
+          mutation: newUserForm,
+          variables: {input: this.newEmp},
+          update: (store, pendingResponse: any) => {
+            const data: any = store.readQuery({query: pendingQuery});
+            data.allUserForms.pending_count = data.allUserForms.pending_count + 1
+            store.writeQuery({query: pendingQuery, data})
+          }
+        }
+        
+        )
+        
+        .subscribe( ({ data }: any) => {
+          
+            let emp = data.createUserForm.form
+            this.emp_id = emp.id
             console.log(emp)
+            console.log(this.emp_id)
         this.userService.sendMail(emp.submit_user.email, emp.id, emp.first_name, emp.last_name, emp.submit_user.user_name)
         .subscribe(email => email)
           //this.show('success', 'Form Saved', `Form for ${newEmp.data.display_name}, was successfully Saved. ID is ${this.emp_id}`)
           this.submitBtnState = ClrLoadingState.SUCCESS;
           this.successModal = true
-          
-          
-          
         },
           err => {
-            this.show('error', 'Error', `${err}`)
             this.submitBtnState = ClrLoadingState.ERROR;
           })
       }
@@ -236,43 +246,45 @@ export class UserOnboardComponent implements OnInit {
         console.log(this.newEmp)
         this.userService.createUser(this.newEmp)
           .subscribe(createdUser => {
-          
-            this.userService.updateUserForm(this.newEmp)
-            .subscribe(res => {
-              let emp = res.data
-              this.userService.sendMail(emp.submit_user.email, emp.id, emp.first_name, emp.last_name, emp.submit_user.user_name, emp.user_name, emp.status, this.newEmp.copy_user, this.newEmp.needs_onbase, this.newEmp.needs_stellar, this.newEmp.needs_dl).subscribe(email => console.log(email))
+            this.apollo.mutate({
+              mutation: updateUserForm,
+              variables: {input: this.newEmp}
+            })
+            .subscribe( ({data}: any) => {
+              let emp = data.updateUserForm.form
+              this.userService.sendMail(emp.submit_user.email, emp.id, emp.first_name, emp.last_name, emp.submit_user.user_name, emp.user_name, emp.status, this.newEmp.copy_user, this.newEmp.needs_onbase, this.newEmp.needs_stellar, this.newEmp.needs_dl)
+              .subscribe(email => console.log(email))
                           })
-            
-            
             this.submitBtnState = ClrLoadingState.SUCCESS;
             this.createdModal = true
           },
             err => {
-              this.show('error', 'Error', `${err}`)
               this.submitBtnState = ClrLoadingState.ERROR;
             })
           }
       }
 
       successButton(){
-          //this.successModal = !this.successModal
+
           this.router.navigate(['/users/onboard-status'], {queryParams: {submitted_by: localStorage.getItem('user_name')}})
       }
       createdButton(){
-        //this.successModal = !this.successModal
+
         this.router.navigate(['/users'])
     }
 
     markTouched(){
-      console.log(this.userForm)
       this.userForm.markAsTouched();
       this.userForm.markAsDirty();
       this.form.markAsTouched();
     }
 
     saveUserForm() {
-      this.userService.updateUserForm(this.newEmp)
-      .subscribe(res => { res} )
+        this.apollo.mutate({
+          mutation: updateUserForm,
+          variables: {input: this.newEmp}
+        })
+      .subscribe(({data}:any) => { data} )
     }
 
 }

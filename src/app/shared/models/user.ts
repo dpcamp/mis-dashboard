@@ -1,15 +1,43 @@
+export interface UserQueryResponse {
+  user: User
+}
+
+export interface UsersQueryResponse {
+  allUsers: User[]
+}
+
+export interface UserFormsQueryResponse {
+  allUserForms: UserForms
+}
+export interface UserFormQueryResponse {
+  userForm: UserForm
+}
+
+export class UserForms {
+  constructor(
+    public pending_count: number,
+    public forms: CreateUser[]
+  ) {}
+}
+export class UserForm {
+  constructor(
+    public pending_count: number,
+    public form: CreateUser
+  ) {}
+}
+
 export class User {
   constructor(
-  public id: string,
-  public first_name: string,
-  public last_name: string,
-  public email: string,
-  public title: string,
-  public department: string,
-  public user_name: string,
-  public display_name: string,
-  public extension: string,
-  public length: string,
+  public id?: string,
+  public first_name?: string,
+  public last_name?: string,
+  public email?: string,
+  public title?: string,
+  public department?: string,
+  public user_name?: string,
+  public display_name?: string,
+  public extension?: string,
+  public length?: string,
   public is_admin?: boolean
   ) {}
 }

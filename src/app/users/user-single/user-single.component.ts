@@ -1,13 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
-import { User } from '../../shared/models/user';
+import { ActivatedRoute } from '@angular/router';
+import { User, UsersQueryResponse } from '../../shared/models/user';
 import { Phone } from '../../shared/models/phone';
-import { UserService } from '../../shared/services/user.service';
-import { PhoneService } from '../../shared/services/phone.service';
 import { Message } from 'primeng/primeng';
-import { Observable, of } from 'rxjs';
-import { map, switchMap, catchError, mergeMap, tap } from 'rxjs/operators';
-import { PhoneSidebarComponent } from '../../phones/phone-sidebar/phone-sidebar.component';
+import { Apollo, QueryRef} from 'apollo-angular'
+import {usersQuery, userDetailQuery} from '../../shared/queries/users'
+import {updatePhoneOwners} from '../../shared/mutations/phones'
 
 @Component({
     // selector: 'selector-name',
@@ -15,106 +13,81 @@ import { PhoneSidebarComponent } from '../../phones/phone-sidebar/phone-sidebar.
 })
 
 export class UserSingleComponent implements OnInit {
-    selectedUser: User;
+    selectedUser: User = {}
     users: User[];
     phoneOpened = true;
     currentExt: number;
+    extOwner: string;
     selectedPhone: Phone;
-    msgs: Message[] = [];
+    msg: any;
     user: User;
     data: any = [];
+    queryVars: any = {}
+    usersQuery: QueryRef<UsersQueryResponse>
+    userDetailQuery: QueryRef<UsersQueryResponse>
+    userPhoneDetailQuery: QueryRef<UsersQueryResponse>
     constructor(
         private route: ActivatedRoute,
-        private router: Router,
-        private service: UserService,
-        private phoneService: PhoneService
+        private apollo: Apollo,
 
     ) { }
 
     ngOnInit() {
         if(this.route.snapshot.params['ext'])
         {
-            //console.log('params is EXT')
         // grab the id from the url
         this.currentExt = this.route.snapshot.params['ext'];
         const id = this.currentExt;
-        this.service.getUsers()
-            .subscribe(users => this.users = users);
-        // use the userservice to getUser()
-        this.loadUser()
 
+        this.usersQuery = this.apollo.watchQuery({
+            query: usersQuery
+        })
+        this.usersQuery.valueChanges
+            .subscribe(({data}:any) => 
+            this.users = data.allUsers);
+        this.queryVars = {ext: this.currentExt}
         }
         else {
-            //console.log('params is user_name: ' + this.route.snapshot.params['user_name'])
-            this.service.getUser(this.route.snapshot.params['user_name'])
-            .subscribe(user => {
-                this.selectedUser = user
-                //console.log('selectedUser: ' + JSON.stringify(this.selectedUser))
-            })
-        }
+            this.queryVars = {user_name: this.route.snapshot.params['user_name']}
 
+        }
+        this.loadUser()
 
     }
     loadUser() {
-        this.service.getUserExt(this.currentExt)
-            .subscribe(user => {
-                this.selectedUser = user
-                //console.log(user)
-            });
-    }
-
-    /**
-     * Delete a user
-     */
-
-    deleteUser() {
-        this.service.deleteUser(this.selectedUser.id)
-            .subscribe(data => {
-                this.router.navigate(['users']);
-            });
-
-    }
-    getUsers() {
-        this.service.getUsers()
-            .subscribe(users => this.users = users);
+        this.userDetailQuery = this.apollo.watchQuery({
+            query: userDetailQuery,
+            variables: this.queryVars
+        })
+        this.userDetailQuery.valueChanges
+        .subscribe(({data}:any) => {
+            this.selectedUser = data.user
+        })
     }
 
     updatePhone() {
-        //console.log(this.selectedUser.user_name);
-        this.phoneService.getPhoneByEXT(this.currentExt)
-            .pipe(
-            mergeMap(dataResults => of(dataResults)),
-            switchMap(phoneID => this.phoneService.phoneUpdateUser(phoneID[0].id, this.selectedUser.user_name))
-            ).
-            subscribe(
-                newUser => {
-                    // this.successMessage = selectedPhone.message;
-                    //console.log(`selectedPhone ID: ${newUser}, user_name: ${this.selectedUser.user_name}`)
-                    this.show('success',
-                    'Phone Record Updated',
-                    `Extension: ${this.currentExt} phone was assigned to ${this.selectedUser.user_name}`);
-                    this.loadUser()
+        this.apollo.mutate({
+            mutation:updatePhoneOwners,
+            variables: {ext: this.currentExt, owners: this.extOwner},
+            refetchQueries: [{
+                query: userDetailQuery,
+                variables: this.queryVars
+            }]
+        }).subscribe(({data}: any) => {
 
-                },
-                err => {
-                    // this.errorMessage = err;
-                    this.show('error', 'ERROR', `${err}`);
-                }
-            );
-
-        ;
-
-
+            this.msg = { 
+                alert : 'success', 
+                message: `Extension: ${data.updatePhoneOwners.extension} was assigned to ${data.updatePhoneOwners.owners[0].display_name}`
+            }
+            this.phoneOpened = false
+        }, (error) =>
+        {
+            this.msg = { 
+                alert : 'danger', 
+                message: `Error: ${error}`
+            }
+        });
 
     }
 
-    /**
-     * Shows the Growl message
-     */
-
-    show(sev: string, sum: string, msg: string) {
-
-        this.msgs = [];
-        this.msgs.push({ severity: `${sev}`, summary: `${sum}`, detail: `${msg}` });
-    }
 }

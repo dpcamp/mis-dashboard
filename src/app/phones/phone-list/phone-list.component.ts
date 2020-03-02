@@ -1,8 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs/Subscription';
-import { PhoneService } from '../../shared/services/phone.service';
-import { UserService } from '../../shared/services/user.service';
 import { Phone } from '../../shared/models/phone';
 import { User } from '../../shared/models/user';
 import { SelectedItem } from '../../shared/models/selected-item';
@@ -10,6 +8,9 @@ import {MessageService} from 'primeng/api';
 import {Apollo} from 'apollo-angular'
 import gql from 'graphql-tag'
 import {Table} from 'primeng/table';
+import { phonesQuery  } from '../../shared/queries/phones'
+import { usersQuery  } from '../../shared/queries/users'
+import { createPhone, deletePhone, updatePhone } from '../../shared/mutations/phones'
 
 
 
@@ -29,114 +30,8 @@ class PhoneFilter implements ClrDatagridStringFilterInterface<Phone> {
 
   }
 }
-const phonesQuery = gql`
-query {
-  allPhones {
-    id
-    full_number
-    extension
-    vm_id
-    drop_num
-    port_num
-    binding_post
-    provider
-    long_distance
-    line_type
-    monthly_cost
-    date_installed
-    disconnect_now
-    disconnect_later
-    need_voicemail
-    investigate
-    notes
-    switch_comments
-    function_info
-    location
-    model
-    owners {
-      user_name
-      display_name
-    }
-  }
-}
-`;
-const usersQuery = gql`
-query {
-  allUsers {
-    user_name
-    display_name
-  }
-}
-`;
-const createPhone = gql`
-  mutation createPhone($input: newPhoneInput!) {
-      createPhone(input: $input) {
-        id
-        full_number
-        extension
-        vm_id
-        drop_num
-        port_num
-        binding_post
-        provider
-        long_distance
-        line_type
-        monthly_cost
-        date_installed
-        disconnect_now
-        disconnect_later
-        need_voicemail
-        investigate
-        notes
-        switch_comments
-        function_info
-        location
-        model
-        owners {
-          user_name
-          display_name
-        }
-    }
-  }
-`;
-const updatePhone = gql`
-  mutation updatePhone($id: String!, $input: uPhoneInput!) {
-    updatePhone(id: $id, input: $input) {
-        id
-        full_number
-        extension
-        vm_id
-        drop_num
-        port_num
-        binding_post
-        provider
-        long_distance
-        line_type
-        monthly_cost
-        date_installed
-        disconnect_now
-        disconnect_later
-        need_voicemail
-        investigate
-        notes
-        switch_comments
-        function_info
-        location
-        model
-        owners {
-          user_name
-          display_name
-        }
-    }
-  }
-`;
-const deletePhone = gql`
-  mutation deletePhone($id: String!) {
-    deletePhone(id: $id) {
-        message
-    }
-  }
-`;
+
+
 @Component({
   templateUrl: 'phone-list.component.html',
   styleUrls: ['phone-list.component.css']
@@ -150,6 +45,7 @@ export class PhoneListComponent implements OnInit {
   assignment: Phone[];
   lineTypes: SelectedItem[];
   cols: any[];
+
 
   private userFilter = new UserFilter();
   phoneFilter = new PhoneFilter();
@@ -176,8 +72,6 @@ export class PhoneListComponent implements OnInit {
   private userSubscription: Subscription;
   
   constructor(
-    private phoneService: PhoneService,
-    private userService: UserService,
     private route: ActivatedRoute,
     private router: Router,
     private messageService: MessageService,

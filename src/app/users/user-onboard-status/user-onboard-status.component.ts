@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { UserService } from '../../shared/services/user.service'
-import { CreateUser } from '../../shared/models/user';
+import { CreateUser, UserFormsQueryResponse } from '../../shared/models/user';
 import { ActivatedRoute } from '@angular/router';
-import { Apollo } from 'apollo-angular';
+import { Apollo, QueryRef } from 'apollo-angular';
 import gql from 'graphql-tag';
 import { from, Subscription } from 'rxjs';
 
@@ -19,8 +18,8 @@ export class UserOnboardStatusComponent implements OnInit {
     submittedBy: string;
     users: CreateUser[];
     userFormSubscription: Subscription;
+    userFormsQuery: QueryRef<UserFormsQueryResponse>
     constructor(
-        private userService: UserService,
         private route: ActivatedRoute,
         private apollo: Apollo
     ) { }
@@ -63,7 +62,7 @@ export class UserOnboardStatusComponent implements OnInit {
                         allUserForms {
                         forms {
                             id
-                                display_name
+                            display_name
                             start_date
                             created_by
                             create_user{
@@ -84,19 +83,15 @@ export class UserOnboardStatusComponent implements OnInit {
 
     }`
         }
-        this.userFormSubscription = this.apollo.watchQuery<any>({
+        this.userFormsQuery = this.apollo.watchQuery<UserFormsQueryResponse>({
             query: this.getUserForms,
         })
-            .valueChanges
-            .subscribe(({ data }) => {
-                this.users = data.allUserForms.forms
-                console.log(this.users)
+        this.userFormsQuery.valueChanges.subscribe(res => {
+                this.users = res.data.allUserForms.forms
+               
             })
 
     }
-    ngOnDestroy(){
-    this.userFormSubscription.unsubscribe();
-    }
-    
+   
 }
 
