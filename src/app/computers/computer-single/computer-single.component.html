@@ -10,49 +10,43 @@
                     <div class="col-lg-6 col-md-12 col-sm-12 col-xs-12">
                         <div class="form-group" *ngIf="selectedComputer.online_user">
 
-                                <label for="ext">Currently Logged In: </label>
+                                <label for="online_user">Currently Logged In: </label>
                                 <a [routerLink]="['/users/sam', selectedComputer.online_user]">{{selectedComputer.user.display_name}}</a>
 
                         </div>
                         <div class="form-group">
-                            <label for="ext">IP Address:</label>
-                            <input class="clr-input" type="text" id="ext" size="20" readonly [(ngModel)]="selectedComputer.ip_address" *ngIf="selectedComputer.ip_address">
+                            <label for="ip_address">IP Address:</label>
+                            <input class="clr-input" type="text" id="ip_address" size="20" readonly [(ngModel)]="selectedComputer.ip_address" *ngIf="selectedComputer.ip_address">
                         </div>
 
                         <div class="form-group" *ngIf="selectedComputer.memory !=='0'">
-                            <label for="ext">Memory:</label>
-                            <input class="clr-input" type="text" id="ext" size="20" readonly [ngModel]="selectedComputer.memory | fileSize"
+                            <label for="memory">Memory:</label>
+                            <input class="clr-input" type="text" id="memory" size="20" readonly [ngModel]="selectedComputer.memory | fileSize"
                                 (ngModelChange)="selectedComputer.memory=$event" >
 
                         </div>
                         <div class="form-group" *ngIf="selectedComputer.memory==='0'">
-                            <label for="ext">Memory:</label>
-                            <input class="clr-input" type="text" id="ext" size="20" readonly [ngModel]="selectedComputer.memory"
+                            <label for="memory">Memory:</label>
+                            <input class="clr-input" type="text" id="memory" size="20" readonly [ngModel]="selectedComputer.memory"
                                 >
 
                         </div>
-                        
-                        <!-- <div class="form-group">
-                            <label for="ext">Disk Space:</label>
-                            <input class="clr-input" type="text" id="ext" size="6" readonly [ngModel]="selectedComputer.computer_attribute.disks_size + ' GB'" *ngIf="selectedComputer.computer_attribute">
-
-                        </div> -->
                     </div>
                     <div class="col-lg-6 col-md-12 col-sm-12 col-xs-12">
                         <div class="form-group">
-                            <label for="ext">Operating System:</label>
-                            <input class="clr-input" type="text" id="ext" size="30" readonly [(ngModel)]="selectedComputer.os_name" *ngIf="selectedComputer.os_name">
+                            <label for="os_name">Operating System:</label>
+                            <input class="clr-input" type="text" id="os_name" size="30" readonly [(ngModel)]="selectedComputer.os_name" *ngIf="selectedComputer.os_name">
                         </div>
 
                         <div class="form-group">
-                            <label for="ext">Service Pack:</label>
-                            <input class="clr-input" type="text" id="ext" size="30" readonly [(ngModel)]="selectedComputer.os_service_pack" *ngIf="selectedComputer.os_service_pack">
+                            <label for="os_service_pack">Service Pack:</label>
+                            <input class="clr-input" type="text" id="os_service_pack" size="30" readonly [(ngModel)]="selectedComputer.os_service_pack" *ngIf="selectedComputer.os_service_pack">
                         </div>
                         <div class="form-group">
                             
                             <div *ngFor="let display of selectedComputer.pdq_displays; let i = index">
-                                <label for="ext" *ngIf="display.model">Display {{i+1}}:</label>
-                            <input class="clr-input" type="text" id="ext" size="30" readonly [(ngModel)]="display.model" *ngIf="display.model">
+                                <label for="model" *ngIf="display.model">Display {{i+1}}:</label>
+                            <input class="clr-input" type="text" id="model" size="30" readonly [(ngModel)]="display.model" *ngIf="display.model">
                         </div>
                         </div>
                     </div>
