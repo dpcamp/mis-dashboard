@@ -169,28 +169,25 @@ export class UserOnboardComponent implements OnInit {
           variables: {id: id}
         })
         this.dfUserQuery.valueChanges
-        .subscribe(dfEmp => {
-            if(dfEmp[0]){
+        .subscribe(res => {
+          //console.log(res.data.dfUser)
+            if(res.data){
+                let dfEmp = res.data.dfUser
+                console.log(dfEmp)
                 this.newEmp.employee_id = id
-                this.newEmp.first_name = dfEmp[0].FirstName
-                this.newEmp.last_name = dfEmp[0].LastName
-                this.newEmp.description = dfEmp[0].Title,
-                this.newEmp.display_name = `${dfEmp[0].LastName}, ${dfEmp[0].FirstName}`
-                
-    
-  
+                this.newEmp.first_name = dfEmp.FirstName
+                this.newEmp.last_name = dfEmp.LastName
+                this.newEmp.description = dfEmp.Title,
+                this.newEmp.display_name = `${dfEmp.LastName}, ${dfEmp.FirstName}`
                 this.isUserReadOnly = true;
             }
-            else{
-                console.log('DOESNT EXIST')
-                this.invalidEmpIdModal = true;
-                this.isUserReadOnly = false
-            }
-
-
-            console.log(dfEmp)
-            console.log(this.newEmp)
-        })
+        },
+        err => {
+            this.invalidEmpIdModal = true;
+            this.isUserReadOnly = false
+        
+        }
+        )
     } else {
       this.isUserReadOnly = false;
     }
@@ -202,6 +199,7 @@ export class UserOnboardComponent implements OnInit {
                       this.newEmp.home_drive = false,
                       this.newEmp.submitted_by = localStorage.getItem('user_name'),
                       this.newEmp.status = 'pending'
+                      
         this.concatDisplayName()
         console.log(this.newEmp)
         this.apollo.mutate( {

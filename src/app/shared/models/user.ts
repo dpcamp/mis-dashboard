@@ -72,7 +72,7 @@ export class CreateUser {
   public shared_mbx?: string,
   public additional_items?: string,
   public copy_user?: string,
-  public phone_ext?: string,
+  public phone_ext?: number,
   public sup_man_execs?: boolean,
   public create_mbx?: boolean,
   public home_drive?: boolean,

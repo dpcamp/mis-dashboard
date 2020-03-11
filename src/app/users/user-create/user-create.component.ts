@@ -23,7 +23,6 @@ export class UserCreateComponent implements OnInit {
   userExistsModal: boolean = false;
   successModal: boolean = false;
   createdModal: boolean = false;
-  //msgs: <MessageService>[] = [];
   submitBtnState: ClrLoadingState = ClrLoadingState.DEFAULT
   userForm: FormGroup
   unExists = false;

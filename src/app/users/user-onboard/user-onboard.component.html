@@ -187,7 +187,7 @@
           </clr-checkbox-container>
           <clr-input-container>
             <label>If there is a phone at the desk list the Extension:</label>
-            <input  clrInput type="text" [(ngModel)]="newEmp.phone_ext" formControlName="phone_ext" [readonly]="isReadOnly" placeholder="optional"/>
+            <input  clrInput type="number" [(ngModel)]="newEmp.phone_ext" formControlName="phone_ext" [readonly]="isReadOnly" placeholder="optional"/>
             
             <clr-control-error *clrIfError="'minlength'">Must be 4 digits</clr-control-error>
             <clr-control-error *clrIfError="'maxlength'">Must be 4 digits</clr-control-error>
