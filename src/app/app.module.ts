@@ -39,6 +39,7 @@ import { PhoneSidebarComponent } from './phones/phone-sidebar/phone-sidebar.comp
 
 import {UsernameValidator} from './shared/validators/username'
 
+import { VouchersComponent } from './vouchers/vouchers.component';
 
 import { ComputerService } from './shared/services/computer.service';
 import { ComputersComponent } from './computers/computers.component';
@@ -86,6 +87,7 @@ import { GraphQLModule } from './graphql.module';
     ComputersComponent,
     ComputerListComponent,
     ComputerSingleComponent,
+    VouchersComponent,
 
     DashboardComponent,
     SrReportsComponent
@@ -111,6 +113,7 @@ import { GraphQLModule } from './graphql.module';
 
     HttpModule,
     HttpClientModule,
+
 
     routing,
 

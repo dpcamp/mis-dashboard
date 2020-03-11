@@ -20,6 +20,8 @@ import { ComputerSingleComponent } from './computers/computer-single/computer-si
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { SrReportsComponent } from './dashboard/sr-reports/sr-reports.component';
 
+import { VouchersComponent } from './vouchers/vouchers.component'
+
 // import { LoginComponent } from './login/login.component';
 
 export const routes: Routes = [
@@ -94,6 +96,10 @@ export const routes: Routes = [
         component: SrReportsComponent
       }
     ]
+  },
+  {
+    path: 'vouchers',
+    component: VouchersComponent,
   }
 ];
 
