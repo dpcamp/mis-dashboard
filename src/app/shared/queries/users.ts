@@ -94,7 +94,7 @@ query userForm($id: String!){
         additional_items
         copy_user
         create_mbx
-        share_mbx
+        shared_mbx
         sup_man_execs
         home_drive
         status

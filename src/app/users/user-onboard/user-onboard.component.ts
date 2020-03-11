@@ -102,8 +102,9 @@ export class UserOnboardComponent implements OnInit {
               })
              this.userFormQuery.valueChanges
              .subscribe(newEmp => {
-               
+                console.log(newEmp)
                  this.newEmp = newEmp.data.userForm.form
+                 console.log(this.newEmp)
                  this.startDate = formatDate(this.newEmp.start_date, 'MM/dd/yyyy', 'en-US')
                  this.concatDisplayName();
                  this.unExists = this.users.some(e => e.user_name === this.newEmp.user_name)
