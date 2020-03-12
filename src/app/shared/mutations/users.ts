@@ -17,10 +17,9 @@ createUserForm(input: $input) {
 }
 `
 export const updateUserForm = gql`
-mutation createUserForm($input: uFormInput!) {
-createUserForm(input: $input) {
+mutation updateUserForm($id: String!, $input: uFormInput!) {
+updateUserForm(id: $id, input: $input) {
     form{
-        id
         first_name
         last_name
         user_name

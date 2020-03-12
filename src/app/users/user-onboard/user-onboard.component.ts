@@ -20,7 +20,7 @@ import { variable } from '@angular/compiler/src/output/output_ast';
 })
 
 export class UserOnboardComponent implements OnInit {
-  @ViewChild(ClrForm, {static: false}) form: ClrForm;
+  @ViewChild(ClrForm) form: ClrForm;
     isAdmin: boolean;
     unExists: boolean = false;
     dnExists: boolean = false;
@@ -240,14 +240,22 @@ export class UserOnboardComponent implements OnInit {
         else {
         this.newEmp.created_by = localStorage.getItem('user_name'),
         this.newEmp.status = 'completed'
-          
+          delete this.newEmp['id']
+          delete this.newEmp['create_user']
+          delete this.newEmp['submit_user']
+          console.log(this.newEmp)
         this.submitBtnState = ClrLoadingState.LOADING;
         console.log(this.newEmp)
         this.userService.createUser(this.newEmp)
           .subscribe(createdUser => {
             this.apollo.mutate({
               mutation: updateUserForm,
-              variables: {input: this.newEmp}
+              variables: {id: this.emp_id, input: this.newEmp},
+              update: (store, pendingResponse: any) => {
+                const data: any = store.readQuery({query: pendingQuery});
+                data.allUserForms.pending_count = data.allUserForms.pending_count - 1
+                store.writeQuery({query: pendingQuery, data})
+              }
             })
             .subscribe( ({data}: any) => {
               let emp = data.updateUserForm.form
@@ -279,9 +287,13 @@ export class UserOnboardComponent implements OnInit {
     }
 
     saveUserForm() {
+      delete this.newEmp['id']
+      delete this.newEmp['create_user']
+      delete this.newEmp['submit_user']
+      console.log(this.newEmp)
         this.apollo.mutate({
           mutation: updateUserForm,
-          variables: {input: this.newEmp}
+          variables: {id: this.emp_id, input: this.newEmp}
         })
       .subscribe(({data}:any) => { data} )
     }

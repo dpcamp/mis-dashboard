@@ -39,7 +39,7 @@
       </clr-input-container>
       
       <div class="clr-form-control" [ngClass]="
-      {'clr-error': unExists || (user_name.invalid && (user_name.dirty || user_name.touched))}" *ngIf="newEmp.id">
+      {'clr-error': unExists || (user_name.invalid && (user_name.dirty || user_name.touched))}" *ngIf="emp_id">
               <label class="clr-control-label">Username</label>
               <div class="clr-control-container">
                 <div class="clr-input-wrapper">
@@ -162,7 +162,7 @@
           </clr-checkbox-container>
           <clr-input-container>
             <label>Shared Mailbox Access:</label>
-            <input  clrInput [(ngModel)]="newEmp.shared_mbx" [ngModelOptions]="{standalone: true}" name="shared_mbx"  [readonly]="isReadOnly" placeholder="optional" size="45"/>
+            <input  clrInput [(ngModel)]="newEmp.share_mbx" [ngModelOptions]="{standalone: true}" name="share_mbx"  [readonly]="isReadOnly" placeholder="optional" size="45"/>
             
             <clr-control-error>This field is required!</clr-control-error>
           </clr-input-container>

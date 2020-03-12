@@ -37,7 +37,7 @@ class PhoneFilter implements ClrDatagridStringFilterInterface<Phone> {
   styleUrls: ['phone-list.component.css']
 })
 export class PhoneListComponent implements OnInit {
-  @ViewChild('dt', {static: false} ) dt: Table;
+  @ViewChild('dt') dt: Table;
   globalFilter: string
   loading: boolean;
   phones: Phone[];
@@ -61,8 +61,8 @@ export class PhoneListComponent implements OnInit {
 
   mask = ['(', /[1-9]/, /\d/, /\d/, ')', ' ', /\d/, /\d/, /\d/, '-', /\d/, /\d/, /\d/, /\d/]
 
-  @ViewChild('createlg', {static: false}) createLarge: ClrWizard;
-  @ViewChild('updatelg', {static: false}) updateLarge: ClrWizard;
+  @ViewChild('createlg') createLarge: ClrWizard;
+  @ViewChild('updatelg') updateLarge: ClrWizard;
 
   createOpen: boolean = false;
   updateOpen: boolean = false;

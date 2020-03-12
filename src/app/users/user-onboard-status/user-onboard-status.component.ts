@@ -13,6 +13,7 @@ import { from, Subscription } from 'rxjs';
     styleUrls: ['user-onboard-status.component.scss']
 })
 export class UserOnboardStatusComponent implements OnInit {
+    loading: boolean = true;
     getUserForms: any;
     isAdmin: boolean;
     submittedBy: string;
@@ -29,6 +30,7 @@ export class UserOnboardStatusComponent implements OnInit {
         this.route.queryParams
             .subscribe(params => {
                 this.submittedBy = params.submitted_by
+                this.loading = false;
             })
         if (this.submittedBy) {
             this.getUserForms = gql`
@@ -57,6 +59,7 @@ export class UserOnboardStatusComponent implements OnInit {
                     }`
         }
         else {
+            this.loading = true;
             this.getUserForms = gql`
                     query {
                         allUserForms {
@@ -88,7 +91,7 @@ export class UserOnboardStatusComponent implements OnInit {
         })
         this.userFormsQuery.valueChanges.subscribe(res => {
                 this.users = res.data.allUserForms.forms
-               
+                this.loading = false;
             })
 
     }

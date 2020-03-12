@@ -82,6 +82,7 @@ getVouchers(year:number, noOnBase:Boolean){
     .subscribe(({data}:any) => {
         
         this.vouchers = data.allAPVouchers
+        
         this.loading = false
     })
     
@@ -99,24 +100,6 @@ obParams(){
           queryParamsHandling: 'merge'
         });
 }
-refresh(state: ClrDatagridStateInterface) {
-    this.loading = true;
-    // We convert the filters from an array to a map,
-    // because that's what our backend-calling service is expecting
-    const filters: { [prop: string]: any[] } = {};
-    if (state.filters) {
-        for (const filter of state.filters) {
-          const { property, value } = <{ property: string; value: string }>filter;
-          filters[property] = [value];
-        }
-      }
-      if (!state.page) {
-        state.page = {
-          from: 0,
-          to: 9,
-          size: 10,
-        };
-      }
-    }
+
     
 }

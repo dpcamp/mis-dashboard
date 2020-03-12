@@ -1,7 +1,7 @@
 <h3>New Hire Form Status</h3>
 
 <button [routerLink]="['/users/onboard']" routerLinkActive="router-link-active" class="btn btn-sm" *ngIf="!isAdmin">new hire request</button>
-<clr-datagrid *ngIf="users">
+<clr-datagrid  [clrDgLoading]="loading">
     <clr-dg-column>New Hire Name</clr-dg-column>
     <clr-dg-column>Start Date</clr-dg-column>
     <clr-dg-column>Submitted By</clr-dg-column>
