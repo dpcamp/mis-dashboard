@@ -29,13 +29,13 @@
     </div>
 </div>
 
-<clr-datagrid [clrDgLoading]="loading" *ngIf="vouchers">
-    <clr-dg-column [clrDgSortOrder]="descSort">Check Run</clr-dg-column>
-    <clr-dg-column>Voucher Number</clr-dg-column>
-    <clr-dg-column>Vendor Code</clr-dg-column>
-    <clr-dg-column>Invoice Number</clr-dg-column>
+<clr-datagrid [clrDgLoading]="loading" >
+    <clr-dg-column [clrDgField]="'checkDate'" [clrDgSortOrder]="descSort">Check Run</clr-dg-column>
+    <clr-dg-column [clrDgField]="'inputKey'" >Voucher Number</clr-dg-column>
+    <clr-dg-column [clrDgField]="'vendorCode'">Vendor Code</clr-dg-column>
+    <clr-dg-column [clrDgField]="'invoiceNum'">Invoice Number</clr-dg-column>
     <clr-dg-column>OnBase</clr-dg-column>
-
+    <div *ngIf="vouchers">
     <clr-dg-row *clrDgItems="let voucher of vouchers">
         <clr-dg-cell>{{voucher.checkDate | date}}</clr-dg-cell>
         <clr-dg-cell>{{voucher.inputKey}}</clr-dg-cell>
@@ -44,7 +44,7 @@
         <clr-dg-cell *ngIf="voucher.onbase"><a href="http://GRF-LW-DIFS2/AppNet/docpop/docpop.aspx?KT216_0_0_0={{voucher.onbase.input}}&clienttype=html&doctypeid=145" target="_blank"><clr-icon shape="success-standard" class="is-solid is-success"></clr-icon></a></clr-dg-cell>
         <clr-dg-cell *ngIf="!voucher.onbase"><clr-icon shape="error-standard" class="is-solid is-danger"></clr-icon></clr-dg-cell>
     </clr-dg-row>
-
+</div>
     <clr-dg-footer> <clr-dg-pagination #pagination [clrDgPageSize]="20">
         <clr-dg-page-size [clrPageSizeOptions]="[10,20,50,100]">Vouchers per page</clr-dg-page-size>
         {{pagination.firstItem + 1}} - {{pagination.lastItem + 1}}
