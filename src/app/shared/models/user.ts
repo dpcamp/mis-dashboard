@@ -69,7 +69,7 @@ export class CreateUser {
   public needs_cell?: boolean,
   public pc_number?: string, 
   public user_name?: string,
-  public shared_mbx?: string,
+  public share_mbx?: string,
   public additional_items?: string,
   public copy_user?: string,
   public phone_ext?: number,

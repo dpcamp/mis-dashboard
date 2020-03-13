@@ -63,9 +63,16 @@ ngOnInit(){
     this.descSort = ClrDatagridSortOrder.DESC;
     this.route.queryParams
     .subscribe(params => {
-        if (params.noOnBase)
-            {this.noOnBase = JSON.parse(params.noOnBase)}
-        this.getVouchers(parseInt(params.year), this.noOnBase)
+        if (params.year){
+            console.log('found params')
+            this.getVouchers(parseInt(params.year), JSON.parse(params.noOnBase))
+        }
+        else {
+            console.log('no params')
+            this.router.navigate(['/vouchers'], { queryParams: {year: '2020', noOnBase: 'false'}})
+        }
+        
+        
     }
         )
 }
